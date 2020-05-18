@@ -1,0 +1,47 @@
+{
+  "JointGenotyping.full_map": "/data/chuv/LABO/redin/test-data/1kgp/downsampled_gvcf_hg38/hg38_1kg_50.full_map",
+  "JointGenotyping.sample_name_map": "/data/chuv/LABO/redin/test-data/1kgp/downsampled_gvcf_hg38/hg38_1kg_50.sample_map",
+  "JointGenotyping.sample_num_threshold": "50",
+
+  "JointGenotyping.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
+  "JointGenotyping.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
+  "JointGenotyping.tabix": "/software/UHTS/Analysis/EPACTS/3.2.6/bin/tabix",
+
+  "JointGenotyping.unpadded_intervals_file": "/data/chuv/LABO/redin/references/hg38/hg38.even.handcurated.20k.intervals",
+  "JointGenotyping.ref_fasta": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta",
+  "JointGenotyping.ref_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+  "JointGenotyping.ref_dict": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dict",
+
+  "JointGenotyping.workspace_dir_name": "genomicsdb",
+  "JointGenotyping.callset_name": "hg38_1kgDS_50",
+
+  "JointGenotyping.dbsnp_vcf": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
+  "JointGenotyping.dbsnp_vcf_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx",
+
+  "JointGenotyping.indel_recalibration_tranche_values": ["100.0", "99.95", "99.9", "99.5", "99.0", "97.0", "96.0", "95.0", "94.0", "93.5", "93.0", "92.0", "91.0", "90.0"],
+  "JointGenotyping.indel_recalibration_annotation_values": ["FS", "ReadPosRankSum", "MQRankSum", "QD", "SOR", "DP"],
+  "JointGenotyping.snp_recalibration_tranche_values": ["100.0", "99.95", "99.9", "99.8", "99.6", "99.5", "99.4", "99.3", "99.0", "98.0", "97.0", "90.0" ],
+  "JointGenotyping.snp_recalibration_annotation_values": ["QD", "MQRankSum", "ReadPosRankSum", "FS", "MQ", "SOR", "DP"],
+
+  "JointGenotyping.mills_resource_vcf": "/data/chuv/LABO/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
+  "JointGenotyping.mills_resource_vcf_index": "/data/chuv/LABO/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
+  "JointGenotyping.axiomPoly_resource_vcf": "/data/chuv/LABO/redin/references/hg38/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz",
+  "JointGenotyping.axiomPoly_resource_vcf_index": "/data/chuv/LABO/redin/references/hg38/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz.tbi",
+  "JointGenotyping.hapmap_resource_vcf": "/data/chuv/LABO/redin/references/hg38/hapmap_3.3.hg38.vcf.gz",
+  "JointGenotyping.hapmap_resource_vcf_index": "/data/chuv/LABO/redin/references/hg38/hapmap_3.3.hg38.vcf.gz.tbi",
+  "JointGenotyping.omni_resource_vcf": "/data/chuv/LABO/redin/references/hg38/1000G_omni2.5.hg38.vcf.gz",
+  "JointGenotyping.omni_resource_vcf_index": "/data/chuv/LABO/redin/references/hg38/1000G_omni2.5.hg38.vcf.gz.tbi",
+  "JointGenotyping.one_thousand_genomes_resource_vcf": "/data/chuv/LABO/redin/references/hg38/1000G_phase1.snps.high_confidence.hg38.vcf.gz",
+  "JointGenotyping.one_thousand_genomes_resource_vcf_index": "/data/chuv/LABO/redin/references/hg38/1000G_phase1.snps.high_confidence.hg38.vcf.gz.tbi",
+ 
+  "JointGenotyping.snp_filter_level": "99.7",
+  "JointGenotyping.indel_filter_level": "99.0",
+
+  "JointGenotyping.eval_interval_list": "/data/chuv/LABO/redin/references/hg38/wgs_evaluation_regions.hg38.interval_list",
+
+  "JointGenotyping.haplotype_database": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.haplotype_database.txt",
+
+  "JointGenotyping.use_allele_specific_annotations": "false",
+  "JointGenotyping.cross_check_fingerprints": "true",
+  "JointGenotyping.excess_het_threshold": "54.69"
+} 

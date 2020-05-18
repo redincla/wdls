@@ -1,0 +1,11 @@
+{
+  "BamToCram.base_file_name": "NA12878",	
+  "BamToCram.chimerism_metrics": "/home/credin/scratch/WGS/data_and_refs/data/test/NA12878.alignment_summary_metrics",
+  "BamToCram.ref_fasta": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta",
+  "BamToCram.duplication_metrics": "/home/credin/scratch/WGS/data_and_refs/data/test/NA12878.duplicate_metrics",
+  "BamToCram.ref_dict": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dict",
+  "BamToCram.SAMTOOLS": "/software/UHTS/Analysis/samtools/1.10/bin/samtools",
+  "BamToCram.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
+  "BamToCram.ref_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+  "BamToCram.input_bam": "/home/credin/scratch/WGS/data_and_refs/data/test/NA12878.final.bam"
+}

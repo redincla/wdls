@@ -1,0 +1,31 @@
+{
+  "UnmappedBamToAlignedBam.ref_ann": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.ann",
+  "UnmappedBamToAlignedBam.flowcell_unmapped_bams": [
+    "/home/credin/scratch/WGS/data_and_refs/data/test/H06HDADXX130110.1.ATCACGAT.20k_reads.bam",
+    "/home/credin/scratch/WGS/data_and_refs/data/test/H06HDADXX130110.2.ATCACGAT.20k_reads.bam",
+    "/home/credin/scratch/WGS/data_and_refs/data/test/H06JUADXX130110.1.ATCACGAT.20k_reads.bam"
+    ],
+  "UnmappedBamToAlignedBam.ref_dict": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dict",
+  "UnmappedBamToAlignedBam.ref_fasta": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta",
+  "UnmappedBamToAlignedBam.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
+  "UnmappedBamToAlignedBam.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
+  "UnmappedBamToAlignedBam.base_file_name": "NA12878",
+  "UnmappedBamToAlignedBam.recalibrated_bam_basename": "NA12878.aligned.unsorted",
+  "UnmappedBamToAlignedBam.ref_bwt": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.bwt",
+  "UnmappedBamToAlignedBam.ref_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+  "UnmappedBamToAlignedBam.BWA": "/software/UHTS/Aligner/bwa/0.7.17/bin/bwa",
+  "UnmappedBamToAlignedBam.ref_alt": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.alt",
+  "UnmappedBamToAlignedBam.ref_pac": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.pac",
+  "UnmappedBamToAlignedBam.ref_sa": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.sa",
+  "UnmappedBamToAlignedBam.ref_amb": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.amb",
+  "UnmappedBamToAlignedBam.known_indels_sites_vcfs": [
+    "/data/chuv/LABO/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
+    "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz"
+  ],
+  "UnmappedBamToAlignedBam.known_indels_sites_indices": [
+    "/data/chuv/LABO/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
+    "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi"
+  ],
+  "UnmappedBamToAlignedBam.dbsnp_vcf": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
+  "UnmappedBamToAlignedBam.dbsnp_vcf_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx"
+}
