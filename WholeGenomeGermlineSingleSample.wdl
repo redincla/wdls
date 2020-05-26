@@ -1,7 +1,7 @@
 version 1.0
 
 ## Copyright Broad Institute, 2018
-##
+## Piou
 ## This WDL pipeline implements data pre-processing and initial variant calling (GVCF
 ## generation) according to the GATK Best Practices (June 2016) for germline SNP and
 ## Indel discovery in human whole-genome data.
