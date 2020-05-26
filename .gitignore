@@ -1,6 +1,6 @@
 *.log
 *~
 ._*
-*._*
+**/._*
 cromwell-executions/
 cromwell-workflow-logs/
