@@ -45,7 +45,7 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
   input {
     File GATK
     File full_map # col 1: sample_name, col 2: fastq_1 , col 3: fastq_2 , col4: RG, col5: lib ID, col 6: PU, col7: run date, col8: platform, col9: seq center
-    File? cohort_name
+    String cohort_name
     Boolean make_fofn
   }
 
@@ -76,40 +76,36 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
             platform_name = platform_name,
             sequencing_center = sequencing_center,
     }
-  }
 
   #Create a file with the generated ubams
   if (make_fofn) {  
     call CreateFoFN {
       input:
         ubam = PairedFastQsToUnmappedBAM.output_unmapped_bam,
-        fofn_name = cohort_name + ".ubam"
+        cohort_name = cohort_name
     }
   }
-  
+}
+
   # Outputs that will be retained when execution is complete
   output {
-    Array[File] output_unmapped_bam = PairedFastQsToUnmappedBAM.output_unmapped_bam
-    File? unmapped_bam_list = CreateFoFN.fofn_list
+    Array[File] output_unmapped_bams = PairedFastQsToUnmappedBAM.output_unmapped_bam
+    File? unmapped_bam_list = "~{cohort_name}.list"
   }
 }
 
 # Creates a file listing paths to all uBAMs (each row = path to a uBAM file)
-# In this case there will only be one file path in the txt file but this format is used by 
-# the pre-processing for variant discvoery workflow. 
 task CreateFoFN {
   input {
-    Array[File] output_unmapped_bam
-    String fofn_name
+    String ubam
+    String cohort_name
   }
-    scatter 
-    ubam =
   command {
-    echo ~{ubam} > ~{fofn_name}.list
+    echo ~{ubam} >> ~{cohort_name}.list
   }
-  output {
-    File fofn_list = "~{fofn_name}.list"
-  }
+ # output {
+ #   File fofn_list = "~{sample_name}.list"
+ # }
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "1000"

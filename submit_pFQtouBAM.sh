@@ -13,4 +13,4 @@ module add UHTS/Analysis/picard-tools/2.21.8
 
 echo "hello from `hostname` at `date`"
 
-java -Dconfig.file=/home/credin/.cromwell.conf -jar /software/Utility/cromwell/47/bin/cromwell-47.jar run /home/credin/scratch/WGS/wdls/imports/workflows/paired-fastq-to-unmapped-bam.wdl -i /home/credin/scratch/WGS/wdls/imports/workflows/paired-fastq-to-unmapped-bam_E1_S1_L001.json
+java -Dconfig.file=/home/credin/.cromwell.conf -jar /software/Utility/cromwell/47/bin/cromwell-47.jar run /home/credin/scratch/WGS/wdls/imports/workflows/paired-fastq-to-unmapped-bam-array.wdl -i /home/credin/scratch/WGS/wdls/imports/workflows/paired-fastq-to-unmapped-bam_E1_array.json
