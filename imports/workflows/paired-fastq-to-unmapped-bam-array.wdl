@@ -76,7 +76,7 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
             platform_name = platform_name,
             sequencing_center = sequencing_center,
     }
-
+  }
   #Create a file with the generated ubams
   if (make_fofn) {  
     call CreateFoFN {
@@ -85,27 +85,26 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
         cohort_name = cohort_name
     }
   }
-}
 
   # Outputs that will be retained when execution is complete
   output {
     Array[File] output_unmapped_bams = PairedFastQsToUnmappedBAM.output_unmapped_bam
-    File? unmapped_bam_list = "~{cohort_name}.list"
+    File? unmapped_bam_list = CreateFoFN.fofn_list
   }
 }
 
 # Creates a file listing paths to all uBAMs (each row = path to a uBAM file)
 task CreateFoFN {
   input {
-    String ubam
+    Array[String] ubam
     String cohort_name
   }
   command {
-    echo ~{ubam} >> ~{cohort_name}.list
+    echo ~{sep='\n' ubam} >> ~{cohort_name}.list
   }
- # output {
- #   File fofn_list = "~{sample_name}.list"
- # }
+  output {
+    File fofn_list = "~{cohort_name}.list"
+  }
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "1000"
