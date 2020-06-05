@@ -305,7 +305,7 @@ task CollectWgsMetrics {
       INCLUDE_BQ_HISTOGRAM=true \
       INTERVALS=~{wgs_coverage_interval_list} \
       OUTPUT=~{metrics_filename} \
-      USE_FAST_ALGORITHM=true \
+      USE_FAST_ALGORITHM=false \
       READ_LENGTH=~{read_length}
   }
   runtime {
@@ -350,7 +350,7 @@ task CollectRawWgsMetrics {
       INCLUDE_BQ_HISTOGRAM=true \
       INTERVALS=~{wgs_coverage_interval_list} \
       OUTPUT=~{metrics_filename} \
-      USE_FAST_ALGORITHM=true \
+      USE_FAST_ALGORITHM=false \
       READ_LENGTH=~{read_length}
   }
   runtime {
