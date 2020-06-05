@@ -147,7 +147,7 @@ task SamSplitter {
       INPUT=~{input_bam} \
       OUTPUT=output_dir \
       SPLIT_TO_N_READS=~{n_reads} \
-      TOTAL_READS_IN_INPUT=~{total_reads}
+      TOTAL_READS_IN_INPUT=$total_reads
   }
   runtime {
 	  runtime_minutes: "8000"

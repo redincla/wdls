@@ -45,7 +45,7 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
   input {
     File GATK
     File full_map # col 1: sample_name, col 2: fastq_1 , col 3: fastq_2 , col4: RG, col5: lib ID, col 6: PU, col7: run date, col8: platform, col9: seq center
-    String cohort_name
+    String cohort_name #could be same as sample_name if multiple files from same sample
     Boolean make_fofn
   }
 
@@ -100,7 +100,7 @@ task CreateFoFN {
     String cohort_name
   }
   command {
-    echo ~{sep='\n' ubam} >> ~{cohort_name}.list
+    echo "~{sep='\n' ubam}" >> ~{cohort_name}.list
   }
   output {
     File fofn_list = "~{cohort_name}.list"

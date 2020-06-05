@@ -433,3 +433,32 @@ task PairedFastQsToUnmappedBAM {
     File output_unmapped_bam = "~{readgroup_name}.unmapped.bam"
   }
 }
+
+############
+### Validate Bam/Sam file
+############  
+task ValidateBam {
+  input {
+    File PICARD
+    File input_bam
+    File ref_fasta
+    String output_bam_basename
+  }
+
+ command {
+   java -Xmx6g -jar ~{PICARD} \
+      ValidateSamFile \
+      INPUT=~{input_bam} \
+      OUTPUT=~{output_bam_basename}.BamValidation.out \
+      MODE=SUMMARY \
+      REFERENCE_SEQUENCE=~{ref_fasta}
+}
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "9000"
+    queue: "normal"
+  }
+  output {
+    File Bamvalidation_report = "~{output_bam_basename}.BamValidation.out"
+  }
+}
