@@ -283,7 +283,8 @@ task ValidateSamFile {
 ############
 ### Collect sequencing metrics
 ############   
-# /!\ Will break if read lengths in bam > 250bp.
+# /!\ Will break if read lengths in bam > 250bp
+# /!\ Using Fast algorithm will break....
 
 task CollectWgsMetrics {
   input {
@@ -297,7 +298,7 @@ task CollectWgsMetrics {
     Int read_length
   }
   command {
-    java -Xms2000m -jar ~{PICARD} \
+    java -Xms4000m -jar ~{PICARD} \
       CollectWgsMetrics \
       INPUT=~{input_bam} \
       VALIDATION_STRINGENCY=SILENT \
@@ -309,9 +310,9 @@ task CollectWgsMetrics {
       READ_LENGTH=~{read_length}
   }
   runtime {
-	  runtime_minutes: "8000"
+	  runtime_minutes: "800"
 	  cpus: "1"
-	  requested_memory_mb_per_core: "3000"
+	  requested_memory_mb_per_core: "6000"
 	  queue: "normal"
   } 
   output {
@@ -323,6 +324,9 @@ task CollectWgsMetrics {
 ### Collect raw WGS metrics (commonly used QC thresholds)
 ############   
 # /!\ Will break if read lengths in bam > 250bp.
+# Needs 6G of java memory else will break
+# /!\ Using Fast algorithm will break...
+
 task CollectRawWgsMetrics {
   input {
     File PICARD
@@ -333,16 +337,16 @@ task CollectRawWgsMetrics {
     File ref_fasta
     File ref_index
     Int read_length
-    Int memory_multiplier = 1
+#    Int memory_multiplier = 1
   }
-    Float ref_size = size(ref_fasta, "GiB") + size(ref_index, "GiB")
-    Int disk_size = ceil(size(input_bam, "GiB") + ref_size) + 20
+#    Float ref_size = size(ref_fasta, "GiB") + size(ref_index, "GiB")
+#    Int disk_size = ceil(size(input_bam, "GiB") + ref_size) + 20
 
-    Int memory_size = ceil((if (disk_size < 110) then 5 else 7) * memory_multiplier)
-    String java_memory_size = (memory_size - 1) * 1000
+#    Int memory_size = ceil((if (disk_size < 110) then 5 else 7) * memory_multiplier)
+#    String java_memory_size = (memory_size - 1) * 1000
 
   command {
-    java -Xms~{java_memory_size}m -jar ~{PICARD} \
+    java -Xms6000m -jar ~{PICARD} \
       CollectRawWgsMetrics \
       INPUT=~{input_bam} \
       VALIDATION_STRINGENCY=SILENT \
@@ -354,7 +358,7 @@ task CollectRawWgsMetrics {
       READ_LENGTH=~{read_length}
   }
   runtime {
-	  runtime_minutes: "8000"
+	  runtime_minutes: "800"
 	  cpus: "1"
 	  requested_memory_mb_per_core: "14000"
 	  queue: "normal"
