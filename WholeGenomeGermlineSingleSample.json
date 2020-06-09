@@ -35,7 +35,7 @@
   "WholeGenomeGermlineSingleSample.calling_interval_list": "/data/chuv/LABO/redin/references/hg38/wgs_calling_regions.hg38.interval_list",
   "WholeGenomeGermlineSingleSample.break_bands_at_multiples_of": "100000",
   "WholeGenomeGermlineSingleSample.haplotype_scatter_count": "10",
-  "WholeGenomeGermlineSingleSample.make_bamout": "true",
+  "WholeGenomeGermlineSingleSample.make_bamout": "false",
 
   "WholeGenomeGermlineSingleSample.known_indels_sites_vcfs": [
     "/data/chuv/LABO/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
