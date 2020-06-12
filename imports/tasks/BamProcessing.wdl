@@ -441,17 +441,18 @@ task ValidateBam {
   input {
     File PICARD
     File input_bam
-    File ref_fasta
-    String output_bam_basename
+    File? ref_fasta
+    String report_filename 
   }
+
+String ref_param = if defined(ref_fasta) then "REFERENCE_SEQUENCE=~{ref_fasta}" else ""
 
  command {
    java -Xmx6g -jar ~{PICARD} \
       ValidateSamFile \
       INPUT=~{input_bam} \
-      OUTPUT=~{output_bam_basename}.BamValidation.out \
-      MODE=SUMMARY \
-      REFERENCE_SEQUENCE=~{ref_fasta}
+      OUTPUT=~{report_filename} \
+      MODE=SUMMARY 
 }
   runtime {
     cpus: "1"
@@ -459,6 +460,6 @@ task ValidateBam {
     queue: "normal"
   }
   output {
-    File Bamvalidation_report = "~{output_bam_basename}.BamValidation.out"
+    File Bamvalidation_report = "~{report_filename}"
   }
 }
