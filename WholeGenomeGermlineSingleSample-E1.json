@@ -4,8 +4,10 @@
   "WholeGenomeGermlineSingleSample.final_vcf_base_name": "E1_PLUMBING",
 
   "WholeGenomeGermlineSingleSample.flowcell_unmapped_bams": [
-    "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/ConvertPairedFastQsToUnmappedBamWf/4eabe0fa-010e-44cc-82eb-f96fdf64e747/call-PairedFastQsToUnmappedBAM/shard-0/execution/E1_S1_L001.unmapped.bam",
-    "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/ConvertPairedFastQsToUnmappedBamWf/4eabe0fa-010e-44cc-82eb-f96fdf64e747/call-PairedFastQsToUnmappedBAM/shard-1/execution/E1_S1_L002.unmapped.bam"
+    "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/ConvertPairedFastQsToUnmappedBamWf/a4b1dcde-09f0-4b0f-8253-bd90b86f99b2/call-PairedFastQsToUnmappedBAM/shard-0/execution/E1_S1_L001.unmapped.bam", 
+    "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/ConvertPairedFastQsToUnmappedBamWf/a4b1dcde-09f0-4b0f-8253-bd90b86f99b2/call-PairedFastQsToUnmappedBAM/shard-1/execution/E1_S1_L002.unmapped.bam", 
+    "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/ConvertPairedFastQsToUnmappedBamWf/a4b1dcde-09f0-4b0f-8253-bd90b86f99b2/call-PairedFastQsToUnmappedBAM/shard-2/execution/E1_S1_L003.unmapped.bam", 
+    "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/ConvertPairedFastQsToUnmappedBamWf/a4b1dcde-09f0-4b0f-8253-bd90b86f99b2/call-PairedFastQsToUnmappedBAM/shard-3/execution/E1_S1_L004.unmapped.bam"
     ],
 
   "WholeGenomeGermlineSingleSample.SAMTOOLS": "/software/UHTS/Analysis/samtools/1.10/bin/samtools",
