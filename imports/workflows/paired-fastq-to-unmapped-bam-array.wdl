@@ -37,6 +37,7 @@ version 1.0
 
 ## Local import
 import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
+import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/Qc.wdl" as QC
 
 #################################################################
 # WORKFLOW DEFINITION
@@ -44,6 +45,7 @@ import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/BamProcessin
 workflow ConvertPairedFastQsToUnmappedBamWf {
   input {
     File GATK
+    File PICARD
     File full_map # col 1: sample_name, col 2: fastq_1 , col 3: fastq_2 , col4: RG, col5: lib ID, col 6: PU, col7: run date, col8: platform, col9: seq center
     String cohort_name #could be same as sample_name if multiple files from same sample
     Boolean make_fofn
@@ -62,7 +64,7 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
         String platform_name = line[7]
         String sequencing_center = line[8]
 
-    # Convert pair of FASTQs to uBAM
+### [1] Convert pair of FASTQs to uBAM
     call Processing.PairedFastQsToUnmappedBAM as PairedFastQsToUnmappedBAM {
         input:
             GATK = GATK,
@@ -74,8 +76,26 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
             platform_unit = platform_unit,
             run_date = run_date,
             platform_name = platform_name,
-            sequencing_center = sequencing_center,
+            sequencing_center = sequencing_center
     }
+
+#    call Processing.SortSam as SortSampleBam {   useless as automatically query sorted with previous task
+#        input:
+#          PICARD = PICARD,
+#          input_bam = PairedFastQsToUnmappedBAM.output_unmapped_bam,
+#          output_bam_basename = sample_name + readgroup_name + ".unaligned_sorted",
+#          compression_level = compression_level
+#    }
+
+
+### [2] Validate the BAM file
+    call Processing.ValidateBam as ValidateBam {
+      input:
+          PICARD = PICARD,
+          input_bam = PairedFastQsToUnmappedBAM.output_unmapped_bam,
+          report_filename = sample_name + readgroup_name + ".bam.validation_report"
+  }
+
   }
   #Create a file with the generated ubams
   if (make_fofn) {  
@@ -90,6 +110,7 @@ workflow ConvertPairedFastQsToUnmappedBamWf {
   output {
     Array[File] output_unmapped_bams = PairedFastQsToUnmappedBAM.output_unmapped_bam
     File? unmapped_bam_list = CreateFoFN.fofn_list
+    Array[File] output_bamvalidation_report = ValidateBam.Bamvalidation_report
   }
 }
 
