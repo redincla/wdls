@@ -1,5 +1,7 @@
 version 1.0
 
+## Adapted from Broad Institute pipeline
+
 ## Copyright Broad Institute, 2018
 ##
 ## This WDL pipeline implements data pre-processing and initial variant calling (GVCF
@@ -7,7 +9,7 @@ version 1.0
 ## Indel discovery in human whole-genome data.
 ##
 ## Requirements/expectations :
-## - Human whole-genome pair-end sequencing data in unmapped BAM (uBAM) format
+## - Human whole-genome pair-end sequencing data in FQ (or unmapped BAM (uBAM) format)
 ## - One or more read groups, one per uBAM file, all belonging to a single sample (SM)
 ## - Input uBAM files must additionally comply with the following requirements:
 ## - - filenames all have the same suffix (we use ".unmapped.bam")
@@ -35,6 +37,7 @@ import "./imports/tasks/Qc.wdl" as QC
 import "./imports/workflows/BamToCram.wdl" as ToCram
 import "./imports/tasks/BamProcessing.wdl" as Processing
 import "./imports/workflows/VariantCalling.wdl" as ToGvcf
+import "./imports/workflows/pFQtoUnmappedBam.wdl" as FQTouBam
 
 
 #################################################################
@@ -44,8 +47,10 @@ workflow WholeGenomeGermlineSingleSample {
     String pipeline_version = "1.3"
 
   input {
-    Array[File] flowcell_unmapped_bams
-    String sample_name
+#    Array[File] flowcell_unmapped_bams
+#    String sample_name
+    File full_map # col 1: sample_name, col 2: fastq_1 , col 3: fastq_2 , col4: RG, col5: lib ID, col 6: PU, col7: run date, col8: platform, col9: seq center
+    Boolean make_fofn
     String base_file_name
     File ref_fasta
     File ref_index
@@ -87,10 +92,17 @@ workflow WholeGenomeGermlineSingleSample {
     String cross_check_fingerprints_by = "READGROUP"
     String recalibrated_bam_basename = base_file_name + ".aligned.duplicates_marked.recalibrated"
 
+    call FQTouBam.pFQtoUnmappedBam {
+    input:
+        GATK = GATK,
+        PICARD = PICARD,
+        full_map = full_map, 
+        make_fofn = make_fofn
+     }
 
     call ToBam.UnmappedBamToAlignedBam {
     input:
-        flowcell_unmapped_bams = flowcell_unmapped_bams,
+        flowcell_unmapped_bams = pFQtoUnmappedBam.output_unmapped_bams,
         base_file_name = base_file_name,
         ref_fasta = ref_fasta,
         ref_index = ref_index,
