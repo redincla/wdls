@@ -1,7 +1,0 @@
-{
-  "ConvertPairedFastQsToUnmappedBamWf.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
-  "ConvertPairedFastQsToUnmappedBamWf.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
-  "ConvertPairedFastQsToUnmappedBamWf.full_map": "/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/191114_A00485_0035_BHVWNKDSXX/E1.fq-list.tsv",
-  "ConvertPairedFastQsToUnmappedBamWf.make_fofn": true,
-  "ConvertPairedFastQsToUnmappedBamWf.cohort_name": "E1"
-}
