@@ -48,10 +48,9 @@ workflow WholeGenomeGermlineSingleSample {
 
   input {
 #    Array[File] flowcell_unmapped_bams
-#    String sample_name
-    File full_map # col 1: sample_name, col 2: fastq_1 , col 3: fastq_2 , col4: RG, col5: lib ID, col 6: PU, col7: run date, col8: platform, col9: seq center
+    File full_map # col 1: fastq_1 , col 2: fastq_2 , col3: RG, col4: lib ID, col 5: PU, col6: run date, col7: platform, col8: seq center
     Boolean make_fofn
-    String base_file_name
+    String base_file_name # = sample name
     File ref_fasta
     File ref_index
     File ref_dict
@@ -97,6 +96,7 @@ workflow WholeGenomeGermlineSingleSample {
         GATK = GATK,
         PICARD = PICARD,
         full_map = full_map, 
+        base_file_name = base_file_name,
         make_fofn = make_fofn
      }
 
@@ -212,6 +212,10 @@ workflow WholeGenomeGermlineSingleSample {
 
   # Outputs that will be retained when execution is complete
   output {
+    Array[File] output_unmapped_bams = pFQtoUnmappedBam.output_unmapped_bams
+    File? unmapped_bam_list = pFQtoUnmappedBam.unmapped_bam_list
+    Array[File] output_bamvalidation_report = pFQtoUnmappedBam.output_bamvalidation_report
+    
     Array[File] quality_yield_metrics = UnmappedBamToAlignedBam.quality_yield_metrics
 
     Array[File] unsorted_read_group_base_distribution_by_cycle_pdf = UnmappedBamToAlignedBam.unsorted_read_group_base_distribution_by_cycle_pdf
