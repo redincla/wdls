@@ -46,29 +46,28 @@ workflow pFQtoUnmappedBam {
   input {
     File GATK
     File PICARD
-    File full_map # col 1: sample_name, col 2: fastq_1 , col 3: fastq_2 , col4: RG, col5: lib ID, col 6: PU, col7: run date, col8: platform, col9: seq center
-#    String cohort_name #could be same as sample_name if multiple files from same sample
+    File full_map # col 1: fastq_1 , col 2: fastq_2 , col3: RG, col4: lib ID, col 5: PU, col6: run date, col7: platform, col8: seq center
+    String base_file_name
     Boolean make_fofn
   }
 
   Array[Array[String]] inputSamples = read_tsv(full_map)
 
   scatter (line in inputSamples) {
-        String sample_name  = line[0]
-        File fastq_1 = line[1]
-        File fastq_2 = line[2]
-        String readgroup_name = line[3]
-        String library_name = line[4]
-        String platform_unit = line[5]
-        String run_date = line[6]
-        String platform_name = line[7]
-        String sequencing_center = line[8]
+        File fastq_1 = line[0]
+        File fastq_2 = line[1]
+        String readgroup_name = line[2]
+        String library_name = line[3]
+        String platform_unit = line[4]
+        String run_date = line[5]
+        String platform_name = line[6]
+        String sequencing_center = line[7]
 
 ### [1] Convert pair of FASTQs to uBAM
     call Processing.PairedFastQsToUnmappedBAM as PairedFastQsToUnmappedBAM {
         input:
             GATK = GATK,
-            sample_name = sample_name,
+            sample_name = base_file_name,
             fastq_1 = fastq_1,
             fastq_2 = fastq_2,
             readgroup_name = readgroup_name,
@@ -87,13 +86,12 @@ workflow pFQtoUnmappedBam {
 #          compression_level = compression_level
 #    }
 
-
 ### [2] Validate the BAM file
     call Processing.ValidateBam as ValidateBam {
       input:
           PICARD = PICARD,
           input_bam = PairedFastQsToUnmappedBAM.output_unmapped_bam,
-          report_filename = sample_name + readgroup_name + ".bam.validation_report"
+          report_filename = base_file_name + readgroup_name + ".bam.validation_report"
   }
 
   }
@@ -102,7 +100,7 @@ workflow pFQtoUnmappedBam {
     call CreateFoFN {
       input:
         ubam = PairedFastQsToUnmappedBAM.output_unmapped_bam,
-        sample_name = sample_name
+        sample_name = base_file_name
     }
   }
 
