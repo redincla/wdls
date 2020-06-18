@@ -91,7 +91,7 @@ workflow pFQtoUnmappedBam {
       input:
           PICARD = PICARD,
           input_bam = PairedFastQsToUnmappedBAM.output_unmapped_bam,
-          report_filename = base_file_name + readgroup_name + ".bam.validation_report"
+          report_filename = readgroup_name + ".bam.validation_report"
   }
 
   }

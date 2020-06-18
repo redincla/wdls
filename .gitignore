@@ -7,3 +7,6 @@
 cromwell-executions/
 cromwell-workflow-logs/
 ._.DS_Store
+downsample-script.submit
+/home/credin/scratch/WGS/wdls/imports/workflows/downsample.sh
+*.out
