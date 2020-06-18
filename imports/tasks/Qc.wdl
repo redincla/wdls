@@ -412,7 +412,7 @@ task ValidateVCF {
     Boolean is_gvcf = true
   }
   command {
-    java -Xms7000m \
+    java -Xms9000m \
       -jar ~{GATK} \
       ValidateVariants \
       -V ~{input_vcf} \
@@ -424,7 +424,7 @@ task ValidateVCF {
   }
   runtime {
 	  cpus: "1"
-	  requested_memory_mb_per_core: "10000"
+	  requested_memory_mb_per_core: "12000"
   }
 }
 
