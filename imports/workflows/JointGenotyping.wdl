@@ -131,7 +131,7 @@ input {
   # For small callsets (fewer than 1000 samples) we can gather the VCF shards and collect metrics directly.
   # For anything larger, we need to keep the VCF sharded and gather metrics collected from them.
   # We allow overriding this default behavior for testing / special requests.
-  Boolean is_small_callset = select_first([gather_vcfs, num_gvcfs <= 100])
+  Boolean is_small_callset = select_first([gather_vcfs, num_gvcfs <= 1000])
 
   Int unbounded_scatter_count = select_first([top_level_scatter_count, round(unbounded_scatter_count_scale_factor * num_gvcfs)])
   Int scatter_count = if unbounded_scatter_count > 2 then unbounded_scatter_count else 2 #I think weird things happen if scatterCount is 1 -- IntervalListTools is noop?
