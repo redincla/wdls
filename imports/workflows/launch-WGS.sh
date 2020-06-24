@@ -8,19 +8,19 @@
 # Contact: Claire Redin <claire.redin@chuv.ch>
 
 # checks for appropriate input
-if [ $# -eq 2 ]; then
+if [ $# -eq 1 ]; then
  sample_list=$1 #full path to list of samples to process from same batch, one sample / line
- cohort_name=$2 #batch name - should be the same as folder name under which FQ.gz files are stored
+# cohort_name=$2 #batch name - should be the same as folder name under which FQ.gz files are stored
 else
  echo -e "\n\nLaunching WGS parallelizer script by sample\n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
  echo "Usage:"
- echo "launch-WGS.sh [sample_list] [cohort_name]"
- echo "sample_list: full path to list of samples to process, cohort_name: self-explanatory"
+ echo "launch-WGS.sh [sample_list] "
+ echo "sample_list: full path to list of samples to process "
  exit 1
 fi
 
 ### Set local parameters
-export BASEDIR=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/${cohort_name}
+export BASEDIR=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ
 export WRKDIR=${BASEDIR}/0620
 
 if ! [ -e $WRKDIR ]; then
@@ -34,7 +34,7 @@ cd ${WRKDIR}
 ### Prepare folder structure  -> Adapt full map with relative paths, not absolute paths since FQ files will be relocated
 while read sample_ID; do
     if ! [ -e $sample_ID ]; then
-	    mkdir $sample_ID
+	    mkdir   
     fi
     if ! [ -e ${sample_ID}/QC ]; then
 	    mkdir ${sample_ID}/QC
