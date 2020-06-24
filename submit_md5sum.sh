@@ -11,4 +11,4 @@
 #SBATCH --chdir /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/
 
 echo "hello from `hostname` at `date`"
-md5sum -c md5.txt 
+md5sum -c testCoPrAC_md5.txt 
