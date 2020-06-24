@@ -9,13 +9,14 @@
 
 # checks for appropriate input
 if [ $# -eq 1 ]; then
- sample_list=$1 #full path to list of samples to process from same batch, one sample / line
-# cohort_name=$2 #batch name - should be the same as folder name under which FQ.gz files are stored
+ sample_list=$1 #Col1: list of samples to process, Col2: full path to full-map
+
 else
  echo -e "\n\nLaunching WGS parallelizer script by sample\n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
  echo "Usage:"
  echo "launch-WGS.sh [sample_list] "
- echo "sample_list: full path to list of samples to process "
+ echo "sample_list: Column 1= list of samples to process, Column 2 = full path to 8-column sample map"
+ echo "(8-column sample map can be automatically generated using script: building-fullmap.sh)"
  exit 1
 fi
 
@@ -31,10 +32,10 @@ cd ${WRKDIR}
 
 #export cromwell_options="${BASEDIR}/cromwell_options.json"
 
-### Prepare folder structure  -> Adapt full map with relative paths, not absolute paths since FQ files will be relocated
-while read sample_ID; do
+### Prepare folder structure
+while read sample_ID full_map; do
     if ! [ -e $sample_ID ]; then
-	    mkdir   
+	    mkdir ${sample_ID}  
     fi
     if ! [ -e ${sample_ID}/QC ]; then
 	    mkdir ${sample_ID}/QC
@@ -46,22 +47,24 @@ while read sample_ID; do
 	    mkdir ${sample_ID}/Processed
     fi
 
-    mv ${BASEDIR}/${sample_ID}*fastq.gz ${WRKDIR}/${sample_ID}/Raw/
-    mv ${BASEDIR}/${sample_ID}.full_map.tsv ${WRKDIR}/${sample_ID}/Raw/
-    sed -i "s+${BASEDIR}+${WRKDIR}/${sample_ID}/Raw+g" ${WRKDIR}/${sample_ID}/Raw/${sample_ID}.full_map.tsv
+    while read fq1 fq2 rest; do
+      mv ${fq1} ${WRKDIR}/${sample_ID}/Raw/
+      mv ${fq2} ${WRKDIR}/${sample_ID}/Raw/
+      old_fq_path="${fq1%%${sample_ID}*}"
+      sed -i "s+${old_fq_path}+${WRKDIR}/${sample_ID}/Raw/+g" ${full_map}
+    done < ${full_map}
+
+    mv ${full_map} ${WRKDIR}/${sample_ID}/Raw/
+
 done < ${sample_list}
 
 # Make template json for inputs
 if ! [ -e ${WRKDIR}/json ]; then
 	    mkdir ${WRKDIR}/json
 fi
-# cd /home/credin/scratch/WGS/wdls \
-# && womtool inputs WholeGenomeGermlineSingleSample.wdl \
-# > ${WRKDIR}/json/template.input.json \
-# && cd -
 
 # Write input json for each sample
-while read sample_ID; do
+while read sample_ID full_map; do
   touch ${WRKDIR}/json/${sample_ID}.WGS.input.json
   cat <<EOF > ${WRKDIR}/json/${sample_ID}.WGS.input.json
 {
@@ -113,7 +116,7 @@ EOF
 done < ${sample_list}
 
 # Write cromwell options with final output directory for each sample
-while read sample_ID; do
+while read sample_ID full_map; do
   touch ${WRKDIR}/json/${sample_ID}.WGS.options.json
   cat <<EOF > ${WRKDIR}/json/${sample_ID}.WGS.options.json
 {
@@ -123,26 +126,16 @@ while read sample_ID; do
 EOF
 done < ${sample_list}
 
-### Run first 3 samples (as a test)
-# Submit
-#while read sample_ID; do
-#  sleep 5
-#  cd ${WRKDIR}
-#  sbatch /home/credin/scratch/WGS/wdls/submit_WGSinglesample.sh \
-#    "${WRKDIR}/json/${sample_ID}.WGS.input.json" \
-#    "${WRKDIR}/json/${sample_ID}.WGS.options.json"
-# done < ${sample_list}
-
-### Run first 3 samples (as a test)
-while read sample_ID; do
+### Launch WGS script
+while read sample_ID full_map; do
 cd ${WRKDIR}
 touch ${WRKDIR}/json/${sample_ID}.WGS.script-submit
 echo "#!/bin/bash
 #SBATCH -n 1
-#SBATCH --job-name=WGS
+#SBATCH --job-name=WGS.${sample_ID}
 #SBATCH -t 3-00:00
 #SBATCH --mem-per-cpu=14G
-#SBATCH --output=slurm.%N.%j.log
+#SBATCH --output=slurm.${sample_ID}.%N.%j.log
 #module load Utility/cromwell/47
 
 module add Development/java/1.8.0_232
