@@ -4,6 +4,7 @@
 #    Creating full.map  #
 ########################
 # col 1: fastq_1 , col 2: fastq_2 , col3: RG, col4: lib ID, col 5: PU, col6: run date, col7: platform, col8: seq center
+# rename fq files including seq date? So that when copying to Raw directory later on there are not overwriting risks...
 
 export BASEDIR=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ
 export WRKDIR=${BASEDIR}/0620
