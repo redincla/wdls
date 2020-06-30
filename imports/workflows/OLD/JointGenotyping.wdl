@@ -51,7 +51,7 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
+import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/JointCalling-tasks.wdl" as Tasks
 
 #################################################################
 # WORKFLOW DEFINITION - Joint Genotyping for hg38 Whole Genomes and Exomes
@@ -61,8 +61,7 @@ workflow JointGenotyping {
   String pipeline_version = "1.2"
 
 input {
-  File full_map  #col1: sample name, col2: path to gvcf, col3: path to gvcf index
-  File sample_name_map #col1: sample name, col2: path to gvcf
+  File sample_name_map
   Int sample_num_threshold = 50 #minimum number of samples to get reliable joint calling results
 
     File GATK
@@ -132,7 +131,7 @@ input {
   # For small callsets (fewer than 1000 samples) we can gather the VCF shards and collect metrics directly.
   # For anything larger, we need to keep the VCF sharded and gather metrics collected from them.
   # We allow overriding this default behavior for testing / special requests.
-  Boolean is_small_callset = select_first([gather_vcfs, num_gvcfs <= 100])
+  Boolean is_small_callset = select_first([gather_vcfs, num_gvcfs <= 1000])
 
   Int unbounded_scatter_count = select_first([top_level_scatter_count, round(unbounded_scatter_count_scale_factor * num_gvcfs)])
   Int scatter_count = if unbounded_scatter_count > 2 then unbounded_scatter_count else 2 #I think weird things happen if scatterCount is 1 -- IntervalListTools is noop?
@@ -289,22 +288,17 @@ input {
     }
 
     if (cross_check_fingerprints) {
-    
-    Array[Array[String]] inputSamples = read_tsv(full_map)
 
-      scatter (line in inputSamples) {
+      scatter (line in sample_name_map_lines) {
          File gvcf_paths = line[1]
-         File gvcf_index_paths = line[2]
       }
 
 ## modified initial GATK version to:  1- add vcf/gvcf indices in the input to save time
 ##                                    2- use final vcf as 2nd input instead of intermediate recalibrated vcfs
-
       call Tasks.CrossCheckFingerprint as CrossCheckFingerprintSolo {
         input:
           PICARD = PICARD,
           gvcf_paths = gvcf_paths,
-          gvcf_index_paths = gvcf_index_paths,
           vcf_paths = ApplyRecalibration.recalibrated_vcf,
           vcf_index_paths = ApplyRecalibration.recalibrated_vcf_index,
           sample_name_map = sample_name_map,
