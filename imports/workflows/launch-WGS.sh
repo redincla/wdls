@@ -30,8 +30,6 @@ fi
 
 cd ${WRKDIR}
 
-#export cromwell_options="${BASEDIR}/cromwell_options.json"
-
 ### Prepare folder structure
 while read sample_ID full_map; do
     if ! [ -e $sample_ID ]; then
