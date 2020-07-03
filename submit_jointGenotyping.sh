@@ -13,4 +13,4 @@ module add UHTS/Analysis/picard-tools/2.21.8
 
 echo "hello from `hostname` at `date`"
 
-java -Dconfig.file=/home/credin/.cromwell.conf -jar /software/Utility/cromwell/47/bin/cromwell-47.jar run /home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping-test.wdl -i /home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping-test.json
+java -Dconfig.file=/home/credin/.cromwell.conf -jar /software/Utility/cromwell/47/bin/cromwell-47.jar run /home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping.wdl -i /home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping.json
