@@ -78,11 +78,11 @@ task ImportGVCFs {
     File ref_index
     File ref_dict
     String workspace_dir_name
+    String TMP_DIR
     Int batch_size
   }
     # Using a nightly version of GATK containing fixes for GenomicsDB
     # https://github.com/broadinstitute/gatk/pull/5899
-
 
 # /!\ if existing directory with same name, will be deleted
 
@@ -95,11 +95,15 @@ task ImportGVCFs {
     # a significant amount of non-heap memory for native libraries.
     # Also, testing has shown that the multithreaded reader initialization
     # does not scale well beyond 5 threads, so don't increase beyond that.
+    # if export TILEDB_DISABLE_FILE_LOCKING=1 fails, need to upgrade to GATK4.1.8.0, which includes GenomicsDB (1.3.0)
+    # 02.07 changes: deactivate consolidate option, make use of tmp_dir, increased memory
   command <<<
     set -euo pipefail
 
     rm -rf ~{workspace_dir_name} 
-    java -Xms8g \
+    TMP_DIR=`mktemp -d /tmp/tmp.XXXXXX`
+    export TILEDB_DISABLE_FILE_LOCKING=1 #required when working on a POSIX filesystem (e.g. Lustre, NFS, xfs, ext4) before running any GenomicsDB tool
+    java -Xms16g -Djava.io.tmpdir=${TMP_DIR} \
       -jar ~{GATK} \
       GenomicsDBImport \
       --genomicsdb-workspace-path ~{workspace_dir_name} \
@@ -108,14 +112,16 @@ task ImportGVCFs {
       --sample-name-map ~{sample_name_map} \
       --reader-threads 5 \
       --merge-input-intervals \
-      --consolidate
+      --max-num-intervals-to-import-in-parallel 3 \
+      --tmp-dir=${TMP_DIR}
 
     tar -cf ~{workspace_dir_name}.tar ~{workspace_dir_name}
   >>>
 
   runtime {
     cpus: "4"
-	  requested_memory_mb_per_core: "26000"
+	  requested_memory_mb_per_core: "40000"
+    runtime_minutes: "2880"
   }
 
   output {
@@ -144,11 +150,12 @@ task GenotypeGVCFs {
     Boolean allow_old_rms_mapping_quality_annotation_data = false
   }
   command <<<
+
     set -euo pipefail
 
     tar -xf ~{workspace_tar}
     WORKSPACE=$(basename ~{workspace_tar} .tar)
-
+    export TILEDB_DISABLE_FILE_LOCKING=1
     java -Xms8g \
       -jar ~{GATK} \
       GenotypeGVCFs \
