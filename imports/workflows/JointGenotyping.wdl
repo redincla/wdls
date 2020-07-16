@@ -190,7 +190,7 @@ input {
     File genotyped_vcf = GenotypeGVCFs.output_vcf
     File genotyped_vcf_index = GenotypeGVCFs.output_vcf_index
 
-### ToKeep or not? given small sampleset?
+    if (!is_small_callset) {
     call Tasks.HardFilterAndMakeSitesOnlyVcf {
       input:
         GATK = GATK,
@@ -199,14 +199,30 @@ input {
         excess_het_threshold = excess_het_threshold,
         variant_filtered_vcf_filename = callset_name + "." + idx + ".variant_filtered.vcf.gz",
         sites_only_vcf_filename = callset_name + "." + idx + ".sites_only.variant_filtered.vcf.gz"
+      }
     }
+
+    if (is_small_callset) {
+    call Tasks.MakeSitesOnlyVcf {
+      input:
+        GATK = GATK,
+        vcf = genotyped_vcf,
+        vcf_index = genotyped_vcf_index,
+        sites_only_vcf_filename = callset_name + "." + idx + ".sites_only.vcf.gz"
+      }
+    }
+
+    File GatherVcfs_input_vcfs = select_first([MakeSitesOnlyVcf.sites_only_vcf, HardFilterAndMakeSitesOnlyVcf.sites_only_vcf])
+    File ApplyRecalibration_input_vcfs = select_first([HardFilterAndMakeSitesOnlyVcf.variant_filtered_vcf, genotyped_vcf])
+    File ApplyRecalibration_input_vcfs_index = select_first([HardFilterAndMakeSitesOnlyVcf.variant_filtered_vcf_index, genotyped_vcf_index])
+
   }
 
   call Tasks.GatherVcfs as SitesOnlyGatherVcf {
     input:
       GATK = GATK,
       tabix = tabix,
-      input_vcfs = HardFilterAndMakeSitesOnlyVcf.sites_only_vcf,
+      input_vcfs = GatherVcfs_input_vcfs,
       output_vcf_name = callset_name + ".sites_only.vcf.gz"
   }
 
@@ -254,8 +270,8 @@ input {
       input:
         GATK = GATK,
         recalibrated_vcf_filename = callset_name + ".filtered." + idx + ".vcf.gz",
-        input_vcf = HardFilterAndMakeSitesOnlyVcf.variant_filtered_vcf[idx],
-        input_vcf_index = HardFilterAndMakeSitesOnlyVcf.variant_filtered_vcf_index[idx],
+        input_vcf = ApplyRecalibration_input_vcfs[idx],
+        input_vcf_index = ApplyRecalibration_input_vcfs_index[idx],
         indels_recalibration = IndelsVariantRecalibrator.recalibration,
         indels_recalibration_index = IndelsVariantRecalibrator.recalibration_index,
         indels_tranches = IndelsVariantRecalibrator.tranches,
