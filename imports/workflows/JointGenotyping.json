@@ -3,6 +3,8 @@
   "JointGenotyping.sample_name_map": "/data/chuv/LABO/redin/test-data/1kgp/downsampled_gvcf_hg38/hg38_1kg_50.sample_map",
   "JointGenotyping.sample_num_threshold": "50",
 
+  "JointGenotyping.top_level_scatter_count": "40",
+
   "JointGenotyping.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
   "JointGenotyping.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
   "JointGenotyping.tabix": "/software/UHTS/Analysis/EPACTS/3.2.6/bin/tabix",
