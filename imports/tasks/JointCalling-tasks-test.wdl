@@ -813,19 +813,22 @@ task PartitionSampleNameMap {
 ############
 task AnnotateScatteredVCF {
   input {
-    File Annovar  ##path to table_annovar.pl script
     File input_vcf
     File AnnovarDB   ##path to AnnovarDB (hg19/hg38)
     String genome_build ## hg38 / hg18 / hg19. Needs corresponding dbs to be downloaded!
-    String base_output_name  
+    String base_vcf_name  
+    File bgzip
   }
 
   command <<<
-  perl ~{Annovar} ~{input_vcf} \
+  export PATH="$PATH:/data/chuv/LABO/redin/annovar"
+  table_annovar.pl ~{input_vcf} \
   ~{AnnovarDB} -buildver ~{genome_build} \
-  -out ~{output_vcf} -remove \
+  -out ~{base_vcf_name} -remove \
   -protocol refGene,ensGene,gnomad_exome,gnomad_genome,dbnsfp33a,genomicSuperDups,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand \
   -operation g,g,f,f,f,r,f,f,f,r -nastring . -vcfinput --thread 4 --polish
+
+  ~{bgzip} "~{base_vcf_name}.hg38_multianno.vcf"
   >>>
 
   runtime {
@@ -834,7 +837,6 @@ task AnnotateScatteredVCF {
   }
 
   output {
-    File output_vcf = "~{base_output_name}.vcf"
+    File output_vcf = "~{base_vcf_name}.hg38_multianno.vcf.gz"
   }
 }
-
