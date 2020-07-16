@@ -62,6 +62,8 @@ fi
   "JointGenotyping.workspace_dir_name": "genomicsdb",
   "JointGenotyping.callset_name": "${cohort_name}",
 
+  "JointGenotyping.top_level_scatter_count": "40",
+
   "JointGenotyping.dbsnp_vcf": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
   "JointGenotyping.dbsnp_vcf_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx",
 
