@@ -53,6 +53,7 @@ task SplitIntervalList {
       -jar ~{GATK} \
       SplitIntervals \
       -L ~{interval_list} -O scatterDir -scatter ~{scatter_count} -R ~{ref_fasta} \
+      -imr OVERLAPPING_ONLY \
       -mode ~{scatter_mode}
    }
 
@@ -121,7 +122,7 @@ task ImportGVCFs {
   runtime {
     cpus: "4"
 	  requested_memory_mb_per_core: "40000"
-    runtime_minutes: "2880"
+    runtime_minutes: "2100"
   }
 
   output {
@@ -173,7 +174,8 @@ task GenotypeGVCFs {
 
   runtime {
     cpus: "2"
-	  requested_memory_mb_per_core: "26000"    
+	  requested_memory_mb_per_core: "26000"  
+    runtime_minutes: "2880"  
   }
 
   output {
@@ -804,3 +806,35 @@ task PartitionSampleNameMap {
 	  requested_memory_mb_per_core: "1000" 
   }
 }
+
+
+############
+### Annotate vcf (small contigs)
+############
+task AnnotateScatteredVCF {
+  input {
+    File Annovar  ##path to table_annovar.pl script
+    File input_vcf
+    File AnnovarDB   ##path to AnnovarDB (hg19/hg38)
+    String genome_build ## hg38 / hg18 / hg19. Needs corresponding dbs to be downloaded!
+    String base_output_name  
+  }
+
+  command <<<
+  perl ~{Annovar} ~{input_vcf} \
+  ~{AnnovarDB} -buildver ~{genome_build} \
+  -out ~{output_vcf} -remove \
+  -protocol refGene,ensGene,gnomad_exome,gnomad_genome,dbnsfp33a,genomicSuperDups,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand \
+  -operation g,g,f,f,f,r,f,f,f,r -nastring . -vcfinput --thread 4 --polish
+  >>>
+
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "12000"
+  }
+
+  output {
+    File output_vcf = "~{base_output_name}.vcf"
+  }
+}
+
