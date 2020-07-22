@@ -22,12 +22,14 @@ String genome_build ## hg38 / hg18 / hg19. Needs corresponding dbs to be downloa
 File GATK
 File tabix
 File bgzip
+String OUTPUT_DIR
+File conf_file
 }
 
 String callset_name  = basename(input_vcfs[0], ".0.vcf.gz")
 
 scatter (idx in range(length(input_vcfs))) {  
-    call Tasks.AnnotateScatteredVCF as AnnotateScatteredVCF { ## outputs a vcf and not vcf.gz file!
+    call Tasks.AnnovarScatteredVCF as AnnovarScatteredVCF { 
     input:
     input_vcf = input_vcfs[idx],
     AnnovarDB = AnnovarDB,
@@ -35,19 +37,27 @@ scatter (idx in range(length(input_vcfs))) {
     base_vcf_name = callset_name + "." + idx,
     bgzip = bgzip
     }
+
+    call Tasks.vcfannoScatteredVCF as vcfannoScatteredVCF { 
+    input:
+    input_vcf = AnnovarScatteredVCF.output_vcf,
+    OUTPUT_DIR = OUTPUT_DIR,
+    conf_file = conf_file,
+    base_vcf_name = callset_name + "." + idx
+    }
 }
 
 call Tasks.GatherVcfs as GatherVcfs {
     input:
       GATK = GATK,
       tabix = tabix,
-      input_vcfs = AnnotateScatteredVCF.output_vcf,
+      input_vcfs = vcfannoScatteredVCF.output_vcf,
       output_vcf_name = callset_name + ".annotated.vcf.gz"
   }
 
 
   output {
-    Array[File] scattered_vcfs = AnnotateScatteredVCF.output_vcf
+    Array[File] scattered_vcfs = vcfannoScatteredVCF.output_vcf
     File final_vcf = GatherVcfs.output_vcf
     File final_vcf_index = GatherVcfs.output_vcf_index
   }
