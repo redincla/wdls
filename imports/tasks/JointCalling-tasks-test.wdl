@@ -360,6 +360,7 @@ task GatherVcfs {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "7000" 
+    runtime_minutes: "120"
   }
 
   output {
@@ -814,7 +815,7 @@ task PartitionSampleNameMap {
 task AnnotateScatteredVCF {
   input {
     File input_vcf
-    File AnnovarDB   ##path to AnnovarDB (hg19/hg38)
+    String AnnovarDB   ##path to AnnovarDB (hg19/hg38)
     String genome_build ## hg38 / hg18 / hg19. Needs corresponding dbs to be downloaded!
     String base_vcf_name  
     File bgzip
@@ -823,17 +824,18 @@ task AnnotateScatteredVCF {
   command <<<
   export PATH="$PATH:/data/chuv/LABO/redin/annovar"
   table_annovar.pl ~{input_vcf} \
-  ~{AnnovarDB} -buildver ~{genome_build} \
+  "~{AnnovarDB}" -buildver ~{genome_build} \
   -out ~{base_vcf_name} -remove \
   -protocol refGene,ensGene,gnomad_exome,gnomad_genome,dbnsfp33a,genomicSuperDups,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand \
-  -operation g,g,f,f,f,r,f,f,f,r -nastring . -vcfinput --thread 4 --polish
+  -operation g,g,f,f,f,r,f,f,f,r -nastring . -vcfinput --thread 2 --polish
 
   ~{bgzip} "~{base_vcf_name}.hg38_multianno.vcf"
   >>>
 
   runtime {
-    cpus: "1"
+    cpus: "2"
 	  requested_memory_mb_per_core: "12000"
+    runtime_minutes: "240"
   }
 
   output {
