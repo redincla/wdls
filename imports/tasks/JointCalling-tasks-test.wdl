@@ -810,9 +810,9 @@ task PartitionSampleNameMap {
 
 
 ############
-### Annotate vcf (small contigs)
+### Annotate vcf with annovar (small contigs)
 ############
-task AnnotateScatteredVCF {
+task AnnovarScatteredVCF {
   input {
     File input_vcf
     String AnnovarDB   ##path to AnnovarDB (hg19/hg38)
@@ -840,5 +840,35 @@ task AnnotateScatteredVCF {
 
   output {
     File output_vcf = "~{base_vcf_name}.hg38_multianno.vcf.gz"
+  }
+}
+
+############
+### Annotate vcf with vcfanno (small contigs)
+############
+task vcfannoScatteredVCF {
+  input {
+    File input_vcf
+    String OUTPUT_DIR 
+    File conf_file
+    String base_vcf_name  
+  }
+
+  command <<<
+  module add UHTS/Analysis/vcfanno/0.3.2
+  module add UHTS/Analysis/EPACTS/3.2.6
+  vcfanno -p 4 -base-path ~{OUTPUT_DIR} ~{conf_file} ~{input_vcf} > "~{OUTPUT_DIR}/~{base_vcf_name}.hg38_vcfanno.vcf"
+
+  bgzip "~{base_vcf_name}.hg38_vcfanno.vcf"
+  >>>
+
+  runtime {
+    cpus: "2"
+	  requested_memory_mb_per_core: "12000"
+    runtime_minutes: "240"
+  }
+
+  output {
+    File output_vcf = "~{base_vcf_name}.hg38_vcfanno.vcf.gz"
   }
 }
