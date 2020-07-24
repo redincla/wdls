@@ -1,0 +1,5 @@
+[[annotation]]
+file="/data/chuv/LABO/redin/references/gene_lists/cardioGenes_txn_canonical_annotated.bed.gz"
+columns = [4,5,6,7,8,9,10,11,12]
+names=["geneSymbol","Inheritance","n.PLP.ClinVar","n.PLP.LoF.ClinVar","n.PLP.mis.ClinVar","pLI","oe.LoF.upper","Confidence","Priority"]
+ops=["first","first","first","first","first","first","first","first","first"]
