@@ -818,22 +818,22 @@ task AnnovarScatteredVCF {
     String AnnovarDB   ##path to AnnovarDB (hg19/hg38)
     String genome_build ## hg38 / hg18 / hg19. Needs corresponding dbs to be downloaded!
     String base_vcf_name  
-    File bgzip
   }
 
   command <<<
-  export PATH="$PATH:/data/chuv/LABO/redin/annovar"
+  module add UHTS/Analysis/EPACTS/3.2.6
+  export PATH="$PATH:/data/chuv/LABO/redin/tools/annovar"
   table_annovar.pl ~{input_vcf} \
   "~{AnnovarDB}" -buildver ~{genome_build} \
   -out ~{base_vcf_name} -remove \
-  -protocol refGene,ensGene,gnomad_exome,gnomad_genome,dbnsfp33a,genomicSuperDups,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand \
-  -operation g,g,f,f,f,r,f,f,f,r -nastring . -vcfinput --thread 2 --polish
+  -protocol refGene,ensGene,gnomad_exome,gnomad_genome,gnomad30_genome,dbnsfp33a,genomicSuperDups,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand \
+  -operation g,g,f,f,f,f,r,f,f,f,r -nastring . -vcfinput --thread 2 --polish
 
-  ~{bgzip} "~{base_vcf_name}.hg38_multianno.vcf"
+  bgzip "~{base_vcf_name}.hg38_multianno.vcf"
   >>>
 
   runtime {
-    cpus: "2"
+    cpus: "1"
 	  requested_memory_mb_per_core: "12000"
     runtime_minutes: "240"
   }
@@ -849,7 +849,6 @@ task AnnovarScatteredVCF {
 task vcfannoScatteredVCF {
   input {
     File input_vcf
-    String OUTPUT_DIR 
     File conf_file
     String base_vcf_name  
   }
@@ -857,15 +856,15 @@ task vcfannoScatteredVCF {
   command <<<
   module add UHTS/Analysis/vcfanno/0.3.2
   module add UHTS/Analysis/EPACTS/3.2.6
-  vcfanno -p 4 -base-path ~{OUTPUT_DIR} ~{conf_file} ~{input_vcf} > "~{OUTPUT_DIR}/~{base_vcf_name}.hg38_vcfanno.vcf"
+  vcfanno ~{conf_file} ~{input_vcf} > "~{base_vcf_name}.hg38_vcfanno.vcf"
 
   bgzip "~{base_vcf_name}.hg38_vcfanno.vcf"
   >>>
 
   runtime {
-    cpus: "2"
-	  requested_memory_mb_per_core: "12000"
-    runtime_minutes: "240"
+    cpus: "1"
+	  requested_memory_mb_per_core: "6000"
+    runtime_minutes: "20"
   }
 
   output {
