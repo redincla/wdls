@@ -21,8 +21,6 @@ File AnnovarDB   ##path to AnnovarDB (hg19/hg38)
 String genome_build ## hg38 / hg18 / hg19. Needs corresponding dbs to be downloaded!
 File GATK
 File tabix
-File bgzip
-String OUTPUT_DIR
 File conf_file
 }
 
@@ -34,14 +32,12 @@ scatter (idx in range(length(input_vcfs))) {
     input_vcf = input_vcfs[idx],
     AnnovarDB = AnnovarDB,
     genome_build = genome_build,
-    base_vcf_name = callset_name + "." + idx,
-    bgzip = bgzip
+    base_vcf_name = callset_name + "." + idx
     }
 
     call Tasks.vcfannoScatteredVCF as vcfannoScatteredVCF { 
     input:
     input_vcf = AnnovarScatteredVCF.output_vcf,
-    OUTPUT_DIR = OUTPUT_DIR,
     conf_file = conf_file,
     base_vcf_name = callset_name + "." + idx
     }
