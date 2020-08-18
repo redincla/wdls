@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -n 1
 #SBATCH --job-name=Annovar
-#SBATCH -t 00-2:00
+#SBATCH -t 00-12:00
 #SBATCH --mem-per-cpu=16G
 #SBATCH -o slurm.%N.%j.log
 
