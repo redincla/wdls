@@ -826,8 +826,8 @@ task AnnovarScatteredVCF {
   table_annovar.pl ~{input_vcf} \
   "~{AnnovarDB}" -buildver ~{genome_build} \
   -out ~{base_vcf_name} -remove \
-  -protocol refGene,ensGene,gnomad_exome,gnomad_genome,gnomad30_genome,dbnsfp33a,genomicSuperDups,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand \
-  -operation g,g,f,f,f,f,r,f,f,f,r -nastring . -vcfinput --thread 2 --polish
+  -protocol refGene,ensGene,gnomad30_genome,gnomad_genome,dbnsfp33a,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand,dbscsnv11,spidex_lifted \
+  -operation g,g,f,f,f,f,f,f,r,f,f -nastring . -vcfinput --thread 2 --polish
 
   bgzip "~{base_vcf_name}.hg38_multianno.vcf"
   >>>
@@ -835,7 +835,7 @@ task AnnovarScatteredVCF {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "12000"
-    runtime_minutes: "240"
+    runtime_minutes: "580"
   }
 
   output {
@@ -859,6 +859,33 @@ task vcfannoScatteredVCF {
   vcfanno ~{conf_file} ~{input_vcf} > "~{base_vcf_name}.hg38_vcfanno.vcf"
 
   bgzip "~{base_vcf_name}.hg38_vcfanno.vcf"
+  >>>
+
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "6000"
+    runtime_minutes: "100"
+  }
+
+  output {
+    File output_vcf = "~{base_vcf_name}.hg38_vcfanno.vcf.gz"
+  }
+}
+
+############
+### Annotate vcf with spliceAI
+############
+task spliceAIScatteredVCF {
+  input {
+    File input_vcf
+    File conf_file
+    String base_vcf_name  
+  }
+
+  command <<<
+  spliceai -I input.vcf -O output.vcf -R genome.fa -A grch37
+  cat input.vcf | spliceai -R genome.fa -A grch37 > output.vcf
+
   >>>
 
   runtime {
