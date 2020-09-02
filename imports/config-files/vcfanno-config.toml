@@ -1,5 +1,23 @@
 [[annotation]]
 file="/data/chuv/LABO/redin/references/gene_lists/cardioGenes_txn_canonical_annotated.bed.gz"
-columns = [4,5,6,7,8,9,10,11,12]
-names=["geneSymbol","Inheritance","n.PLP.ClinVar","n.PLP.LoF.ClinVar","n.PLP.mis.ClinVar","pLI","oe.LoF.upper","Confidence","Priority"]
-ops=["first","first","first","first","first","first","first","first","first"]
+columns = [5,6,7,8,9,10,11,12]
+names=["MEDP_MOI","n.PLP.ClinVar","n.PLP.LoF.ClinVar","n.PLP.mis.ClinVar","pLI","oe.LoF.upper","MEDP_Confidence","MEDP_Priority"]
+ops=["first","first","first","first","first","first","first","first"]
+
+[[annotation]]
+file="/data/chuv/LABO/redin/references/gene_lists/ClinGen_FULL_sorted_200901.bed.gz"
+columns = [6,8,9]
+names=["ClinGen_Disease_name","ClinGen_MOI","ClinGen_Classification"]
+ops=["concat","uniq","concat"]
+
+[[annotation]]
+file="/data/chuv/LABO/redin/references/gene_lists/DDG2P_FULL_sorted_200901.bed.gz"
+columns = [5,6,7,8,9,10]
+names=["MIM_gene","MIM_Disease_name","MIM_Disease","DDD_Classification","DDD_MOI","DDD_mutation_consequence"]
+ops=["concat","concat","concat","concat","concat","concat"]
+
+[[postannotation]]
+fields=['AF_raw', 'AF_male', 'AF_female', 'AF_afr', 'AF_ami', 'AF_amr', 'AF_asj', 'AF_eas', 'AF_fin', 'AF_nfe', 'AF_oth', '1000g2015aug_all', 'Kaviar_AF']
+op="max"
+name="max_aaf_all"
+type="Float"
