@@ -119,11 +119,11 @@ command <<<
     -V ~{input_vcf} \
     -O ~{base_output_name}.lowAC.vcf.gz \
     --restrict-alleles-to BIALLELIC \
-    -select "AC < 4.0"   
+    -select "AC < 6"   
 >>>
 
   runtime {
-    cpus: "1"
+  cpus: "1"
 	requested_memory_mb_per_core: "9000" 
   }
 
@@ -148,21 +148,16 @@ task AFFilter {
   }
 
 command <<<
-    gzip -cd ~{input_vcf} | sed 's@AF_popmax,Number=.,Type=String@AF_popmax,Number=1,Type=Float@g' \
-    sed 's@M-CAP_score,Number=.,Type=String@M-CAP_score,Number=1,Type=Float@g' | gzip > tmp.vcf.gz
-
+    module add UHTS/Analysis/EPACTS/3.2.6
+    gzip -cd ~{input_vcf} | sed 's@AF_popmax,Number=.,Type=String@AF_popmax,Number=1,Type=Float@g' | sed 's@dbscSNV_ADA_SCORE,Number=.,Type=String@dbscSNV_ADA_SCORE,Number=1,Type=Float@g' | sed 's@dbscSNV_RF_SCORE,Number=.,Type=String@dbscSNV_RF_SCORE,Number=1,Type=Float@g' | sed 's@dpsi_max_tissue,Number=.,Type=String@dpsi_max_tissue,Number=1,Type=Float@g' | sed 's@dpsi_zscore,Number=.,Type=String@dpsi_zscore,Number=1,Type=Float@g' | sed 's@;AF_popmax=\.;@;AF_popmax=NaN;@g' | sed 's@;dbscSNV_ADA_SCORE=\.;@;dbscSNV_ADA_SCORE=NaN;@g'  | sed 's@;dbscSNV_RF_SCORE=\.;@;dbscSNV_RF_SCORE=NaN;@g' | sed 's@;dpsi_max_tissue=\.;@;dpsi_max_tissue=NaN;@g' | sed 's@;dpsi_zscore=\.;@;dpsi_zscore=NaN;@g' | bgzip -c > tmp.vcf.gz
+    tabix tmp.vcf.gz
     java -Xmx8g -jar ~{GATK} \
     SelectVariants \
     -R ~{ref_fasta} \
-    -V ${tmp.vcf.gz} \
+    -V tmp.vcf.gz \
     -O ~{base_output_name}.lowAC.lowAF.vcf.gz \
-    -select "AF_popmax < 0.001" 
->>>
-# sed -i 's@dbscSNV_ADA_SCORE,Number=.,Type=String@dbscSNV_ADA_SCORE,Number=1,Type=Float@g' ~{input_vcf}
-# sed -i 's@dbscSNV_RF_SCORE,Number=.,Type=String@dbscSNV_RF_SCORE,Number=1,Type=Float@g' ~{input_vcf}
-# sed -i 's@dpsi_max_tissue,Number=.,Type=String@dpsi_max_tissue,Number=1,Type=Float@g' ~{input_vcf}
-# sed -i 's@dpsi_zscore,Number=.,Type=String@dpsi_zscore,Number=1,Type=Float@g' ~{input_vcf}
-# -select "AF_popmax == '.'" \
+    -select "AF_popmax < 0.01 || AF_popmax == 'NaN'"
+>>>  # need to push everything under a single expression with || else only takes into account the last select expression??
 
   runtime {
   cpus: "1"
@@ -198,12 +193,12 @@ command <<<
         -O "~{base_output_name}.lowAC.lowAF.HQ.~{sample_ID}.vcf.gz" \
         --exclude-non-variants \
         --keep-original-ac \
-        -sn ~{sample_ID} 
+        -sn ~{sample_ID} \
         -select "QUAL > 20.0 && DP > 5" 
 >>>
 
   runtime {
-    cpus: "1"
+  cpus: "1"
 	requested_memory_mb_per_core: "9000" 
   }
 
@@ -234,16 +229,11 @@ command <<<
         -R ~{ref_fasta} \
         -V ~{input_vcf} \
         -O "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.vcf.gz" \
-        -select " Func.ensGene == 'exonic'" \
-        -select " Func.refGene == 'exonic'"
+        -select "Func.ensGene == 'exonic' || Func.refGene == 'exonic' || dbscSNV_ADA_SCORE > 0.6 || dbscSNV_RF_SCORE > 0.6 || CLINSIG  == 'Pathogenic/Likely_pathogenic' || CLINSIG  == 'Likely_pathogenic' || CLINSIG  == 'Pathogenic'"
+##       || dpsi_zscore < -2.0 || dpsi_max_tissue < -2.0
+##        -select "ExonicFunc.ensGene != 'synonymous_SNV'"
 >>>
 
-#-select "dbscSNV_ADA > 0.6"
-#-select "dbscSNV_RF > 0.6
-#-select "dpsi_zscore < -2.0
-#-select "dpsi_max_tissue < -2.0"
-#--missing-values-evaluate-as-failing
-#-select " ExonicFunc.ensGene == 'nonsynonymous_SNV'"
 #-select "M-CAP_score > 0.025"  
 
   runtime {
@@ -253,7 +243,7 @@ command <<<
 
   output {
     File output_vcf = "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.vcf.gz"
-    File output_vcf_index = "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.vcf.tbi"
+    File output_vcf_index = "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.vcf.gz.tbi"
   }
 }
 
@@ -276,11 +266,11 @@ command <<<
      java -Xmx8g -jar ~{GATK} \
      VariantsToTable \
         -V ~{input_vcf} \
-        -F CHROM -F POS -F ID -F REF -F ALT -F QUAL -F FILTER \
+        -F CHROM -F POS -F ID -F REF -F ALT -F QUAL -F FILTER -F AD -F DP -F GQ -F GT \
         -F 1000g2015aug_all -F AAChange.ensGene -F AAChange.refGene -F AC_Orig -F AF_Orig -F AF_afr -F AF_ami -F AF_amr -F AF_asj -F AF_eas -F AF_female -F AF_fin -F AF_male -F AF_nfe -F AF_popmax -F AN_Orig -F AS_FS -F AS_MQ \
-        -F AS_QD -F CADD_phred -F CLINSIG -F Confidence -F DANN_score -F DP -F ExcessHet -F ExonicFunc.ensGene -F ExonicFunc.refGene -F FATHMM_pred -F FATHMM_score -F Func.ensGene -F Func.refGene -F GERP++_RS -F Gene.ensGene -F Gene.refGene -F Inheritance \
-        -F Kaviar_AF -F M-CAP_pred -F M-CAP_score -F MetaLR_pred -F MetaLR_score -F MetaSVM_pred -F MetaSVM_score -F MutationAssessor_pred -F MutationAssessor_score -F MutationTaster_pred -F MutationTaster_score -F NEGATIVE_TRAIN_SITE -F POSITIVE_TRAIN_SITE -F Polyphen2_HDIV_pred -F Polyphen2_HDIV_score \
-        -F Polyphen2_HVAR_pred -F Polyphen2_HVAR -F Priority -F QD -F SIFT_pred -F SIFT_score -F controls_AF_popmax -F non_topmed_AF_popmax -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar -F non_cancer_AF_popmax -F oe.LoF.upper \
+        -F AS_QD -F CADD_phred -F Classification -F CLINSIG -F CLNDBN -F CLNDSDBID -F Confidence -F DANN_score -F Disease_description -F DP -F ExcessHet -F ExonicFunc.ensGene -F ExonicFunc.refGene -F FATHMM_pred -F FATHMM_score -F Func.ensGene -F Func.refGene -F GERP++_RS -F Gene.ensGene -F Gene.refGene -F Inheritance \
+        -F Kaviar_AF -F M-CAP_pred -F M-CAP_score -F MetaLR_pred -F MetaLR_score -F MetaSVM_pred -F MetaSVM_score -F MOI -F MutationAssessor_pred -F MutationAssessor_score -F MutationTaster_pred -F MutationTaster_score -F NEGATIVE_TRAIN_SITE -F POSITIVE_TRAIN_SITE -F Polyphen2_HDIV_pred -F Polyphen2_HDIV_score \
+        -F Polyphen2_HVAR_pred -F Polyphen2_HVAR -F Priority -F QD -F SIFT_pred -F SIFT_score -F max_aaf_all -F controls_AF_popmax -F dbscSNV_ADA_SCORE -F dbscSNV_RF_SCORE -F dpsi_max_tissue -F dpsi_zscore -F non_topmed_AF_popmax -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar -F non_cancer_AF_popmax -F oe.LoF.upper \
         -F pLI -F phastCons100way_vertebrate -F phyloP100way_vertebrate -F phyloP20way_mammalian \
         -O "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.tsv"
 >>>
