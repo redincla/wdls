@@ -1,8 +1,0 @@
-{
-	"final_workflow_outputs_dir": "gs://talkowski-sv-gnomad-output-staging/rlc"
-    "default_runtime_attributes": {
-        "cpu": "2",
-	"memory_mb": "4000",
-	"runtime_minutes": "36000"
-    }
-}
