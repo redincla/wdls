@@ -826,8 +826,8 @@ task AnnovarScatteredVCF {
   table_annovar.pl ~{input_vcf} \
   "~{AnnovarDB}" -buildver ~{genome_build} \
   -out ~{base_vcf_name} -remove \
-  -protocol refGene,ensGene,gnomad30_genome,gnomad_genome,dbnsfp33a,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand,dbscsnv11,spidex_lifted \
-  -operation g,g,f,f,f,f,f,f,r,f,f -nastring . -vcfinput --thread 2 --polish
+  -protocol refGene,ensGene,gnomad30_genome,dbnsfp33a,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand,dbscsnv11,spidex_lifted \
+  -operation g,g,f,f,f,f,f,r,f,f -nastring . -vcfinput --thread 2 --polish
 
   bgzip "~{base_vcf_name}.hg38_multianno.vcf"
   >>>
