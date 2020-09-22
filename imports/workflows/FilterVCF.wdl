@@ -149,14 +149,14 @@ task AFFilter {
 
 command <<<
     module add UHTS/Analysis/EPACTS/3.2.6
-    gzip -cd ~{input_vcf} | sed 's@AF_popmax,Number=.,Type=String@AF_popmax,Number=1,Type=Float@g' | sed 's@dbscSNV_ADA_SCORE,Number=.,Type=String@dbscSNV_ADA_SCORE,Number=1,Type=Float@g' | sed 's@dbscSNV_RF_SCORE,Number=.,Type=String@dbscSNV_RF_SCORE,Number=1,Type=Float@g' | sed 's@dpsi_max_tissue,Number=.,Type=String@dpsi_max_tissue,Number=1,Type=Float@g' | sed 's@dpsi_zscore,Number=.,Type=String@dpsi_zscore,Number=1,Type=Float@g' | sed 's@;AF_popmax=\.;@;AF_popmax=NaN;@g' | sed 's@;dbscSNV_ADA_SCORE=\.;@;dbscSNV_ADA_SCORE=NaN;@g'  | sed 's@;dbscSNV_RF_SCORE=\.;@;dbscSNV_RF_SCORE=NaN;@g' | sed 's@;dpsi_max_tissue=\.;@;dpsi_max_tissue=NaN;@g' | sed 's@;dpsi_zscore=\.;@;dpsi_zscore=NaN;@g' | bgzip -c > tmp.vcf.gz
+    gzip -cd ~{input_vcf} | sed 's@dbscSNV_ADA_SCORE,Number=.,Type=String@dbscSNV_ADA_SCORE,Number=1,Type=Float@g' | sed 's@dbscSNV_RF_SCORE,Number=.,Type=String@dbscSNV_RF_SCORE,Number=1,Type=Float@g' | sed 's@dpsi_max_tissue,Number=.,Type=String@dpsi_max_tissue,Number=1,Type=Float@g' | sed 's@dpsi_zscore,Number=.,Type=String@dpsi_zscore,Number=1,Type=Float@g' | sed 's@;dbscSNV_ADA_SCORE=\.;@;dbscSNV_ADA_SCORE=NaN;@g'  | sed 's@;dbscSNV_RF_SCORE=\.;@;dbscSNV_RF_SCORE=NaN;@g' | sed 's@;dpsi_max_tissue=\.;@;dpsi_max_tissue=NaN;@g' | sed 's@;dpsi_zscore=\.;@;dpsi_zscore=NaN;@g' | sed 's@;max_aaf_all=\.;@;max_aaf_all=NaN;@g' | bgzip -c > tmp.vcf.gz
     tabix tmp.vcf.gz
     java -Xmx8g -jar ~{GATK} \
     SelectVariants \
     -R ~{ref_fasta} \
     -V tmp.vcf.gz \
     -O ~{base_output_name}.lowAC.lowAF.vcf.gz \
-    -select "AF_popmax < 0.01 || AF_popmax == 'NaN'"
+    -select "max_aaf_all < 0.01 || max_aaf_all == 'NaN'"
 >>>  # need to push everything under a single expression with || else only takes into account the last select expression??
 
   runtime {
@@ -266,12 +266,12 @@ command <<<
      java -Xmx8g -jar ~{GATK} \
      VariantsToTable \
         -V ~{input_vcf} \
-        -F CHROM -F POS -F ID -F REF -F ALT -F QUAL -F FILTER -F AD -F DP -F GQ -F GT \
-        -F 1000g2015aug_all -F AAChange.ensGene -F AAChange.refGene -F AC_Orig -F AF_Orig -F AF_afr -F AF_ami -F AF_amr -F AF_asj -F AF_eas -F AF_female -F AF_fin -F AF_male -F AF_nfe -F AF_popmax -F AN_Orig -F AS_FS -F AS_MQ \
-        -F AS_QD -F CADD_phred -F Classification -F CLINSIG -F CLNDBN -F CLNDSDBID -F Confidence -F DANN_score -F Disease_description -F DP -F ExcessHet -F ExonicFunc.ensGene -F ExonicFunc.refGene -F FATHMM_pred -F FATHMM_score -F Func.ensGene -F Func.refGene -F GERP++_RS -F Gene.ensGene -F Gene.refGene -F Inheritance \
-        -F Kaviar_AF -F M-CAP_pred -F M-CAP_score -F MetaLR_pred -F MetaLR_score -F MetaSVM_pred -F MetaSVM_score -F MOI -F MutationAssessor_pred -F MutationAssessor_score -F MutationTaster_pred -F MutationTaster_score -F NEGATIVE_TRAIN_SITE -F POSITIVE_TRAIN_SITE -F Polyphen2_HDIV_pred -F Polyphen2_HDIV_score \
-        -F Polyphen2_HVAR_pred -F Polyphen2_HVAR -F Priority -F QD -F SIFT_pred -F SIFT_score -F max_aaf_all -F controls_AF_popmax -F dbscSNV_ADA_SCORE -F dbscSNV_RF_SCORE -F dpsi_max_tissue -F dpsi_zscore -F non_topmed_AF_popmax -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar -F non_cancer_AF_popmax -F oe.LoF.upper \
-        -F pLI -F phastCons100way_vertebrate -F phyloP100way_vertebrate -F phyloP20way_mammalian \
+        -F CHROM -F POS -F ID -F REF -F ALT -F QUAL -F FILTER -F AD -F DP -F GQ -F GT -F AC_Orig -F AF_Orig -F AN_Orig -F AS_FS -F AS_MQ -F AS_QD -F QD -F DP -F ExcessHet -F NEGATIVE_TRAIN_SITE -F POSITIVE_TRAIN_SITE -F SB \
+        -F Gene.ensGene -F Gene.refGene -F Func.ensGene -F Func.refGene -F ExonicFunc.ensGene -F ExonicFunc.refGene -F AAChange.ensGene -F AAChange.refGene \
+        -F AF_afr -F AF_ami -F AF_amr -F AF_asj -F AF_eas -F AF_female -F AF_fin -F AF_male -F AF_nfe -F AF_popmax -F Kaviar_AF -F 1000g2015aug_all -F max_aaf_all \
+        -F CLINSIG -F CLNDBN -F CLNDSDBID -F ClinGen_Disease_name -F ClinGen_MOI -F ClinGen_Classification -F MIM_Disease -F MIM_Disease_name -F MIM_gene -F DDD_mutation_consequence -F DDD_MOI -F DDD_Classification -F MEDP_MOI -F MEDP_Confidence -F MEDP_Priority -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar \
+        -F FATHMM_pred -F FATHMM_score -F GERP++_RS -F CADD_phred -F M-CAP_pred -F M-CAP_score -F DANN_score -F MetaLR_pred -F MetaLR_score -F MetaSVM_pred -F MetaSVM_score -F MutationAssessor_pred -F MutationAssessor_score -F MutationTaster_pred -F MutationTaster_score -F Polyphen2_HDIV_pred -F Polyphen2_HDIV_score \
+        -F Polyphen2_HVAR_pred -F Polyphen2_HVAR  -F SIFT_pred -F SIFT_score -F dbscSNV_ADA_SCORE -F dbscSNV_RF_SCORE -F dpsi_max_tissue -F dpsi_zscore -F oe.LoF.upper -F pLI -F phastCons100way_vertebrate -F phyloP100way_vertebrate -F phyloP20way_mammalian \
         -O "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.tsv"
 >>>
 
