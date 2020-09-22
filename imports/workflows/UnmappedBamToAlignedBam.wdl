@@ -69,12 +69,19 @@ workflow UnmappedBamToAlignedBam {
         Float unmapped_bam_size = size(unmapped_bam, "GiB")
         String unmapped_bam_basename = basename(unmapped_bam, ".bam")
 
-        ### [0.2] QC the unmapped BAM
+        ### [0.2] QC the unmapped BAM with Piccard
         call QC.CollectQualityYieldMetrics as CollectQualityYieldMetrics {
         input:
             PICARD = PICARD,
             input_bam = unmapped_bam,
             metrics_filename = unmapped_bam_basename + ".unmapped.quality_yield_metrics"
+        }
+
+        ### [0.3] QC the unmapped BAM with fastqc
+        call QC.CollectFastQCMetrics as CollectFastQCMetrics {
+        input:
+            input_bam = unmapped_bam,
+            metrics_basename = unmapped_bam_basename
         }
         
         ### [1.0] Align flowcell-level unmapped input bams in parallel
@@ -230,6 +237,8 @@ workflow UnmappedBamToAlignedBam {
 
 output {
     Array[File] quality_yield_metrics = CollectQualityYieldMetrics.quality_yield_metrics
+    Array[File] fastqc_metrics_summary = CollectFastQCMetrics.summary_metrics
+    Array[File] fastqc_metrics_html = CollectFastQCMetrics.html_metrics
 
     Array[File] unsorted_read_group_base_distribution_by_cycle_pdf = CollectUnsortedReadgroupBamQualityMetrics.base_distribution_by_cycle_pdf
     Array[File] unsorted_read_group_base_distribution_by_cycle_metrics = CollectUnsortedReadgroupBamQualityMetrics.base_distribution_by_cycle_metrics

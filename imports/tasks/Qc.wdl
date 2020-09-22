@@ -463,3 +463,26 @@ task CollectVariantCallingMetrics {
   }
 }
 
+############
+### Collect FastQC metrics from FQ/bam files
+############  
+task CollectFastQCMetrics {
+  input {
+    File input_bam
+    String metrics_basename
+    Boolean is_bam = true
+  }
+  command {
+    module add UHTS/Quality_control/fastqc/0.11.7
+    fastqc ~{input_bam} ~{true="-f bam" false="-f fastq" is_bam}
+  }
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "8000"
+    runtime_minutes: "1400"
+  }
+  output {
+    File summary_metrics = "~{metrics_basename}_fastqc.zip"
+    File html_metrics = "~{metrics_basename}_fastqc.html"
+  }
+}
