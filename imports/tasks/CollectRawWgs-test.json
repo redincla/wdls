@@ -1,7 +1,7 @@
 {
     "CollectMetrics.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
-    "CollectMetrics.input_bam": "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/WholeGenomeGermlineSingleSample/2e96f154-62f6-473b-8041-a04d166849f3/call-CollectRawWgsMetrics/inputs/867056318/E1.bam",
-    "CollectMetrics.input_bam_index": "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/cromwell-executions/WholeGenomeGermlineSingleSample/2e96f154-62f6-473b-8041-a04d166849f3/call-CollectRawWgsMetrics/inputs/867056318/E1.bai",
+    "CollectMetrics.input_bam": "/home/credin/scratch/WGS/wdls/cromwell-executions/WholeGenomeGermlineSingleSample/2e96f154-62f6-473b-8041-a04d166849f3/call-CollectRawWgsMetrics/inputs/867056318/E1.bam",
+    "CollectMetrics.input_bam_index": "/home/credin/scratch/WGS/wdls/cromwell-executions/WholeGenomeGermlineSingleSample/2e96f154-62f6-473b-8041-a04d166849f3/call-CollectRawWgsMetrics/inputs/867056318/E1.bai",
     "CollectMetrics.base_file_name": "E1",
     "CollectMetrics.wgs_coverage_interval_list": "/data/chuv/LABO/redin/references/hg38/wgs_coverage_regions.hg38.interval_list",
     "CollectMetrics.ref_fasta": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta",

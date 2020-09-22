@@ -1,10 +1,10 @@
 version 1.0
 
 ## Local import
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/GermlineVariantDiscovery.wdl" as Calling
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/Qc.wdl" as QC
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/Utilities.wdl" as Utils
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/BamProcessing.wdl" as BamProcessing
+import "/home/credin/scratch/WGS/wdls/imports/tasks/GermlineVariantDiscovery.wdl" as Calling
+import "/home/credin/scratch/WGS/wdls/imports/tasks/Qc.wdl" as QC
+import "/home/credin/scratch/WGS/wdls/imports/tasks/Utilities.wdl" as Utils
+import "/home/credin/scratch/WGS/wdls/imports/tasks/BamProcessing.wdl" as BamProcessing
 
 #################################################################
 # WORKFLOW DEFINITION

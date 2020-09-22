@@ -14,11 +14,11 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/Alignment.wdl" as Alignment
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/workflows/SplitLargeReadGroup.wdl" as SplitRG
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/Qc.wdl" as QC
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/Utilities.wdl" as Utils
+import "/home/credin/scratch/WGS/wdls/imports/tasks/Alignment.wdl" as Alignment
+import "/home/credin/scratch/WGS/wdls/imports/workflows/SplitLargeReadGroup.wdl" as SplitRG
+import "/home/credin/scratch/WGS/wdls/imports/tasks/Qc.wdl" as QC
+import "/home/credin/scratch/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
+import "/home/credin/scratch/WGS/wdls/imports/tasks/Utilities.wdl" as Utils
 
 
 ############

@@ -36,7 +36,7 @@ version 1.0
 
 
 ## Local import
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
+import "/home/credin/scratch/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
 
 #################################################################
 # WORKFLOW DEFINITION

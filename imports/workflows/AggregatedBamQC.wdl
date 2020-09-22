@@ -17,7 +17,7 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/Qc.wdl" as QC
+import "/home/credin/scratch/WGS/wdls/imports/tasks/Qc.wdl" as QC
 
 #################################################################
 # WORKFLOW DEFINITION
@@ -46,7 +46,7 @@ workflow AggregatedBamQC {
         ref_index = ref_index
   }
 
-### [2] QC the final BAM some more (no such thing as too much QC)
+### [2a] QC the final BAM some more (no such thing as too much QC)
   call QC.CollectAggregationMetrics as CollectAggregationMetrics {
     input:
       PICARD = PICARD,
@@ -57,6 +57,13 @@ workflow AggregatedBamQC {
       ref_fasta = ref_fasta,
       ref_index = ref_index
   }
+
+### [2b] QC the final BAM with fastqc
+  call QC.CollectFastQCMetrics as CollectFastQCMetrics {
+    input:
+      input_bam = base_recalibrated_bam,
+      metrics_basename = base_name
+    }
 
 ### [3]  Generate a checksum per readgroup in the final BAM
   call QC.CalculateReadGroupChecksum as CalculateReadGroupChecksum {
@@ -72,6 +79,9 @@ workflow AggregatedBamQC {
     File read_group_gc_bias_detail_metrics = CollectReadgroupBamQualityMetrics.gc_bias_detail_metrics
     File read_group_gc_bias_pdf = CollectReadgroupBamQualityMetrics.gc_bias_pdf
     File read_group_gc_bias_summary_metrics = CollectReadgroupBamQualityMetrics.gc_bias_summary_metrics
+
+    File agg_fastqc_metrics_summary = CollectFastQCMetrics.summary_metrics
+    File agg_fastqc_metrics_html = CollectFastQCMetrics.html_metrics
 
     File calculate_read_group_checksum_md5 = CalculateReadGroupChecksum.md5_file
 

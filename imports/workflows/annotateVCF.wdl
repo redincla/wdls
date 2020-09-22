@@ -5,7 +5,7 @@ version 1.0
 ## per scattered contigs after jointgenotyping
 
 ## Local import
-import "/scratch/beegfs/PRTNR/CHUV/chuv_medp/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
+import "/home/credin/scratch/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
 
 #################################################################
 # WORKFLOW DEFINITION - VCF annotation
