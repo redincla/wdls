@@ -237,8 +237,8 @@ workflow UnmappedBamToAlignedBam {
 
 output {
     Array[File] quality_yield_metrics = CollectQualityYieldMetrics.quality_yield_metrics
-    Array[File] fastqc_metrics_summary = CollectFastQCMetrics.summary_metrics
-    Array[File] fastqc_metrics_html = CollectFastQCMetrics.html_metrics
+    Array[File] rawfastqc_metrics_summary = CollectFastQCMetrics.summary_metrics
+    Array[File] rawfastqc_metrics_html = CollectFastQCMetrics.html_metrics
 
     Array[File] unsorted_read_group_base_distribution_by_cycle_pdf = CollectUnsortedReadgroupBamQualityMetrics.base_distribution_by_cycle_pdf
     Array[File] unsorted_read_group_base_distribution_by_cycle_metrics = CollectUnsortedReadgroupBamQualityMetrics.base_distribution_by_cycle_metrics
