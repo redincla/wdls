@@ -32,6 +32,7 @@ workflow AggregatedBamQC {
     File ref_fasta
     File ref_index
     File ref_dict
+    File interval_list
   }
 
 ### [1] QC the final BAM (consolidated after scattered BQSR)
@@ -65,6 +66,15 @@ workflow AggregatedBamQC {
       metrics_basename = base_name
     }
 
+### [2c] Get depth of coverage for specific bed file
+  call QC.GetMeanCoverage as GetMeanCoverage {
+    input:
+      input_bam = base_recalibrated_bam,
+      interval_list = interval_list,
+      ref_index = ref_index,
+      metrics_basename = base_name
+    }
+
 ### [3]  Generate a checksum per readgroup in the final BAM
   call QC.CalculateReadGroupChecksum as CalculateReadGroupChecksum {
     input:
@@ -82,6 +92,8 @@ workflow AggregatedBamQC {
 
     File agg_fastqc_metrics_summary = CollectFastQCMetrics.summary_metrics
     File agg_fastqc_metrics_html = CollectFastQCMetrics.html_metrics
+
+    File agg_coverage_metrics = GetMeanCoverage.coverage_metrics
 
     File calculate_read_group_checksum_md5 = CalculateReadGroupChecksum.md5_file
 
