@@ -2,10 +2,10 @@
     "GenotypeRefinement.callset_name": "hg38_1kgDS_50",
     "GenotypeRefinement.vcf": "/home/credin/scratch/WGS/wdls/cromwell-executions/JointGenotyping/dba1e4ad-4afb-4f3c-bbb3-3430e6c36443/call-FinalGatherVcf/execution/hg38_1kgDS_50.vcf.gz",
     "GenotypeRefinement.vcf_index": "/home/credin/scratch/WGS/wdls/cromwell-executions/JointGenotyping/dba1e4ad-4afb-4f3c-bbb3-3430e6c36443/call-FinalGatherVcf/execution/hg38_1kgDS_50.vcf.gz.tbi",
-    "GenotypeRefinement.ref_fasta": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta",
-    "GenotypeRefinement.ref_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.fai",
-    "GenotypeRefinement.ref_dict": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dict",
-    "GenotypeRefinement.one_thousand_genomes_vcf": "/data/chuv/LABO/redin/references/hg38/hg38_v0_1000G.phase3.integrated.sites_only.no_MATCHED_REV.hg38.vcf",
-    "GenotypeRefinement.one_thousand_genomes_vcf_index": "/data/chuv/LABO/redin/references/hg38/hg38_v0_1000G.phase3.integrated.sites_only.no_MATCHED_REV.hg38.vcf.idx",
+    "GenotypeRefinement.ref_fasta": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta",
+    "GenotypeRefinement.ref_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+    "GenotypeRefinement.ref_dict": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dict",
+    "GenotypeRefinement.one_thousand_genomes_vcf": "/home/credin/refs/references/hg38/hg38_v0_1000G.phase3.integrated.sites_only.no_MATCHED_REV.hg38.vcf",
+    "GenotypeRefinement.one_thousand_genomes_vcf_index": "/home/credin/refs/references/hg38/hg38_v0_1000G.phase3.integrated.sites_only.no_MATCHED_REV.hg38.vcf.idx",
     "GenotypeRefinement.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar"
 }

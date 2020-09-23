@@ -1,5 +1,5 @@
 {
-  "JointAnnotation.AnnovarDB": "/data/chuv/LABO/redin/tools/annovar/AnnovarDB/humandb/hg38",
+  "JointAnnotation.AnnovarDB": "/home/credin/refs/tools/annovar/AnnovarDB/humandb/hg38",
   "JointAnnotation.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
   "JointAnnotation.tabix": "/software/UHTS/Analysis/EPACTS/3.2.6/bin/tabix",
   "JointAnnotation.genome_build": "hg38",

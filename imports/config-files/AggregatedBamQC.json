@@ -2,9 +2,9 @@
   "AggregatedBamQC.base_name": "NA12878",
   "AggregatedBamQC.base_recalibrated_bam_index": "/home/credin/scratch/WGS/data_and_refs/data/test/NA12878.final.bai",
   "AggregatedBamQC.recalibrated_bam_base_name": "NA12878.aligned.duplicates_marked.recalibrated",
-  "AggregatedBamQC.ref_index": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+  "AggregatedBamQC.ref_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.fai",
   "AggregatedBamQC.base_recalibrated_bam": "/home/credin/scratch/WGS/data_and_refs/data/test/NA12878.final.bam",
-  "AggregatedBamQC.ref_fasta": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.fasta",
-  "AggregatedBamQC.ref_dict": "/data/chuv/LABO/redin/references/hg38/Homo_sapiens_assembly38.dict",
+  "AggregatedBamQC.ref_fasta": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta",
+  "AggregatedBamQC.ref_dict": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dict",
   "AggregatedBamQC.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar"
 }
