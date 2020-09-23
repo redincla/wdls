@@ -218,6 +218,9 @@ workflow WholeGenomeGermlineSingleSample {
     
     Array[File] quality_yield_metrics = UnmappedBamToAlignedBam.quality_yield_metrics
 
+    Array[File] rawfastqc_metrics_summary = UnmappedBamToAlignedBam.rawfastqc_metrics_summary
+    Array[File] rawfastqc_metrics_html = UnmappedBamToAlignedBam.rawfastqc_metrics_html
+
     Array[File] unsorted_read_group_base_distribution_by_cycle_pdf = UnmappedBamToAlignedBam.unsorted_read_group_base_distribution_by_cycle_pdf
     Array[File] unsorted_read_group_base_distribution_by_cycle_metrics = UnmappedBamToAlignedBam.unsorted_read_group_base_distribution_by_cycle_metrics
     Array[File] unsorted_read_group_insert_size_histogram_pdf = UnmappedBamToAlignedBam.unsorted_read_group_insert_size_histogram_pdf
@@ -234,6 +237,11 @@ workflow WholeGenomeGermlineSingleSample {
     File read_group_gc_bias_detail_metrics = AggregatedBamQC.read_group_gc_bias_detail_metrics
     File read_group_gc_bias_pdf = AggregatedBamQC.read_group_gc_bias_pdf
     File read_group_gc_bias_summary_metrics = AggregatedBamQC.read_group_gc_bias_summary_metrics
+
+    File agg_fastqc_metrics_summary = AggregatedBamQC.agg_fastqc_metrics_summary
+    File agg_fastqc_metrics_html = AggregatedBamQC.agg_fastqc_metrics_html
+
+    File agg_coverage_metrics = AggregatedBamQC.agg_coverage_metrics
 
     File calculate_read_group_checksum_md5 = AggregatedBamQC.calculate_read_group_checksum_md5
 
