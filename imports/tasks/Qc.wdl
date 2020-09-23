@@ -486,3 +486,28 @@ task CollectFastQCMetrics {
     File html_metrics = "~{metrics_basename}_fastqc.html"
   }
 }
+
+############
+### Collect mean depth of coverage for a bed list of genomic intervals
+############  
+task GetMeanCoverage {
+  input {
+    File input_bam
+    File interval_list # in bed format
+    File ref_index # to make sure bam/bedfile are sorted the same way
+    String metrics_basename
+  }
+  command {
+    module add UHTS/Analysis/BEDTools/2.29.2
+    bedtools sort -i ~{interval_list} -faidx ~{ref_index} > ~{interval_list}_sorted
+    bedtools coverage -a ~{interval_list}_sorted -b ~{input_bam} -sorted -mean -nobuf > ~{metrics_basename}_meanCoverage.list
+  }
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "4000"
+    runtime_minutes: "600"
+  }
+  output {
+    File coverage_metrics = "~{metrics_basename}_meanCoverage.list"
+  }
+}
