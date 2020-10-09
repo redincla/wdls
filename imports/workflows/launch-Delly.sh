@@ -105,7 +105,7 @@ EOF
 
 ### Launch jointGenotyping script
 cd ${WRKDIR}
-touch ${WRKDIR}/json/${cohort_name}.JointGenotyping.script-submit
+touch ${WRKDIR}/json/${cohort_name}.Delly.script-submit
 echo "#!/bin/bash
 #SBATCH -n 1
 #SBATCH --job-name=jointCalling.${cohort_name}
@@ -119,6 +119,6 @@ module add UHTS/Analysis/samtools/1.10
 module add UHTS/Analysis/GenomeAnalysisTK/4.1.3.0
 module add UHTS/Analysis/picard-tools/2.21.8
 
-java -Dconfig.file=/home/credin/.cromwell.conf -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping.wdl -i ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json -o ${WRKDIR}/json/${cohort_name}.JointGenotyping.options.json" > ${WRKDIR}/json/${cohort_name}.JointGenotyping.script-submit
+java -Dconfig.file=/home/credin/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping.wdl -i ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json -o ${WRKDIR}/json/${cohort_name}.JointGenotyping.options.json" > ${WRKDIR}/json/${cohort_name}.JointGenotyping.script-submit
 
 sbatch ${WRKDIR}/json/${cohort_name}.JointGenotyping.script-submit
