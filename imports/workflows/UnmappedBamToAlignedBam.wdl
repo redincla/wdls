@@ -74,7 +74,7 @@ workflow UnmappedBamToAlignedBam {
         input:
             PICARD = PICARD,
             input_bam = unmapped_bam,
-            metrics_filename = unmapped_bam_basename + ".unmapped.quality_yield_metrics"
+            metrics_filename = unmapped_bam_basename + ".quality_yield_metrics"
         }
 
         ### [0.3] QC the unmapped BAM with fastqc
