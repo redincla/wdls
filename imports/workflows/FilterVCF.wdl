@@ -229,7 +229,7 @@ command <<<
         -R ~{ref_fasta} \
         -V ~{input_vcf} \
         -O "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.vcf.gz" \
-        -select "Func.ensGene == 'exonic' || Func.refGene == 'exonic' || dbscSNV_ADA_SCORE > 0.6 || dbscSNV_RF_SCORE > 0.6 || CLINSIG  == 'Pathogenic/Likely_pathogenic' || CLINSIG  == 'Likely_pathogenic' || CLINSIG  == 'Pathogenic'"
+        -select "Func.ensGene == 'exonic' || Func.refGene == 'exonic' || dbscSNV_ADA_SCORE > 0.6 || dbscSNV_RF_SCORE > 0.6 || ClinVar_Sign  == 'Pathogenic/Likely_pathogenic' || ClinVar_Sign  == 'Likely_pathogenic' || ClinVar_Sign  == 'Pathogenic'"
 ##       || dpsi_zscore < -2.0 || dpsi_max_tissue < -2.0
 ##        -select "ExonicFunc.ensGene != 'synonymous_SNV'"
 >>>
@@ -266,10 +266,10 @@ command <<<
      java -Xmx8g -jar ~{GATK} \
      VariantsToTable \
         -V ~{input_vcf} \
-        -F CHROM -F POS -F ID -F REF -F ALT -F QUAL -F FILTER -F AD -F DP -F GQ -F GT -F AC_Orig -F AF_Orig -F AN_Orig -F AS_FS -F AS_MQ -F AS_QD -F QD -F DP -F ExcessHet -F NEGATIVE_TRAIN_SITE -F POSITIVE_TRAIN_SITE -F SB \
+        -F CHROM -F POS -F ID -F REF -F ALT -F QUAL -F FILTER -GF AD -F DP -GF GQ -GF GT -F AC_Orig -F AF_Orig -F AN_Orig -F AS_FS -F AS_MQ -GF AS_QD -F QD -F DP -F ExcessHet -F NEGATIVE_TRAIN_SITE -F POSITIVE_TRAIN_SITE -F SB \
         -F Gene.ensGene -F Gene.refGene -F Func.ensGene -F Func.refGene -F ExonicFunc.ensGene -F ExonicFunc.refGene -F AAChange.ensGene -F AAChange.refGene \
-        -F AF_afr -F AF_ami -F AF_amr -F AF_asj -F AF_eas -F AF_female -F AF_fin -F AF_male -F AF_nfe -F AF_popmax -F Kaviar_AF -F 1000g2015aug_all -F max_aaf_all \
-        -F CLINSIG -F CLNDBN -F CLNDSDBID -F ClinGen_Disease_name -F ClinGen_MOI -F ClinGen_Classification -F MIM_Disease -F MIM_Disease_name -F MIM_gene -F DDD_mutation_consequence -F DDD_MOI -F DDD_Classification -F MEDP_MOI -F MEDP_Confidence -F MEDP_Priority -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar \
+        -F AF_afr -F AF_ami -F AF_amr -F AF_asj -F AF_eas -F AF_female -F AF_fin -F AF_male -F AF_nfe -F AF_popmax -F Kaviar_AF -F 1000g2015aug_all -F ClinVar_AF_EXAC -F ClinVar_AF_TGP -F max_aaf_all \
+        -F ClinVar_Sign -F CLINSIG -F ClinVar_Sign_Conflict -F ClinVar_RevStatus -F ClinVar_Disease_name -F ClinGen_Disease_name -F ClinGen_MOI -F ClinGen_Classification -F MIM_Disease -F MIM_Disease_name -F MIM_gene -F DDD_mutation_consequence -F DDD_MOI -F DDD_Classification -F MEDP_MOI -F MEDP_Confidence -F MEDP_Priority -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar \
         -F FATHMM_pred -F FATHMM_score -F GERP++_RS -F CADD_phred -F M-CAP_pred -F M-CAP_score -F DANN_score -F MetaLR_pred -F MetaLR_score -F MetaSVM_pred -F MetaSVM_score -F MutationAssessor_pred -F MutationAssessor_score -F MutationTaster_pred -F MutationTaster_score -F Polyphen2_HDIV_pred -F Polyphen2_HDIV_score \
         -F Polyphen2_HVAR_pred -F Polyphen2_HVAR  -F SIFT_pred -F SIFT_score -F dbscSNV_ADA_SCORE -F dbscSNV_RF_SCORE -F dpsi_max_tissue -F dpsi_zscore -F oe.LoF.upper -F pLI -F phastCons100way_vertebrate -F phyloP100way_vertebrate -F phyloP20way_mammalian \
         -O "~{base_output_name}.lowAC.lowAF.HQ.Himpact.~{sample_ID}.tsv"
