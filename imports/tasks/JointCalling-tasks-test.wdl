@@ -822,7 +822,7 @@ task AnnovarScatteredVCF {
 
   command <<<
   module add UHTS/Analysis/EPACTS/3.2.6
-  export PATH="$PATH:/data/chuv/LABO/redin/tools/annovar"
+  export PATH="$PATH:/home/credin/refs/tools/annovar"
   table_annovar.pl ~{input_vcf} \
   "~{AnnovarDB}" -buildver ~{genome_build} \
   -out ~{base_vcf_name} -remove \
