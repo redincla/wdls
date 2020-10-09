@@ -474,12 +474,12 @@ task CollectFastQCMetrics {
   }
   command {
     module add UHTS/Quality_control/fastqc/0.11.7
-    fastqc ~{input_bam} ~{true="-f bam" false="-f fastq" is_bam}
+    fastqc ~{input_bam} ~{true="-f bam" false="-f fastq" is_bam} -o .
   }
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "8000"
-    runtime_minutes: "1400"
+    runtime_minutes: "2000" #1400 not enough for some large files
   }
   output {
     File summary_metrics = "~{metrics_basename}_fastqc.zip"
@@ -500,7 +500,7 @@ task GetMeanCoverage {
   command {
     module add UHTS/Analysis/BEDTools/2.29.2
     bedtools sort -i ~{interval_list} -faidx ~{ref_index} > ~{interval_list}_sorted
-    bedtools coverage -a ~{interval_list}_sorted -b ~{input_bam} -sorted -mean -nobuf > ~{metrics_basename}_meanCoverage.list
+    bedtools coverage -a ~{interval_list}_sorted -b ~{input_bam} -g ~{ref_index} -sorted -mean -nobuf > ~{metrics_basename}_meanCoverage.list
   }
   runtime {
     cpus: "1"
