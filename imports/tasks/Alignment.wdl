@@ -114,7 +114,7 @@ task SamToFastqAndBwaMem {
     fi
   >>>
     runtime {
-	    runtime_minutes: "8000"
+	    runtime_minutes: "3000"
 	    cpus: "3"
 	    requested_memory_mb_per_core: "14000"
 	    queue: "normal"
