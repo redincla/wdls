@@ -83,6 +83,7 @@ workflow WholeGenomeGermlineSingleSample {
     Int break_bands_at_multiples_of
     Boolean make_bamout #output realigned bam+bai files after initial variant calling step
     File final_vcf_base_name
+    File interval_list #bed file of intervals to calculate mean coverage on. E.g. gene/exon coordinates of specific targets
   }
 
     # Not overridable:
@@ -138,7 +139,8 @@ workflow WholeGenomeGermlineSingleSample {
         PICARD = PICARD,
         ref_fasta = ref_fasta,
 	      ref_index = ref_index,
-        ref_dict = ref_dict
+        ref_dict = ref_dict,
+        interval_list = interval_list,
     }
 
     call ToCram.BamToCram as BamToCram {
