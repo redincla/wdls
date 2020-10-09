@@ -289,6 +289,7 @@ task ConvertToCram {
   }
 
   command <<<
+    module add UHTS/Analysis/samtools/1.10
     set -e
     set -o pipefail
 
