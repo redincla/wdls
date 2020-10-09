@@ -5,6 +5,12 @@ names=["MEDP_MOI","n.PLP.ClinVar","n.PLP.LoF.ClinVar","n.PLP.mis.ClinVar","pLI",
 ops=["first","first","first","first","first","first","first","first"]
 
 [[annotation]]
+file="/home/credin/refs/references/gene_lists/201003_clinvar.vcf.gz"
+fields = ["AF_EXAC", "AF_TGP", "CLNDN", "CLNREVSTAT", "CLNSIG", "CLNSIGCONF"]
+names=["ClinVar_AF_EXAC","ClinVar_AF_TGP","ClinVar_Disease_name","ClinVar_RevStatus","ClinVar_Sign","ClinVar_Sign_Conflict"]
+ops=["self","self","self","self","self","self"]
+
+[[annotation]]
 file="/home/credin/refs/references/gene_lists/ClinGen_FULL_sorted_200901.bed.gz"
 columns = [6,8,9]
 names=["ClinGen_Disease_name","ClinGen_MOI","ClinGen_Classification"]
