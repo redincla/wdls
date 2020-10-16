@@ -8,19 +8,21 @@
 # Contact: Claire Redin <claire.redin@chuv.ch>
 
 # checks for appropriate input
-if [ $# -eq 1 ]; then
+if [ $# -eq 2 ]; then
  sample_list=$1 #full path to file: list of samples to gather WGS metrics on
+ WRKDIR=$2 #full directory where processed results are
 
 else
  echo -e "\n\nGather WGS summary metrics by sample\n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
  echo "Usage:"
- echo "summary-metrics.sh [sample_list] "
+ echo "summary-metrics.sh [sample_list] [working directory] "
  echo "sample_list: full path to file: list of samples to gather WGS metrics on"
+ echo "working directory: full path"
  exit 1
 fi
 
-export BASEDIR=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ
-export WRKDIR=${BASEDIR}/0620
+# export BASEDIR=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ
+# export WRKDIR=${BASEDIR}/0620
 
 while read sample_ID; do
     cd ${WRKDIR}
