@@ -784,6 +784,78 @@ task GatherPicardMetrics {
 }
 
 ############
+### Refines genotype quality using all cohort samples (if >10) and the 1000G dataset
+############# 
+task CalculatGenotypePosteriors {
+  input {
+    File GATK
+    File ref_fasta
+    File ref_index
+    File ref_dict
+    File vcf
+    File vcf_index
+    File one_thousand_genomes_vcf
+    File one_thousand_genomes_vcf_index
+    String output_vcf_filename
+  }
+  command {
+    java -Xmx4g \
+    -jar ~{GATK} \
+    CalculateGenotypePosteriors \
+    -R ~{ref_fasta} \
+    --supporting ~{one_thousand_genomes_vcf} \
+    -V ~{vcf} \
+    -O ~{output_vcf_filename}
+  }
+  runtime {
+	cpus: "1"
+	requested_memory_mb_per_core: "6000"
+	queue: "normal"
+  }
+  output {
+    File output_vcf = "~{output_vcf_filename}"
+    File output_vcf_index = "~{output_vcf_filename}.tbi"
+  }
+}
+
+############
+### Annotates variants with refined GQ <20 and DP<10 as lowQUAL
+#############  
+
+task VariantFilterLowQ {
+ input {
+    File GATK
+    File ref_fasta
+    File ref_index
+    File ref_dict
+    File vcf
+    File vcf_index
+    String output_vcf_filename
+  }
+  command {
+    java -Xms3g \
+    -jar ~{GATK} \
+    VariantFiltration \
+    -R ~{ref_fasta} \
+    -V ~{vcf} \
+    -G-filter "GQ < 20.0" \
+    -G-filter-name lowGQ \
+    -G-filter "DP < 10.0" \
+    -G-filter-name lowDP \
+    -O ~{output_vcf_filename}
+  }
+  runtime {
+	cpus: "1"
+	requested_memory_mb_per_core: "4000"
+	queue: "normal"
+  }
+  output {
+    File output_vcf = "~{output_vcf_filename}"
+    File output_vcf_index = "~{output_vcf_filename}.tbi"
+  }
+}
+
+############
 ### Create sampleset partitions
 ############
 task PartitionSampleNameMap {
@@ -807,7 +879,6 @@ task PartitionSampleNameMap {
 	  requested_memory_mb_per_core: "1000" 
   }
 }
-
 
 ############
 ### Annotate vcf with annovar (small contigs)
