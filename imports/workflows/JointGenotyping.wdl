@@ -102,6 +102,8 @@ input {
     File omni_resource_vcf_index
     File one_thousand_genomes_resource_vcf
     File one_thousand_genomes_resource_vcf_index
+    File one_thousand_genomes_resource_NO_MULTIALLELIC_vcf
+    File one_thousand_genomes_resource_NO_MULTIALLELIC_vcf_index
 
     Float snp_filter_level
     Float indel_filter_level
@@ -293,11 +295,36 @@ input {
         output_vcf_name = callset_name + ".vcf.gz"
     }
 
+    call Tasks.CalculatGenotypePosteriors as CalculatGenotypePosteriors {
+      input:
+        GATK = GATK,
+        ref_fasta = ref_fasta,
+        ref_index = ref_index,
+        ref_dict = ref_dict,
+        vcf = FinalGatherVcf.output_vcf,
+        vcf_index = FinalGatherVcf.output_vcf_index,
+        one_thousand_genomes_vcf = one_thousand_genomes_resource_NO_MULTIALLELIC_vcf,
+        one_thousand_genomes_vcf_index = one_thousand_genomes_resource_NO_MULTIALLELIC_vcf_index,
+        output_vcf_filename = callset_name + "refined_priors.vcf.gz"
+   }
+
+    call Tasks.VariantFilterLowQ as VariantFilterLowQ {
+      input:
+        GATK = GATK,
+        ref_fasta = ref_fasta,
+        ref_index = ref_index,
+        ref_dict = ref_dict,
+        vcf = CalculatGenotypePosteriors.output_vcf,
+        vcf_index = CalculatGenotypePosteriors.output_vcf_index,
+        output_vcf_filename = callset_name + "refined_priors-filtered.vcf.gz"
+    }
+
+
     call Tasks.CollectVariantCallingMetrics as CollectMetricsOnFullVcf {
       input:
         GATK = GATK,
-        input_vcf = FinalGatherVcf.output_vcf,
-        input_vcf_index = FinalGatherVcf.output_vcf_index,
+        input_vcf = VariantFilterLowQ.output_vcf,
+        input_vcf_index = VariantFilterLowQ.output_vcf_index,
         metrics_filename_prefix = callset_name,
         dbsnp_vcf = dbsnp_vcf,
         dbsnp_vcf_index = dbsnp_vcf_index,
@@ -331,8 +358,8 @@ input {
     }
 
   # Get the VCFs from either code path
-  Array[File?] output_vcf_files = if defined(FinalGatherVcf.output_vcf) then [FinalGatherVcf.output_vcf] else ApplyRecalibration.recalibrated_vcf
-  Array[File?] output_vcf_index_files = if defined(FinalGatherVcf.output_vcf_index) then [FinalGatherVcf.output_vcf_index] else ApplyRecalibration.recalibrated_vcf_index
+  Array[File?] output_vcf_files = if defined(VariantFilterLowQ.output_vcf) then [VariantFilterLowQ.output_vcf] else ApplyRecalibration.recalibrated_vcf
+  Array[File?] output_vcf_index_files = if defined(VariantFilterLowQ.output_vcf_index) then [VariantFilterLowQ.output_vcf_index] else ApplyRecalibration.recalibrated_vcf_index
 
   output {
     # Metrics from either the small or large callset
