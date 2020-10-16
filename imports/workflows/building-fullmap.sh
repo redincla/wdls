@@ -10,17 +10,19 @@
 #export WRKDIR=${BASEDIR}/0920
 
 # checks for appropriate input
-if [ $# -eq 3 ]; then
+if [ $# -eq 4 ]; then
  sample_list=$1 #col1: sample list, deprecated: col2: lib preparation date
  FQDIR=$2 #full directory of FQ files
  BASEDIR=$3 #full directory to drop sample_maps
+ run_dates=$4 #file with correspondance between: col1: run_ID, col2: run_date
 else
  echo -e "\n\nBuilding sample map script by sample\n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
  echo "Usage:"
- echo "building-fullmap.sh [sample_list] [fq directory] [output directory]"
- echo "sample_list: Column 1= list of samples to process"
- echo "fq directory: full path"
- echo "output directory: full path"
+ echo "building-fullmap.sh [sample_list] [fq directory] [output directory] [run_dates]"
+ echo "- sample_list: Column 1= list of samples to process"
+ echo "- fq directory: full path"
+ echo "- output directory: full path"
+ echo "- run_dates: 2-columns file, giving correspondance between: col1: run_ID, col2: run_date"
  exit 1
 fi
 
@@ -31,22 +33,25 @@ cd ${FQDIR}
 FQDIR=$( echo "${FQDIR}" | sed "s+/$++g")  #replace last '/' if present in given fqdir path in order not to mess up the final fq absolute paths
 
 while read sample_ID; do  ## build sample map
-ls -l | awk '{print $9}' > tmp
-grep -P "${sample_ID}_.*R1" tmp > ${sample_ID}.fq1_list #get list of fq_R1
+find . -name "${sample_ID}*_R1_*.fastq.gz" | sed "s+^./++" > ${sample_ID}.fq1_list #get list of fq_R1
    while read fq_R1; do
         fq_R2=$( echo "${fq_R1}" | sed "s+R1+R2+g" )
         run_ID=$( zcat ${fq_R1} | cut -f 1,2 -d: | head -n 1 | sed "s+:+.+g" | sed "s+@++g" ) #/!\ has to be NNNNNN date format
-        lib_ID=$( echo "${fq_R1}" |  cut -f 2 -d_ )
-        RG=$( zcat ${fq_R1} | cut -f 3,4 -d: | head -n 1 | sed "s+:+.+g" )
+        lib_index=$(( $(echo "${fq_R1}" | awk '{print index($0,"NGS")}') - 1 ))
+        lib_ID=$( echo "${fq_R1:lib_index}" |  cut -f 1 -d_ )
+        RG=$( echo ${sample_ID}.$(zcat ${fq_R1} | cut -f 3,4 -d: | head -n 1 | sed "s+:+.+g") )
         PU=$( zcat ${fq_R1} | cut -f 3,4,10 -d: | head -n 1 | sed "s+:+.+g" )
-        echo "${FQDIR} ${fq_R1} ${FQDIR} ${fq_R2} ${RG} ${lib_ID} ${PU} ${run_ID}"
+#        echo "${FQDIR} ${fq_R1} ${FQDIR} ${fq_R2} ${RG} ${lib_ID} ${PU} ${run_ID}"
         printf "%s/%s_%s\t%s/%s_%s\t%s\t%s\t%s\t%s\tillumina\tH2030GC\n" "${FQDIR}" "${run_ID}" "${fq_R1}" "${FQDIR}" "${run_ID}" "${fq_R2}" "${RG}" "${lib_ID}" "${PU}" "${run_ID}" >> ${FQDIR}/${sample_ID}.full_map.tsv
 #        printf "%s/%s\t%s/%s\t%s\t%s\t%s\t%s\tillumina\tH2030GC\n" "${FQDIR}" "${fq_R1}" "${FQDIR}" "${fq_R2}" "${RG}" "${lib_ID}" "${PU}" "${run_ID}" >> ${FQDIR}/${sample_ID}.full_map.tsv
-        mv ${fq_R1} ${run_ID}_${fq_R1}
+        mv ${fq_R1} ${run_ID}_${fq_R1} #to avoid FQ name duplicates when coming from different run IDs
         mv ${fq_R2} ${run_ID}_${fq_R2}
     done < ${sample_ID}.fq1_list
     rm ${sample_ID}.fq1_list
-    rm tmp
+
+    while read run_ID run_day; do
+        sed -i "s+\t${run_ID}\t+\t${run_day}\t+g" ${FQDIR}/${sample_ID}.full_map.tsv
+    done < ${run_dates}
     
     if [ -f "${BASEDIR}/${sample_ID}.full_map.tsv" ]; then
         cat ${BASEDIR}/${sample_ID}.full_map.tsv ${FQDIR}/${sample_ID}.full_map.tsv > tmp2
