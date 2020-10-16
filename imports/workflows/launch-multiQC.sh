@@ -9,11 +9,11 @@ if [ $# -eq 2 ]; then
     #SBATCH --job-name=multiQC
     #SBATCH -t 2-00:00
     #SBATCH --mem-per-cpu=1G
-    #SBATCH --output=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/0620/json/multiQC.slurm.%N.%j.log
+    #SBATCH --output=${output_dir}/multiQC.slurm.%N.%j.log
     source /dcsrsoft/spack/bin/setup_dcsrsoft
     module load gcc python
     source /home/credin/refs/tools/multiQC-venv/bin/activate
-    multiqc ${input_dir} --outdir ${output_dir}" > /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/0620/json/multiQC.script-submit
+    multiqc ${input_dir} --outdir ${output_dir}" > ${output_dir}/multiQC.script-submit
 
 elif [ $# -eq 3 ]; then
     file_list=$2 #optional, list of QC files to process, if spreadout/not all within the same folder
@@ -23,11 +23,11 @@ elif [ $# -eq 3 ]; then
     #SBATCH --job-name=multiQC
     #SBATCH -t 2-00:00
     #SBATCH --mem-per-cpu=1G
-    #SBATCH --output=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/0620/json/multiQC.slurm.%N.%j.log
+    #SBATCH --output=${output_dir}/multiQC.slurm.%N.%j.log
     source /dcsrsoft/spack/bin/setup_dcsrsoft
     module load gcc python
     source /home/credin/refs/tools/multiQC-venv/bin/activate
-    multiqc --file-list ${file_list} --outdir ${output_dir}" > /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/0620/json/multiQC.script-submit
+    multiqc --file-list ${file_list} --outdir ${output_dir}" > ${output_dir}/multiQC.script-submit
    
 else
  echo -e "\n\nLaunching multiQC\n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
@@ -40,4 +40,4 @@ else
  exit 1
 fi
 
-sbatch /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/0620/json/multiQC.script-submit
+sbatch ${output_dir}/multiQC.script-submit
