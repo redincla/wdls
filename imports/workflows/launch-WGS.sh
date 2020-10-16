@@ -23,9 +23,7 @@ else
 fi
 
 ### Set local parameters
-# export BASEDIR=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ
 export WRKDIR
-# export WRKDIR=${BASEDIR}/TCAG/0920
 
 if ! [ -e $WRKDIR ]; then
 	mkdir $WRKDIR
@@ -48,14 +46,13 @@ while read sample_ID full_map; do
 	    mkdir ${sample_ID}/Processed
     fi
 
-#    while read fq1 fq2 rest; do
-#      mv ${fq1} ${WRKDIR}/${sample_ID}/Raw/
-#      mv ${fq2} ${WRKDIR}/${sample_ID}/Raw/
-#      old_fq_path="${fq1%%${sample_ID}*}"
-#      sed -i "s+${old_fq_path}+${WRKDIR}/${sample_ID}/Raw/+g" ${full_map}
-#    done < ${full_map}
-
-#    cp ${full_map} ${WRKDIR}/${sample_ID}/Raw/
+    while read fq1 fq2 rest; do
+      mv ${fq1} ${WRKDIR}/${sample_ID}/Raw/
+      mv ${fq2} ${WRKDIR}/${sample_ID}/Raw/
+      fq1name=${fq1##*/}
+      old_fq_path="${fq1%%${fq1name}*}" #retrieving fqdir, where fq files are currently located
+      sed "s+${old_fq_path}+${WRKDIR}/${sample_ID}/Raw/+g" ${full_map} > ${WRKDIR}/${sample_ID}/Raw/${sample_ID}.full_map.tsv #updating fq paths in full.map from fqdir to outdir, as fq files will be moved to individual sample folders
+    done < ${full_map}
 
 done < ${sample_list}
 
