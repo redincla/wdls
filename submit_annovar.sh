@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH -n 1
-#SBATCH --job-name=Annovar
-#SBATCH -t 00-12:00
+#SBATCH --job-name=JointAnnotation
+#SBATCH -t 00-24:00
 #SBATCH --mem-per-cpu=16G
-#SBATCH -o slurm.%N.%j.log
+#SBATCH --output=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/Delly/slurm.JointAnnotation.%N.%j.log
 
 module add Development/java/1.8.0_232
 module add R/3.6.1
