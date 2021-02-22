@@ -11,16 +11,16 @@ task gSVCalling {
     File exclude_regions_bed
     File input_bam
     File input_bam_index
-    String sample_id
+    String sample_id   
   }
 
   Boolean is_bam = basename(input_bam, ".bam") + ".bam" == basename(input_bam)
-
   # ensure there's sufficient memory. These coefficients are obtained
   # via linear regression to test data, assuming uncertainty in memory
   # usage proportional to bam or cram size, and adding 3 standard
   # deviations to best fit estimate of memory usage.
   Float bam_or_cram_size = size(input_bam, "GiB")
+  Boolean bam_is_big = if (bam_or_cram_size > 10) then true else false
   Float mem_per_bam_size = 0.03937
   Float mem_bam_offset = 4.4239
   Float mem_per_cram_size = 0.08579
@@ -44,7 +44,7 @@ task gSVCalling {
       -x "~{exclude_regions_bed}" \
       -o "$BCF" \
       -n "~{input_bam}" \
-      -q 20 -s 15 
+      ~{true='-q 20 -s 15 -r 50' false='' bam_is_big} \ 
   >>>
 
   output {
@@ -53,7 +53,8 @@ task gSVCalling {
 
   runtime {
   cpus: "1"
-	requested_memory_mb_per_core: "10000"  #initially ~{mem_size_Mb}, trying to increase for stuck samples
+	requested_memory_mb_per_core: "15000"  #10000 for large WGS initially ~{mem_size_Mb}, trying to increase for stuck samples
+  runtime_minutes: "7000"
   }
 }
 
@@ -64,21 +65,21 @@ task gSVCalling {
 task MergeBCF {
   input {
     Array[File] input_bcfs
-    String cohort_name
+    String base_name
   }
   command <<<
     module add UHTS/Analysis/delly/0.7.8
     export OMP_NUM_THREADS=2
-    BCF="~{cohort_name}.delly.bcf"
+    BCF="~{base_name}.delly.bcf"
     delly merge ~{sep=' ' input_bcfs} -o "$BCF"
   >>>
 
   output {
-    File merged_bcf = "~{cohort_name}.delly.bcf"
+    File merged_bcf = "~{base_name}.delly.bcf"
   }
 
   runtime {
-    cpus: "1"
+  cpus: "1"
 	requested_memory_mb_per_core: "5000"
   }
 }
@@ -110,9 +111,9 @@ task GenotypeBCF {
   }
 
   runtime {
-    cpus: "1"
-	requested_memory_mb_per_core: "5000"
-#    runtime_minutes: "480"
+  cpus: "1"
+	requested_memory_mb_per_core: "10000"
+  runtime_minutes: "480"
   }
 }
 
@@ -140,9 +141,9 @@ task MergeGenotypedBCF {
   }
 
   runtime {
-    cpus: "1"
+  cpus: "1"
 	requested_memory_mb_per_core: "5000"
-#    runtime_minutes: "580"
+# runtime_minutes: "580"
   }
 }
 
@@ -172,12 +173,60 @@ task FilterGenotypedBCF {
 
   output {
     File final_vcf = "~{cohort_name}.delly.vcf.gz"
-    File index = "~{cohort_name}.delly.vcf.gz.tbi"
+    File final_vcf_index = "~{cohort_name}.delly.vcf.gz.tbi"
+  }
+
+  runtime {
+  cpus: "1"
+	requested_memory_mb_per_core: "8000"
+#    runtime_minutes: "480"
+  }
+}
+
+############
+### Convert BCF to vcf
+############
+
+task BCFsToVCFs {
+  input {
+    File input_bcf
+    String base_name
+  }
+
+  command <<<
+    module add UHTS/Analysis/samtools/1.10
+    module add UHTS/Analysis/EPACTS/3.2.6
+    module add UHTS/Analysis/vcftools/0.1.15
+    set -Eeuo pipefail
+
+    BCF="~{input_bcf}"
+    echo "Extracting vcf header"
+    bcftools view ~{input_bcf} | grep "^#" > header.vcf
+    VCF=$(echo "$BCF" | sed -e 's/.bcf$/.vcf/')
+    echo "Converting $BCF to $VCF, skipping header"
+    bcftools view $BCF | grep -v "^#" > $VCF
+    VCFS="header.vcf $VCF"
+
+    VCF_OUT="~{base_name}.delly.vcf.gz"
+    echo "Concatenating vcf into $VCF_OUT"
+    cat $VCFS \
+      | vcf-sort -c \
+      | bcftools reheader -s <(echo "~{base_name}") \
+      | bgzip -c \
+      > $VCF_OUT
+    echo "Indexing $VCF_OUT"
+    tabix "$VCF_OUT"
+  >>>
+
+  output {
+    File vcf = "${base_name}.delly.vcf.gz"
+    File index = "${base_name}.delly.vcf.gz.tbi"
   }
 
   runtime {
     cpus: "1"
-	requested_memory_mb_per_core: "5000"
+	  requested_memory_mb_per_core: "2000"
 #    runtime_minutes: "480"
   }
+
 }
