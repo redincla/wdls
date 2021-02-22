@@ -46,12 +46,14 @@ while read sample_ID full_map; do
 	    mkdir ${sample_ID}/Processed
     fi
 
+    cp ${full_map} ${WRKDIR}/${sample_ID}/Raw/${sample_ID}.full_map.tsv
+
     while read fq1 fq2 rest; do
       mv ${fq1} ${WRKDIR}/${sample_ID}/Raw/
       mv ${fq2} ${WRKDIR}/${sample_ID}/Raw/
       fq1name=${fq1##*/}
       old_fq_path="${fq1%%${fq1name}*}" #retrieving fqdir, where fq files are currently located
-      sed "s+${old_fq_path}+${WRKDIR}/${sample_ID}/Raw/+g" ${full_map} > ${WRKDIR}/${sample_ID}/Raw/${sample_ID}.full_map.tsv #updating fq paths in full.map from fqdir to outdir, as fq files will be moved to individual sample folders
+      sed -i "s+${old_fq_path}+${WRKDIR}/${sample_ID}/Raw/+g" ${WRKDIR}/${sample_ID}/Raw/${sample_ID}.full_map.tsv #updating fq paths in full.map from fqdir to outdir, as fq files will be moved to individual sample folders
     done < ${full_map}
 
 done < ${sample_list}
@@ -78,38 +80,38 @@ while read sample_ID full_map; do
   "WholeGenomeGermlineSingleSample.GATK3": "/software/UHTS/Analysis/GenomeAnalysisTK/3.8.1.0.gf15c1c3ef/bin/GenomeAnalysisTK.jar",
   "WholeGenomeGermlineSingleSample.VerifyBamID": "/software/UHTS/Analysis/VerifyBamID/1.0.6/bin/VerifyBamID",
 
-  "WholeGenomeGermlineSingleSample.ref_fasta": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta",
-  "WholeGenomeGermlineSingleSample.ref_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.fai",
-  "WholeGenomeGermlineSingleSample.ref_dict": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dict",
-  "WholeGenomeGermlineSingleSample.ref_ann": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.ann",
-  "WholeGenomeGermlineSingleSample.ref_sa": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.sa",
-  "WholeGenomeGermlineSingleSample.ref_bwt": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.bwt",
-  "WholeGenomeGermlineSingleSample.ref_pac": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.pac",
-  "WholeGenomeGermlineSingleSample.ref_amb": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.amb",
-  "WholeGenomeGermlineSingleSample.ref_alt": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.alt",
-  "WholeGenomeGermlineSingleSample.contamination_sites_bed": "/home/credin/refs/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.bed",
-  "WholeGenomeGermlineSingleSample.contamination_sites_mu": "/home/credin/refs/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.mu",
-  "WholeGenomeGermlineSingleSample.contamination_sites_ud": "/home/credin/refs/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.UD",
+  "WholeGenomeGermlineSingleSample.ref_fasta": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta",
+  "WholeGenomeGermlineSingleSample.ref_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+  "WholeGenomeGermlineSingleSample.ref_dict": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.dict",
+  "WholeGenomeGermlineSingleSample.ref_ann": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.ann",
+  "WholeGenomeGermlineSingleSample.ref_sa": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.sa",
+  "WholeGenomeGermlineSingleSample.ref_bwt": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.bwt",
+  "WholeGenomeGermlineSingleSample.ref_pac": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.pac",
+  "WholeGenomeGermlineSingleSample.ref_amb": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.amb",
+  "WholeGenomeGermlineSingleSample.ref_alt": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.64.alt",
+  "WholeGenomeGermlineSingleSample.contamination_sites_bed": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.bed",
+  "WholeGenomeGermlineSingleSample.contamination_sites_mu": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.mu",
+  "WholeGenomeGermlineSingleSample.contamination_sites_ud": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.UD",
   "WholeGenomeGermlineSingleSample.disable_sanity_check": "true",
 
-  "WholeGenomeGermlineSingleSample.wgs_coverage_interval_list": "/home/credin/refs/references/hg38/wgs_coverage_regions.hg38.interval_list",
-  "WholeGenomeGermlineSingleSample.evaluation_interval_list": "/home/credin/refs/references/hg38/wgs_evaluation_regions.hg38.interval_list",
-  "WholeGenomeGermlineSingleSample.calling_interval_list": "/home/credin/refs/references/hg38/wgs_calling_regions.hg38.interval_list",
-  "WholeGenomeGermlineSingleSample.interval_list": "/home/credin/refs/references/gene_lists/cardioGenes_codingexons_sorted.bed",
+  "WholeGenomeGermlineSingleSample.wgs_coverage_interval_list": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/wgs_coverage_regions.hg38.interval_list",
+  "WholeGenomeGermlineSingleSample.evaluation_interval_list": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/wgs_evaluation_regions.hg38.interval_list",
+  "WholeGenomeGermlineSingleSample.calling_interval_list": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/wgs_calling_regions.hg38.interval_list",
+  "WholeGenomeGermlineSingleSample.interval_list": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/cardioGenes_codingexons_sorted.bed",
   "WholeGenomeGermlineSingleSample.break_bands_at_multiples_of": "100000",
   "WholeGenomeGermlineSingleSample.haplotype_scatter_count": "10",
   "WholeGenomeGermlineSingleSample.make_bamout": "false",
 
   "WholeGenomeGermlineSingleSample.known_indels_sites_vcfs": [
-    "/home/credin/refs/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
-    "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz"
+    "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
+    "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz"
   ],
   "WholeGenomeGermlineSingleSample.known_indels_sites_indices": [
-    "/home/credin/refs/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
-    "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi"
+    "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
+    "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi"
   ],
-  "WholeGenomeGermlineSingleSample.dbsnp_vcf": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
-  "WholeGenomeGermlineSingleSample.dbsnp_vcf_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx"
+  "WholeGenomeGermlineSingleSample.dbsnp_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
+  "WholeGenomeGermlineSingleSample.dbsnp_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx"
 }
 EOF
 done < ${sample_list}
@@ -132,7 +134,7 @@ touch ${WRKDIR}/json/${sample_ID}.WGS.script-submit
 echo "#!/bin/bash
 #SBATCH -n 1
 #SBATCH --job-name=WGS.${sample_ID}
-#SBATCH -t 3-00:00
+#SBATCH -t 4-00:00
 #SBATCH --mem-per-cpu=14G
 #SBATCH --output=slurm.${sample_ID}.%N.%j.log
 #module load Utility/cromwell/47
@@ -143,7 +145,7 @@ module add UHTS/Analysis/samtools/1.10
 module add UHTS/Analysis/GenomeAnalysisTK/4.1.3.0
 module add UHTS/Analysis/picard-tools/2.21.8
 
-java -Dconfig.file=/home/credin/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/WholeGenomeGermlineSingleSample.wdl -i ${WRKDIR}/json/${sample_ID}.WGS.input.json -o ${WRKDIR}/json/${sample_ID}.WGS.options.json" > ${WRKDIR}/json/${sample_ID}.WGS.script-submit
+java -Dconfig.file=/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/WholeGenomeGermlineSingleSample.wdl -i ${WRKDIR}/json/${sample_ID}.WGS.input.json -o ${WRKDIR}/json/${sample_ID}.WGS.options.json" > ${WRKDIR}/json/${sample_ID}.WGS.script-submit
 
 sbatch ${WRKDIR}/json/${sample_ID}.WGS.script-submit
 
