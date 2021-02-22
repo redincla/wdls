@@ -6,12 +6,12 @@
 
 module add Utility/UCSC-utils/359
 
-grep "^#" hg19_spidex.txt > header
+grep "^#" /home/credin/refs/references/hg38/sv-resources/gnomad_v2.1_sv.sites.vcf > header
 grep -v '#' hg19_spidex.txt | awk -v s=1 '{print "chr"$1"\t"$2"\t"$3+s"\t"$4"\t"$5"\t"$6"\t"$7;}' > hg19_spidex_tmp.txt
 
-liftOver /home/credin/refs/tools/annovar/AnnovarDB/humandb/hg38/hg19_spidex_tmp.txt \
+liftOver /home/credin/refs/references/hg38/sv-resources/gnomad_v2.1_sv.sites.vcf \
 ~/refs/references/hg38/hg19ToHg38.over.chain.gz \
-/home/credin/refs/tools/annovar/AnnovarDB/humandb/hg38/hg19_spidex_tmp_liftedhg38.txt \
+/home/credin/refs/references/hg38/sv-resources/gnomad_v2.1_sv.sites.liftedhg38.vcf \
 -bedPlus=3 unMapped
 
 cat $header | awk -v s=1 '{print $1"\t"$2"\t"$3-s"\t"$4"\t"$5"\t"$6"\t"$7;}' hg19_spidex_tmp_liftedhg38.txt | sed 's@^chr@@g' > hg38_spidex_lifted-from-hg19.txt
