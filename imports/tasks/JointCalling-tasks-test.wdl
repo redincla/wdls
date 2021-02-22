@@ -343,16 +343,19 @@ task GatherVcfs {
     # --ignore-safety-checks makes a big performance difference so we include it in our invocation.
     # This argument disables expensive checks that the file headers contain the same set of
     # genotyped samples and that files are in order by position of first record.
+    # check that output combined vcf is sorted, else tabix will fail
   command <<<
     set -euo pipefail
-
+    module add UHTS/Analysis/samtools/1.10
     java -Xms6g \
       -jar ~{GATK} \
       GatherVcfsCloud \
       --ignore-safety-checks \
       --gather-type BLOCK \
       --input ~{sep=" --input " input_vcfs} \
-      --output ~{output_vcf_name}
+      --output tmp_vcf.gz
+    
+    bcftools sort tmp_vcf.gz  -O z -o ~{output_vcf_name}
 
     ~{tabix} ~{output_vcf_name}
   >>>
@@ -360,7 +363,7 @@ task GatherVcfs {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "7000" 
-    runtime_minutes: "120"
+    runtime_minutes: "400"
   }
 
   output {
@@ -810,6 +813,7 @@ task CalculatGenotypePosteriors {
   runtime {
 	cpus: "1"
 	requested_memory_mb_per_core: "6000"
+  runtime_minutes: "800"
 	queue: "normal"
   }
   output {
@@ -847,6 +851,7 @@ task VariantFilterLowQ {
   runtime {
 	cpus: "1"
 	requested_memory_mb_per_core: "4000"
+  runtime_minutes: "300"
 	queue: "normal"
   }
   output {
@@ -897,7 +902,7 @@ task AnnovarScatteredVCF {
   table_annovar.pl ~{input_vcf} \
   "~{AnnovarDB}" -buildver ~{genome_build} \
   -out ~{base_vcf_name} -remove \
-  -protocol refGene,ensGene,gnomad30_genome,dbnsfp33a,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand,dbscsnv11,spidex_lifted \
+  -protocol refGene,ensGene,gnomad30_genome,dbnsfp41a,1000g2015aug_all,kaviar_20150923,clinvar,cytoBand,dbscsnv11,spidex_lifted \
   -operation g,g,f,f,f,f,f,r,f,f -nastring . -vcfinput --thread 2 --polish
 
   bgzip "~{base_vcf_name}.hg38_multianno.vcf"
@@ -906,7 +911,7 @@ task AnnovarScatteredVCF {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "12000"
-    runtime_minutes: "580"
+    runtime_minutes: "800"
   }
 
   output {
@@ -935,11 +940,41 @@ task vcfannoScatteredVCF {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "6000"
-    runtime_minutes: "100"
+    runtime_minutes: "60"
   }
 
   output {
     File output_vcf = "~{base_vcf_name}.hg38_vcfanno.vcf.gz"
+  }
+}
+
+############
+### Split vcf
+############
+task SplitVCF {
+  input {
+    File input_vcf
+    File input_vcf_index
+    File interval
+    String base_vcf_name  
+  }
+
+  command <<<
+  module add UHTS/Analysis/samtools/1.10
+  module add UHTS/Analysis/EPACTS/3.2.6
+  grep '^chr' ~{interval} > "~{interval}_clean"
+  bcftools view -R "~{interval}_clean" ~{input_vcf} -O z -o "~{base_vcf_name}.hg38.vcf.gz"
+  tabix "~{base_vcf_name}.hg38.vcf.gz"
+  >>>
+
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "6000"
+    runtime_minutes: "200"
+  }
+
+  output {
+    File output_vcf = "~{base_vcf_name}.hg38.vcf.gz"
   }
 }
 
