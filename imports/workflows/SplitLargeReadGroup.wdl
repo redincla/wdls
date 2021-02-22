@@ -16,8 +16,8 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/tasks/Alignment.wdl" as Alignment
-import "/home/credin/scratch/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/Alignment.wdl" as Alignment
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
 
 #################################################################
 # WORKFLOW DEFINITION

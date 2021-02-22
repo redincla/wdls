@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH -n 1
 #SBATCH --job-name=SplitVCF
-#SBATCH -t 00-04:00
+#SBATCH -t 00-12:00
 #SBATCH --mem-per-cpu=10G
-#SBATCH -o slurm.%N.%j.log
+#SBATCH -o /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/Delly/splitVCF.slurm.%N.%j.log
 
 #sample_ID=$1
 module add Development/java/1.8.0_232

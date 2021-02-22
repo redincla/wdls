@@ -1,8 +1,8 @@
 version 1.0
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/tasks/Qc.wdl" as QC
-import "/home/credin/scratch/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/Qc.wdl" as QC
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/BamProcessing.wdl" as Processing
 
 
 #################################################################

@@ -17,7 +17,7 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/tasks/Qc.wdl" as QC
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/Qc.wdl" as QC
 
 #################################################################
 # WORKFLOW DEFINITION

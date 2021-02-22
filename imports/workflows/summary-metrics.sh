@@ -28,7 +28,7 @@ while read sample_ID; do
     cd ${WRKDIR}
 ################ CROMWELL #############
 ## Check that workflow succeed
-    if grep -q "WorkflowSucceededState" slurm.${sample_ID}.*.log ; then
+    if grep -q "Workflow WholeGenomeGermlineSingleSample complete" slurm.${sample_ID}.*.log ; then
         printf "%s: SUCCESS\n" "${sample_ID}">> ${WRKDIR}/Agregate_workflow.log
         CONTAMINATION=$(grep "WholeGenomeGermlineSingleSample.contamination" slurm.${sample_ID}.*.log | cut -f 2 -d: | cut -f 1 -d, | head -n 1)
         cd ${WRKDIR}/${sample_ID}/Processed
@@ -50,13 +50,13 @@ while read sample_ID; do
             echo -e "${sample_ID}: errors in cram file\n" >> ${WRKDIR}/Agregate_bam.log
         fi
 
-###duplicate metrics
+###duplicate metrics -> UnmappedBamToAlignedBam output
         header_line=$(grep -n "UNPAIRED_READS_EXAMINED" ${sample_ID}.duplicate_metrics | cut -f1 -d: )
         num_line=$(( ${header_line} + 1))
         READ_PAIRS_EXAMINED=$(sed -n ${num_line}p ${sample_ID}.duplicate_metrics | cut -f 3)
         PERCENT_DUPLICATION=$(sed -n ${num_line}p ${sample_ID}.duplicate_metrics | cut -f 9)
 
-###alignment metrics
+###alignment metrics  -> AggregateBAMQC output
         num_line=$(grep -Pn "^PAIR\t" ${sample_ID}.alignment_summary_metrics | cut -f1 -d: | head -1 )
         TOTAL_READS=$(sed -n ${num_line}p ${sample_ID}.alignment_summary_metrics | cut -f 2)
         PF_READS=$(sed -n ${num_line}p ${sample_ID}.alignment_summary_metrics | cut -f 3)
@@ -74,13 +74,13 @@ while read sample_ID; do
         PCT_CHIMERAS=$(sed -n ${num_line}p ${sample_ID}.alignment_summary_metrics | cut -f 23)
         PCT_ADAPTER=$(sed -n ${num_line}p ${sample_ID}.alignment_summary_metrics | cut -f 24)
 
-###insert size metrics
+###insert size metrics -> AggregateBAMQC output
         header_line=$(grep -n "MEDIAN_INSERT_SIZE" ${sample_ID}.insert_size_metrics | cut -f1 -d: )
         num_line=$(( ${header_line} + 1))
         MEDIAN_INSERT_SIZE=$(sed -n ${num_line}p ${sample_ID}.insert_size_metrics | cut -f 1)
         MEDIAN_ABSOLUTE_DEVIATION=$(sed -n ${num_line}p ${sample_ID}.insert_size_metrics | cut -f 3)
 
-###wgs metrics
+###wgs metrics -> CollectWgsMetrics output
         header_line=$(grep -n "GENOME_TERRITORY" ${sample_ID}.wgs_metrics | cut -f1 -d: )
         num_line=$(( ${header_line} + 1))
         MEDIAN_COVERAGE=$(sed -n ${num_line}p ${sample_ID}.wgs_metrics | cut -f 4)
@@ -97,7 +97,7 @@ while read sample_ID; do
         HET_SNP_SENSITIVITY=$(sed -n ${num_line}p ${sample_ID}.wgs_metrics | cut -f 28)
         HET_SNP_Q=$(sed -n ${num_line}p ${sample_ID}.wgs_metrics | cut -f 29)
 
-###variant calling metrics
+###variant calling metrics -> BamToGvcf output
         header_line=$(grep -n "SAMPLE_ALIAS" ${sample_ID}_PLUMBING.variant_calling_detail_metrics | cut -f1 -d: )
         num_line=$(( ${header_line} + 1))
         HET_HOMVAR_RATIO=$(sed -n ${num_line}p ${sample_ID}_PLUMBING.variant_calling_detail_metrics | cut -f 2)
