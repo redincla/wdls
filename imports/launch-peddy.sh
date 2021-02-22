@@ -35,4 +35,4 @@ cd ${OUTDIR}
 sbatch -J Peddy -D ${OUTDIR} --time 60 -p normal \
   		-n 1 \
   		--mem-per-cpu=2G \
- 	    --wrap "peddy --plot -p 3 --sites hg38 ${vcf_file} ${ped_file}"
+ 	    --wrap "peddy --plot -p 3 --sites hg38 --prefix TACG.CoPrAc ${vcf_file} ${ped_file}"
