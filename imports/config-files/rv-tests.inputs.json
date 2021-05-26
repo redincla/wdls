@@ -1,0 +1,14 @@
+{
+  "RareVariantTest.input_vcf": "/users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/JointAnnotation/TACG_CoPRAC_HEVrefined_priors-filtered.annotated.vcf.gz",
+  "RareVariantTest.input_vcf_index": "/users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/JointAnnotation/TACG_CoPRAC_HEVrefined_priors-filtered.annotated.vcf.gz.tbi",
+  "RareVariantTest.ped_file": "/users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/CoPrAc/2101/rvtests/210421_COPRAC.ped",
+  "RareVariantTest.single_test_names": ["score","wald","exact","firth"],
+  "RareVariantTest.burden_test_names": ["cmc","zeggini","mb","fp","exactCMC","cmcWald","rarecover"],
+  "RareVariantTest.gene_file": "/users/credin/refs/references/hg38/refFlat_hg38_rvtest.txt.gz",
+  "RareVariantTest.AN_threshold": "289",
+  "RareVariantTest.AF_threshold": "0.01",
+  "RareVariantTest.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
+  "RareVariantTest.ref_fasta": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta",
+  "RareVariantTest.ref_dict": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dict",
+  "RareVariantTest.ref_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.fai"
+}
