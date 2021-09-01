@@ -134,7 +134,7 @@ touch ${WRKDIR}/json/${sample_ID}.WGS.script-submit
 echo "#!/bin/bash
 #SBATCH -n 1
 #SBATCH --job-name=WGS.${sample_ID}
-#SBATCH -t 4-00:00
+#SBATCH -t 5-00:00
 #SBATCH --mem-per-cpu=14G
 #SBATCH --output=slurm.${sample_ID}.%N.%j.log
 #module load Utility/cromwell/47
