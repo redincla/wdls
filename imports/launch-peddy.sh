@@ -32,7 +32,7 @@ source /home/credin/refs/tools/peddy_venv/bin/activate
 cd ${OUTDIR}
 
 ### Write and launch slurm script
-sbatch -J Peddy -D ${OUTDIR} --time 60 -p normal \
+sbatch -J Peddy -D ${OUTDIR} --time 200 -p normal \
   		-n 1 \
   		--mem-per-cpu=2G \
- 	    --wrap "peddy --plot -p 3 --sites hg38 --prefix TACG.CoPrAc ${vcf_file} ${ped_file}"
+ 	    --wrap "peddy --plot -p 3 --sites hg38 --prefix HEV ${vcf_file} ${ped_file}"
