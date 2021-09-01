@@ -20,7 +20,7 @@ version 1.0
 
 import "/home/credin/scratch/WGS/wdls/imports/tasks/delly-tasksv2.wdl" as Tasks
 
-workflow Delly-cohort {
+workflow DellyCohort {
   # Run Delly SV detection algorithm on whole genomes in array of bam or cram files.
   input {
 #    File full_map # col 1: sample ID , col 2: input bam/cram , col3: input bam/cram index
