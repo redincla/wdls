@@ -59,7 +59,8 @@ task SplitIntervalList {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "4000"
+	  requested_memory_mb_per_core: "3500"
+    runtime_minutes: "20"
   }
 
   output {
@@ -104,13 +105,14 @@ task ImportGVCFs {
     rm -rf ~{workspace_dir_name} 
     TMP_DIR=`mktemp -d /tmp/tmp.XXXXXX`
     export TILEDB_DISABLE_FILE_LOCKING=1 #required when working on a POSIX filesystem (e.g. Lustre, NFS, xfs, ext4) before running any GenomicsDB tool
+    cp ~{sample_name_map} tmp_map
     java -Xms16g -Djava.io.tmpdir=${TMP_DIR} \
       -jar ~{GATK} \
       GenomicsDBImport \
       --genomicsdb-workspace-path ~{workspace_dir_name} \
       --batch-size ~{batch_size} \
       -L ~{interval} \
-      --sample-name-map ~{sample_name_map} \
+      --sample-name-map tmp_map \
       --reader-threads 5 \
       --merge-input-intervals \
       --max-num-intervals-to-import-in-parallel 3 \
@@ -122,7 +124,7 @@ task ImportGVCFs {
   runtime {
     cpus: "4"
 	  requested_memory_mb_per_core: "40000"
-    runtime_minutes: "2100"
+    runtime_minutes: "2500"
   }
 
   output {
@@ -174,8 +176,8 @@ task GenotypeGVCFs {
 
   runtime {
     cpus: "2"
-	  requested_memory_mb_per_core: "26000"  
-    runtime_minutes: "2880"  
+	  requested_memory_mb_per_core: "30000"  
+    runtime_minutes: "4700"  
   }
 
   output {
@@ -287,7 +289,8 @@ task HardFilterAndMakeSitesOnlyVcf {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "4000"   
+	  requested_memory_mb_per_core: "4000"  
+    runtime_minutes: "60" 
   }
 
   output {
@@ -322,6 +325,7 @@ task MakeSitesOnlyVcf {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "4000"   
+    runtime_minutes: "60" 
   }
 
   output {
@@ -362,8 +366,8 @@ task GatherVcfs {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "7000" 
-    runtime_minutes: "400"
+	  requested_memory_mb_per_core: "9000" 
+    runtime_minutes: "800"
   }
 
   output {
@@ -422,7 +426,8 @@ task IndelsVariantRecalibrator {
 
   runtime {
     cpus: "2"
-	  requested_memory_mb_per_core: "26000"   
+	  requested_memory_mb_per_core: "26000"  
+    runtime_minutes: "300"  
   }
 
   output {
@@ -487,6 +492,7 @@ task SNPsVariantRecalibratorCreateModel {
   runtime {
     cpus: "2"
 	  requested_memory_mb_per_core: "104000"   #104 Gib in original!
+    runtime_minutes: "300"
   }
 
   output {
@@ -552,6 +558,7 @@ task SNPsVariantRecalibrator {
   runtime {
     cpus: "2"
 	  requested_memory_mb_per_core: "~{machine_mem}000"  
+    runtime_minutes: "300"
   }
 
   output {
@@ -614,6 +621,7 @@ task ApplyRecalibration {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "7000" 
+    runtime_minutes: "200" 
   }
 
   output {
@@ -659,6 +667,7 @@ task CollectVariantCallingMetrics {
   runtime {
     cpus: "2"
 	  requested_memory_mb_per_core: "8000" 
+    runtime_minutes: "500" 
   }
 }
 
@@ -851,7 +860,7 @@ task VariantFilterLowQ {
   runtime {
 	cpus: "1"
 	requested_memory_mb_per_core: "4000"
-  runtime_minutes: "300"
+  runtime_minutes: "400"
 	queue: "normal"
   }
   output {
@@ -910,8 +919,8 @@ task AnnovarScatteredVCF {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "12000"
-    runtime_minutes: "800"
+	  requested_memory_mb_per_core: "14000"
+    runtime_minutes: "1000"
   }
 
   output {
@@ -935,6 +944,7 @@ task vcfannoScatteredVCF {
   vcfanno ~{conf_file} ~{input_vcf} > "~{base_vcf_name}.hg38_vcfanno.vcf"
 
   bgzip "~{base_vcf_name}.hg38_vcfanno.vcf"
+  tabix "~{base_vcf_name}.hg38_vcfanno.vcf.gz"
   >>>
 
   runtime {
@@ -945,6 +955,7 @@ task vcfannoScatteredVCF {
 
   output {
     File output_vcf = "~{base_vcf_name}.hg38_vcfanno.vcf.gz"
+    File output_vcf_index = "~{base_vcf_name}.hg38_vcfanno.vcf.gz.tbi"
   }
 }
 
