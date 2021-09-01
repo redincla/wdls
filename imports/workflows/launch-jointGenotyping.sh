@@ -26,6 +26,7 @@ fi
 export WRKDIR
 
 cut -f 1,2 ${full_map} > $WRKDIR/sample_name_map
+sample_number=$(wc -l ${full_map} | awk '{print $1}')
 
 if ! [ -e $WRKDIR ]; then
 	mkdir $WRKDIR
@@ -44,6 +45,8 @@ fi
 
 # Write input json
     touch ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json
+
+    shard_number=$( echo $sample_number / 3 | bc )  ### calculate number of shards needed based on total # of input genomes
     cat <<EOF > ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json
 {
   "JointGenotyping.full_map": "${full_map}",
@@ -62,7 +65,7 @@ fi
   "JointGenotyping.workspace_dir_name": "genomicsdb",
   "JointGenotyping.callset_name": "${cohort_name}",
 
-  "JointGenotyping.top_level_scatter_count": "40",
+  "JointGenotyping.top_level_scatter_count": "${shard_number}",
 
   "JointGenotyping.dbsnp_vcf": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
   "JointGenotyping.dbsnp_vcf_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx",
