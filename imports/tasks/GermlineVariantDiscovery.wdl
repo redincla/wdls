@@ -118,6 +118,7 @@ task HaplotypeCaller_GATK4_VCF {
   >>>
 
   runtime {
+  runtime_minutes: "1200"
   cpus: "2"
 	requested_memory_mb_per_core: "7000"
 	queue: "normal"
