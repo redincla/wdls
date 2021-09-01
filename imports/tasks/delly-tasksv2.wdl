@@ -54,7 +54,7 @@ task gSVCalling {
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "15000"  #10000 for large WGS initially ~{mem_size_Mb}, trying to increase for stuck samples
-  runtime_minutes: "7000"
+  runtime_minutes: "10000"
   }
 }
 
@@ -80,7 +80,7 @@ task MergeBCF {
 
   runtime {
   cpus: "1"
-	requested_memory_mb_per_core: "5000"
+	requested_memory_mb_per_core: "8000"
   }
 }
 
@@ -113,7 +113,7 @@ task GenotypeBCF {
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "10000"
-  runtime_minutes: "480"
+  runtime_minutes: "2000"
   }
 }
 
@@ -142,7 +142,7 @@ task MergeGenotypedBCF {
 
   runtime {
   cpus: "1"
-	requested_memory_mb_per_core: "5000"
+	requested_memory_mb_per_core: "8000"
 # runtime_minutes: "580"
   }
 }
@@ -178,7 +178,7 @@ task FilterGenotypedBCF {
 
   runtime {
   cpus: "1"
-	requested_memory_mb_per_core: "8000"
+	requested_memory_mb_per_core: "10000"
 #    runtime_minutes: "480"
   }
 }
@@ -225,7 +225,7 @@ task BCFsToVCFs {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "2000"
+	  requested_memory_mb_per_core: "4000"
 #    runtime_minutes: "480"
   }
 
