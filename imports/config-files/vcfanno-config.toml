@@ -41,7 +41,7 @@ names=["LOEUF_bin","GnomAD_pLI","ExAC_pLI"]
 ops=["first","first","first"]
 
 [[postannotation]]
-fields=['gnomadv3_AF','gnomadv3_AF_raw','gnomadv3_AF_male','gnomadv3_AF_female','gnomadv3_AF_afr','gnomadv3_AF_ami','gnomadv3_AF_amr','gnomadv3_AF_asj','gnomadv3_AF_eas','gnomadv3_AF_fin','gnomadv3_AF_nfe','gnomadv3_AF_oth','gnomadv3_AF_sas','1000g2015aug_all','Kaviar_AF','ClinVar_AF_EXAC']
+fields=['gnomadv3_AF','gnomadv3_AF_raw','gnomadv3_AF_male','gnomadv3_AF_female','gnomadv3_AF_afr','gnomadv3_AF_ami','gnomadv3_AF_amr','gnomadv3_AF_asj','gnomadv3_AF_eas','gnomadv3_AF_fin','gnomadv3_AF_nfe','gnomadv3_AF_sas','1000g2015aug_all','Kaviar_AF','ClinVar_AF_EXAC']
 op="max"
 name="max_aaf_all"
 type="Float"
