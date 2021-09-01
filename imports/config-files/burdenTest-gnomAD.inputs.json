@@ -1,0 +1,13 @@
+{
+    "BurdenTestgnomAD.input_vcf": "/users/credin/refs/references/GRCh38/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz",
+    "BurdenTestgnomAD.input_vcf_index": "/users/credin/refs/references/GRCh38/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi",
+    "BurdenTestgnomAD.genome_version": "grch38",
+    "BurdenTestgnomAD.ref_fasta": "/users/credin/refs/references/GRCh38/GCA_000001405.15_GRCh38_no_alt_analysis_set.fa",
+    "BurdenTestgnomAD.ref_dict": "/users/credin/refs/references/GRCh38/GCA_000001405.15_GRCh38_no_alt_analysis_set.dict",
+    "BurdenTestgnomAD.ref_index": "/users/credin/refs/references/GRCh38/GCA_000001405.15_GRCh38_no_alt_analysis_set.fa.fai",
+    "BurdenTestgnomAD.tabix": "/software/UHTS/Analysis/EPACTS/3.2.6/bin/tabix",
+    "BurdenTestgnomAD.unpadded_intervals_file": "/home/credin/refs/references/hg38/hg38.even.handcurated.20k.intervals",
+    "BurdenTestgnomAD.AF_threshold": "0.01",
+    "BurdenTestgnomAD.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
+    "BurdenTestgnomAD.scatter_count": "45"
+  }
