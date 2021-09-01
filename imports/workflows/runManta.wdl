@@ -30,8 +30,11 @@ workflow Manta {
     File region_bed
     File region_bed_index
     File samtools
+    File GATK
     File ref_fasta #.fasta file with reference used to align bam or cram file
     File ref_index #[optional] If omitted, the WDL will look for an index by appending .fai to the .fasta file
+    File ref_dict
+    String cohort_name
   }
 
 scatter (idx in range(length(input_bams_or_crams))) {  
@@ -47,6 +50,17 @@ scatter (idx in range(length(input_bams_or_crams))) {
       region_bed_index = region_bed_index
   }
 }
+
+call CombineGvCFs {
+      input:
+        GATK = GATK,
+        output_vcf_filename = cohort_name,
+        ref_fasta = ref_fasta,
+        ref_index = ref_index,
+        ref_dict = ref_dict,
+        input_gvcf = RunManta.vcf,
+        input_gvcf_index = RunManta.index
+      }
 
   output {
     Array[File] vcfs = RunManta.vcf
@@ -151,4 +165,39 @@ task RunManta {
   runtime_minutes: "1800"
   }
 #1400 minutes not enough for some samples
+}
+
+############
+### Combine individual Manta VCFs
+############
+task CombineGvCFs {
+  input {
+    File GATK
+    Array[File] input_gvcf
+    Array[File] input_gvcf_index
+    String output_vcf_filename
+    File ref_fasta
+    File ref_index
+    File ref_dict
+  }
+  command <<<
+    set -euo pipefail
+    java -Xms8g \
+      -jar ~{GATK} \
+      CombineGVCFs \
+      -R ~{ref_fasta} \
+      -O "~{output_vcf_filename}.manta.gvcf" \
+      ~{sep=' --variant ' input_gvcf }
+  >>>
+
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "8000"  
+    runtime_minutes: "4700"  
+  }
+
+  output {
+    File output_vcf = "~{output_vcf_filename}.manta.gvcf"
+    File output_vcf_index = "~{output_vcf_filename}.manta.gvcf.tbi"
+  }
 }
