@@ -35,17 +35,6 @@ input {
         String input_cram = line[3]
         String input_cram_index = line[4]
 
-    call shapeit4 {
-      input:
-        input_vcf = input_vcf,
-        input_vcf_index = input_vcf_index,
-        base_output_name = sample_id,
-        chr_gmap = chr_gmap,
-        phased_ref = phased_ref,
-        phased_ref_index = phased_ref_index,
-        target_region = target_region
-    }
-
     call whatshap_phasing {
       input:
         input_vcf = input_vcf,
@@ -59,6 +48,18 @@ input {
         base_output_name = sample_id
     }
 
+    call shapeit4 {
+      input:
+        input_vcf = whatshap_phasing.output_vcf,
+        input_vcf_index = whatshap_phasing.output_vcf_index,
+        base_output_name = sample_id,
+        chr_gmap = chr_gmap,
+        phased_ref = phased_ref,
+        phased_ref_index = phased_ref_index,
+        target_region = target_region
+    }
+
+
     call get_gtf {
       input:
         shapeit4_phased_vcf = shapeit4.output_vcf,
@@ -68,7 +69,7 @@ input {
         base_output_name = sample_id
     }
 
-    call phasing_reads {
+    call phasing_reads as phasing_reads_shapeit4 {
       input:
         ref_fasta = ref_fasta,
         ref_index = ref_index,
@@ -77,7 +78,19 @@ input {
         input_cram_index = input_cram_index,
         phased_vcf = shapeit4.output_vcf,
         phased_vcf_index = shapeit4.output_vcf_index,
-        base_output_name = sample_id
+        base_output_name = sample_id + ".shapeit4."
+    }
+
+    call phasing_reads as phasing_reads_whatshap {
+      input:
+        ref_fasta = ref_fasta,
+        ref_index = ref_index,
+        ref_dict = ref_dict,
+        input_cram = input_cram,
+        input_cram_index = input_cram_index,
+        phased_vcf = whatshap_phasing.output_vcf,
+        phased_vcf_index = whatshap_phasing.output_vcf_index,
+        base_output_name = sample_id + ".whatshap."
     }
 }
 
@@ -91,8 +104,11 @@ output {
   Array[File] whatshap_phased_vcfs_indices = whatshap_phasing.output_vcf_index
   Array[File] whatshap_phased_gtfs = get_gtf.output_gtf_whatshap
 
-  Array[File] phased_bams = phasing_reads.phased_bam
-  Array[File] phased_bams_indices = phasing_reads.phased_bam_index
+  Array[File] shapeit4_phased_bams = phasing_reads_shapeit4.phased_bam
+  Array[File] shapeit4_phased_bams_indices = phasing_reads_shapeit4.phased_bam_index
+
+  Array[File] whatshap_phased_bams = phasing_reads_whatshap.phased_bam
+  Array[File] whatshap_phased_bams_indices = phasing_reads_whatshap.phased_bam_index
 }
 }
 
@@ -122,13 +138,13 @@ command <<<
     module load gcc
     module load shapeit4/4.1.3
     module load htslib/1.12
-    shapeit4 --input ~{input_vcf} --map ~{chr_gmap} --region ~{target_region} --thread 4 --sequencing --reference ~{phased_ref} --output "~{base_output_name}.shapeit4.phased.vcf.gz"
+    shapeit4 --input ~{input_vcf} --map ~{chr_gmap} --region ~{target_region} --thread 4 --sequencing --reference ~{phased_ref} --scaffold ~{phased_ref} --mcmc-iterations 10b,1p,1b,1p,1b,1p,1b,1p,10m --pbwt-disable-init --output "~{base_output_name}.shapeit4.phased.vcf.gz"
     tabix -p vcf ~{base_output_name}.shapeit4.phased.vcf.gz
 >>>
 
   runtime {
-    cpus: "1"
-    requested_memory_mb_per_core: "10000" 
+    cpus: "2"
+    requested_memory_mb_per_core: "30000" 
   }
 
   output {
@@ -232,9 +248,10 @@ command <<<
     module load htslib/1.12
     module load samtools/1.12
 
-    samtools view ~{input_cram} --bam --with-header -o "~{base_output_name}.MYBPC3region.bam" ## convert cram to bam on the fly  
-    whatshap haplotag -o "~{base_output_name}.MYBPC3region.haplotagged.bam" --reference=~{ref_fasta} ~{phased_vcf} "~{base_output_name}.MYBPC3region.bam"
-    samtools index "~{base_output_name}.MYBPC3region.haplotagged.bam"
+    samtools view ~{input_cram} -b -o "~{base_output_name}.chr11.bam" ## convert cram to bam on the fly  
+    samtools index "~{base_output_name}.chr11.bam"
+    whatshap haplotag -o "~{base_output_name}.chr11.haplotagged.bam" --reference=~{ref_fasta} ~{phased_vcf} "~{base_output_name}.chr11.bam"
+    samtools index "~{base_output_name}.chr11.haplotagged.bam"
 >>>
 
   runtime {
@@ -243,7 +260,7 @@ command <<<
   }
 
   output {
-    File phased_bam = "~{base_output_name}.MYBPC3region.haplotagged.bam"
-    File phased_bam_index = "~{base_output_name}.MYBPC3region.haplotagged.bam.bai"
+    File phased_bam = "~{base_output_name}.chr11.haplotagged.bam"
+    File phased_bam_index = "~{base_output_name}.chr11.haplotagged.bam.bai"
   }
 }
