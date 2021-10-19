@@ -133,6 +133,51 @@ task ImportGVCFs {
 }
 
 ############
+### Add new samples to existing GenomicsDB before joint genotyping
+############
+task updateGenomicsDB {
+  input {
+    File GATK
+    File sample_name_map
+    String workspace_dir_name
+    String TMP_DIR
+    Int batch_size
+  }
+    # The --genomicsdb-update-workspace-path must point to a existing genomicsdb workspace
+    # /!\ Always backup existing genomicsdb workspaces before adding new samples. 
+    # If the tool fails during incremental import for any reason, the workspace may be corrupted
+
+  command <<<
+    set -euo pipefail
+
+    TMP_DIR=`mktemp -d /tmp/tmp.XXXXXX`
+    export TILEDB_DISABLE_FILE_LOCKING=1 #required when working on a POSIX filesystem (e.g. Lustre, NFS, xfs, ext4) before running any GenomicsDB tool
+    cp ~{sample_name_map} tmp_map
+    java -Xms16g -Djava.io.tmpdir=${TMP_DIR} \
+      -jar ~{GATK} \
+      GenomicsDBImport \
+      --genomicsdb-update-workspace-path  ~{workspace_dir_name} \
+      --batch-size ~{batch_size} \
+      --sample-name-map tmp_map \
+      --reader-threads 5 \
+      --tmp-dir=${TMP_DIR}
+
+    tar -cf ~{workspace_dir_name}.tar ~{workspace_dir_name}
+  >>>
+
+  runtime {
+    cpus: "4"
+	  requested_memory_mb_per_core: "40000"
+    runtime_minutes: "2500"
+  }
+
+  output {
+    File output_genomicsdb = "~{workspace_dir_name}.tar"
+  }
+}
+
+
+############
 ### Perform joint genotyping on one or more samples
 ############
 task GenotypeGVCFs {
