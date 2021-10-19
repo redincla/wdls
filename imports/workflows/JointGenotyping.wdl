@@ -362,6 +362,9 @@ input {
   Array[File?] output_vcf_index_files = if defined(VariantFilterLowQ.output_vcf_index) then [VariantFilterLowQ.output_vcf_index] else ApplyRecalibration.recalibrated_vcf_index
 
   output {
+    # genomicsDB, to allow for addition of new samples later on
+    File genomics_database = ImportGVCFs.output_genomicsdb
+
     # Metrics from either the small or large callset
     File detail_metrics_file = CollectMetricsOnFullVcf.detail_metrics_file
     File summary_metrics_file = CollectMetricsOnFullVcf.summary_metrics_file
