@@ -10,3 +10,10 @@ cromwell-workflow-logs/
 downsample-script.submit
 /home/credin/scratch/WGS/wdls/imports/workflows/downsample.sh
 *.out
+imports/config-files/NA12878_full_map.txt
+.gitignore
+.DS_Store
+imports/.DS_Store
+.DS_Store
+.gitignore
+imports/.DS_Store
