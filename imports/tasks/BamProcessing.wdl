@@ -87,6 +87,7 @@ task MarkDuplicates {
       ADD_PG_TAG_TO_READS=false
   }
   runtime {
+  runtime_minutes: "720"
 	cpus: "1"
 	requested_memory_mb_per_core: "14000"
 	queue: "normal"
