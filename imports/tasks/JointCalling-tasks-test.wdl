@@ -139,8 +139,9 @@ task updateGenomicsDB {
   input {
     File GATK
     File sample_name_map
-    String workspace_dir_name
+    File workspace_tar
     String TMP_DIR
+    String output_interval_file_name
     Int batch_size
   }
     # The --genomicsdb-update-workspace-path must point to a existing genomicsdb workspace
@@ -153,16 +154,26 @@ task updateGenomicsDB {
     TMP_DIR=`mktemp -d /tmp/tmp.XXXXXX`
     export TILEDB_DISABLE_FILE_LOCKING=1 #required when working on a POSIX filesystem (e.g. Lustre, NFS, xfs, ext4) before running any GenomicsDB tool
     cp ~{sample_name_map} tmp_map
+    #need untar'd db
+    tar -xf ~{workspace_tar}
+    WORKSPACE=$(basename ~{workspace_tar} .tar)
     java -Xms16g -Djava.io.tmpdir=${TMP_DIR} \
       -jar ~{GATK} \
       GenomicsDBImport \
-      --genomicsdb-update-workspace-path  ~{workspace_dir_name} \
+      --genomicsdb-update-workspace-path ${WORKSPACE} \
       --batch-size ~{batch_size} \
       --sample-name-map tmp_map \
       --reader-threads 5 \
       --tmp-dir=${TMP_DIR}
 
-    tar -cf ~{workspace_dir_name}.tar ~{workspace_dir_name}
+    #cannnot export interval list and update db at the same time
+    java -Xms16g -Djava.io.tmpdir=${TMP_DIR} \
+      -jar ~{GATK} \
+      GenomicsDBImport \
+      --genomicsdb-update-workspace-path ${WORKSPACE} \
+      --output-interval-list-to-file ~{output_interval_file_name} \
+
+    tar -cf ${WORKSPACE}.tar ${WORKSPACE}
   >>>
 
   runtime {
@@ -172,7 +183,8 @@ task updateGenomicsDB {
   }
 
   output {
-    File output_genomicsdb = "~{workspace_dir_name}.tar"
+    File output_genomicsdb = "${WORKSPACE}.tar"
+    File interval = "~{output_interval_file_name}"
   }
 }
 
