@@ -1,0 +1,46 @@
+{
+  "WholeGenomeGermlineSingleSample.full_map": "/home/credin/scratch/WGS/wdls/imports/config-files/NA12878_full_map.txt",
+  "WholeGenomeGermlineSingleSample.make_fofn": "true",
+  "WholeGenomeGermlineSingleSample.base_file_name": "NA12878",
+  "WholeGenomeGermlineSingleSample.final_vcf_base_name": "NA12878_PLUMBING",
+
+  "WholeGenomeGermlineSingleSample.SAMTOOLS": "/software/UHTS/Analysis/samtools/1.10/bin/samtools",
+  "WholeGenomeGermlineSingleSample.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
+  "WholeGenomeGermlineSingleSample.BWA": "/software/UHTS/Aligner/bwa/0.7.17/bin/bwa",
+  "WholeGenomeGermlineSingleSample.GATK": "/software/UHTS/Analysis/GenomeAnalysisTK/4.1.3.0/bin/GenomeAnalysisTK.jar",
+  "WholeGenomeGermlineSingleSample.GATK3": "/software/UHTS/Analysis/GenomeAnalysisTK/3.8.1.0.gf15c1c3ef/bin/GenomeAnalysisTK.jar",
+  "WholeGenomeGermlineSingleSample.VerifyBamID": "/software/UHTS/Analysis/VerifyBamID/1.0.6/bin/VerifyBamID",
+
+  "WholeGenomeGermlineSingleSample.ref_fasta": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta",
+  "WholeGenomeGermlineSingleSample.ref_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+  "WholeGenomeGermlineSingleSample.ref_dict": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dict",
+  "WholeGenomeGermlineSingleSample.ref_ann": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.ann",
+  "WholeGenomeGermlineSingleSample.ref_sa": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.sa",
+  "WholeGenomeGermlineSingleSample.ref_bwt": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.bwt",
+  "WholeGenomeGermlineSingleSample.ref_pac": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.pac",
+  "WholeGenomeGermlineSingleSample.ref_amb": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.amb",
+  "WholeGenomeGermlineSingleSample.ref_alt": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.64.alt",
+  "WholeGenomeGermlineSingleSample.contamination_sites_bed": "/home/credin/refs/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.bed",
+  "WholeGenomeGermlineSingleSample.contamination_sites_mu": "/home/credin/refs/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.mu",
+  "WholeGenomeGermlineSingleSample.contamination_sites_ud": "/home/credin/refs/references/hg38/1000g.phase3.100k.b38.vcf.gz.dat.UD",
+  "WholeGenomeGermlineSingleSample.disable_sanity_check": "true",
+
+  "WholeGenomeGermlineSingleSample.wgs_coverage_interval_list": "/home/credin/refs/references/hg38/wgs_coverage_regions.hg38.interval_list",
+  "WholeGenomeGermlineSingleSample.evaluation_interval_list": "/home/credin/refs/references/hg38/wgs_evaluation_regions.hg38.interval_list",
+  "WholeGenomeGermlineSingleSample.calling_interval_list": "/home/credin/refs/references/hg38/wgs_calling_regions.hg38.interval_list",
+  "WholeGenomeGermlineSingleSample.interval_list": "/home/credin/refs/references/gene_lists/cardioGenes_codingexons_sorted.bed",
+  "WholeGenomeGermlineSingleSample.break_bands_at_multiples_of": "100000",
+  "WholeGenomeGermlineSingleSample.haplotype_scatter_count": "10",
+  "WholeGenomeGermlineSingleSample.make_bamout": "false",
+
+  "WholeGenomeGermlineSingleSample.known_indels_sites_vcfs": [
+    "/home/credin/refs/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
+    "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz"
+  ],
+  "WholeGenomeGermlineSingleSample.known_indels_sites_indices": [
+    "/home/credin/refs/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
+    "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi"
+  ],
+  "WholeGenomeGermlineSingleSample.dbsnp_vcf": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
+  "WholeGenomeGermlineSingleSample.dbsnp_vcf_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx"
+}
