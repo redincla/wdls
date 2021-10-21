@@ -1,0 +1,52 @@
+###### HEP-E CASES
+
+##1- Get High + Mod impact SNP list using the merger script
+source /dcsrsoft/spack/bin/setup_dcsrsoft
+module load gcc
+module load python/2.7.16
+
+python /users/credin/refs/tools/TRAPD/code/merge_snp_file.py \
+--snpfiles TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_origHighImpactPASSONLY.qualifying.variants.list,TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_origModImpactMissensePASSONLY.qualifying.variants.list,TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_origModImpactNonMisPASSONLY.qualifying.variants.list  \
+--outfile TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_origHigh+ModImpactPASSONLY.qualifying.variants.list
+
+##2- Get High + Mod impact SNP count
+
+python /users/credin/refs/tools/TRAPD/code/count_cases.py \
+--vcffile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_orig.vcf.gz \
+--snpfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/cases/TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_origHigh+ModImpactPASSONLY.qualifying.variants.list \
+--outfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/cases/TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_origHigh+ModImpactPASS.qualifying.variants.counts \
+--pass --samplefile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/EUR_sample_IDs
+
+
+###### gnomad
+
+##1- Get High + Mod impact SNP list using the merger script
+source /dcsrsoft/spack/bin/setup_dcsrsoft
+module load gcc
+module load python/2.7.16
+
+python /users/credin/refs/tools/TRAPD/code/merge_snp_file.py \
+--snpfiles gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgzHighImpactALL.qualifying.variants.list,gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgzModImpactMissenseALL.qualifying.variants.list,gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgzModImpactNonMisALL.qualifying.variants.list  \
+--outfile gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgzHigh+ModImpactALL.qualifying.variants.list
+
+##2- Get High + Mod impact SNP count
+
+python /users/credin/refs/tools/TRAPD/code/count_controls.py \
+--vcffile /users/credin/refs/references/GRCh38/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz \
+--snpfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/ctrls/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgzHigh+ModImpactALL.qualifying.variants.list \
+--outfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/ctrls/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgzHigh+ModImpactPASS.qualifying.variants.counts \
+--pass --database gnomad
+
+###### RUN BURDEN TEST 
+source /dcsrsoft/spack/bin/setup_dcsrsoft
+module load gcc
+module load r/4.0.2
+
+Rscript /users/credin/refs/tools/TRAPD/code/burden.R --casefile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/cases/TACG_COPRAC_HEV_VZVrefined_priors-filtered.annotated.HEV.AC_origHigh+ModImpactPASS.qualifying.variants.counts \
+--casesize 24 \
+--controlfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/ctrls/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgzHigh+ModImpactPASS.qualifying.variants.counts \
+--controlsize 125748 \
+--outfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/HEV-gnomAD.MAF1pct.High+ModImpact.burden.out.txt
+
+###### QQ plot
+Rscript /users/credin/refs/tools/TRAPD/code/QQ.R --pvalfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/HEV-gnomAD.MAF1pct.High+ModImpact.burden.out.txt --plotfile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/HEV/Analysis/BurdenTest/MAF1%/HEV-gnomAD.MAF1pct.High+ModImpact.burden.QQ.png
