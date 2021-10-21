@@ -60,12 +60,10 @@ while read runID; do
 
     FQDIR="${BASEDIR}/${runID}"
     cd ${FQDIR}
-    #num_col=$( echo "${FQDIR}" | awk -F'/' '{print NF; exit}')
-    #run_date=$( echo "${FQDIR}" | cut -f ${num_col} -d/ | cut -f 1 -d_)
     FQDIR=$( echo "${FQDIR}" | sed "s+/$++g")  #replace last '/' if present in given fqdir path in order not to mess up the final fq absolute paths
     
     #get list of sample ID
-    find . -name "*.gz"  | cut -f 1 -dN | cut -f 2 -d/ | sed "s+_$++" | sort -u > sample_list
+    find . -name "*.gz"  | awk -F_NGS '{print $1 }' | cut -f 2 -d/ | sort -u > sample_list
 
     while read sample_ID; do  ## build sample map
         find . -name "${sample_ID}_*_R1_*.fastq.gz" | sed "s+^./++" > ${sample_ID}.fq1_list #get list of fq_R1
