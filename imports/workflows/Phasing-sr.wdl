@@ -25,7 +25,6 @@ input {
     File ref_index
     File ref_dict
 }
-
     Array[Array[String]] inputSamples = read_tsv(sample_manifest)
 
     scatter (line in inputSamples) {
@@ -78,7 +77,7 @@ input {
         input_cram_index = input_cram_index,
         phased_vcf = shapeit4.output_vcf,
         phased_vcf_index = shapeit4.output_vcf_index,
-        base_output_name = sample_id + ".shapeit4."
+        base_output_name = sample_id + ".shapeit4"
     }
 
     call phasing_reads as phasing_reads_whatshap {
@@ -90,7 +89,15 @@ input {
         input_cram_index = input_cram_index,
         phased_vcf = whatshap_phasing.output_vcf,
         phased_vcf_index = whatshap_phasing.output_vcf_index,
-        base_output_name = sample_id + ".whatshap."
+        base_output_name = sample_id + ".whatshap"
+    }
+
+    call get_haplotypes as get_haplotypes_shapeit4 {
+      input:
+        target_region = target_region,
+        phased_vcf = shapeit4.output_vcf,
+        phased_vcf_index = shapeit4.output_vcf_index,
+        base_output_name = sample_id
     }
 }
 
@@ -109,6 +116,9 @@ output {
 
   Array[File] whatshap_phased_bams = phasing_reads_whatshap.phased_bam
   Array[File] whatshap_phased_bams_indices = phasing_reads_whatshap.phased_bam_index
+
+  Array[File] shapeit4_HapA = get_haplotypes_shapeit4.HapA
+  Array[File] shapeit4_HapB = get_haplotypes_shapeit4.HapB
 }
 }
 
@@ -138,7 +148,7 @@ command <<<
     module load gcc
     module load shapeit4/4.1.3
     module load htslib/1.12
-    shapeit4 --input ~{input_vcf} --map ~{chr_gmap} --region ~{target_region} --thread 4 --sequencing --reference ~{phased_ref} --scaffold ~{phased_ref} --mcmc-iterations 10b,1p,1b,1p,1b,1p,1b,1p,10m --pbwt-disable-init --output "~{base_output_name}.shapeit4.phased.vcf.gz"
+    shapeit4 --input ~{input_vcf} --map ~{chr_gmap} --region ~{target_region} --thread 4 --sequencing --reference ~{phased_ref} --mcmc-iterations 10b,1p,1b,1p,1b,1p,1b,1p,10m --output "~{base_output_name}.shapeit4.phased.vcf.gz"
     tabix -p vcf ~{base_output_name}.shapeit4.phased.vcf.gz
 >>>
 
@@ -241,6 +251,8 @@ task phasing_reads {
     String base_output_name
   }
 
+    Boolean is_bam = basename(input_cram, ".bam") + ".bam" == basename(input_cram)
+
 command <<<
     source /dcsrsoft/spack/bin/setup_dcsrsoft
     module load gcc
@@ -248,10 +260,16 @@ command <<<
     module load htslib/1.12
     module load samtools/1.12
 
-    samtools view ~{input_cram} -b -o "~{base_output_name}.chr11.bam" ## convert cram to bam on the fly  
-    samtools index "~{base_output_name}.chr11.bam"
-    whatshap haplotag -o "~{base_output_name}.chr11.haplotagged.bam" --reference=~{ref_fasta} ~{phased_vcf} "~{base_output_name}.chr11.bam"
-    samtools index "~{base_output_name}.chr11.haplotagged.bam"
+    if [[ "~{is_bam}" = true ]] 
+      then
+        whatshap haplotag -o "~{base_output_name}.chr11.haplotagged.bam" --reference=~{ref_fasta} ~{phased_vcf} ~{input_cram}
+        samtools index "~{base_output_name}.chr11.haplotagged.bam"
+      else
+        samtools view ~{input_cram} -b -o "~{base_output_name}.chr11.bam" ## convert cram to bam on the fly  
+        samtools index "~{base_output_name}.chr11.bam"
+        whatshap haplotag -o "~{base_output_name}.chr11.haplotagged.bam" --reference=~{ref_fasta} ~{phased_vcf} "~{base_output_name}.chr11.bam"
+        samtools index "~{base_output_name}.chr11.haplotagged.bam"
+    fi  
 >>>
 
   runtime {
@@ -262,5 +280,33 @@ command <<<
   output {
     File phased_bam = "~{base_output_name}.chr11.haplotagged.bam"
     File phased_bam_index = "~{base_output_name}.chr11.haplotagged.bam.bai"
+  }
+}
+
+############
+### 5- Extract haplotypes 
+############
+task get_haplotypes {
+  input {
+    String target_region
+    File phased_vcf
+    File phased_vcf_index
+    String base_output_name
+  }
+
+command <<<
+
+    zgrep "^~{target_region}"  ~{phased_vcf}  | cut -f 1-5,10 | sed 's@|@\t@g' | cut -f 1-3,5-7 | cut -f 1-5 > ~{base_output_name}.shapeit4.HapA
+    zgrep "^~{target_region}"  ~{phased_vcf}  | cut -f 1-5,10 | sed 's@|@\t@g' | cut -f 1-3,5-7 | cut -f 1-4,6 > ~{base_output_name}.shapeit4.HapB
+>>>
+
+  runtime {
+  cpus: "1"
+  requested_memory_mb_per_core: "10000" 
+  }
+
+  output {
+    File HapA = "~{base_output_name}.shapeit4.HapA"
+    File HapB = "~{base_output_name}.shapeit4.HapB"
   }
 }
