@@ -1017,6 +1017,53 @@ task vcfannoScatteredVCF {
 }
 
 ############
+### Annotate vcf with VEP
+############
+task VEPannoScatteredVCF {
+  input {
+    File input_vcf
+    File input_vcf_index
+    String base_vcf_name  
+  }
+
+  command <<<
+  source /dcsrsoft/spack/bin/setup_dcsrsoft
+  module load gcc
+  module load singularity
+  module load htslib/1.12
+
+  export PERL5LIB=$PERL5LIB:/db/local/vep/Plugins.  # pour spécifier le répertoire des plugins
+  export SINGULARITY_BINDPATH="/scratch,/users,/dcsrsoft,/db"
+
+  singularity run /dcsrsoft/singularity/containers/ensembl-vep_104.sif vep \
+  -i ~{input_vcf} \
+  --plugin dbNSFP,/db/local/vep/plugins_data/dbNSFP4.1a_grch38.gz,ALL \
+  --plugin SpliceAI,snv=/db/local/vep/plugins_data/spliceai_scores.raw.snv.hg38.vcf.gz,indel=/db/local/vep/plugins_data/spliceai_scores.raw.indel.hg38.vcf.gz \
+  --buffer_size 100000 \
+  --offline --fork 10 \
+  --dir_cache=/db/local \
+  --vcf --force_overwrite \
+  --pick  \  #to select annotations from canonical transcripts...
+  --domains --regulatory \
+  --cache -o "~{base_vcf_name}.hg38.VEP.vcf"
+
+  bgzip "~{base_vcf_name}.hg38.VEP.vcf"
+  tabix "~{base_vcf_name}.hg38.VEP.vcf.gz"
+  >>>
+
+  runtime {
+    cpus: "1"
+	  requested_memory_mb_per_core: "14000"
+    runtime_minutes: "1000"
+  }
+
+  output {
+    File output_vcf = "~{base_vcf_name}.hg38.VEP.vcf.gz"
+    File output_vcf_index = "~{base_vcf_name}.hg38.VEP.vcf.gz.tbi"
+  }
+}
+
+############
 ### Split vcf
 ############
 task SplitVCF {
