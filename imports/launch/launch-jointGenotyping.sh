@@ -46,7 +46,7 @@ fi
 # Write input json
     touch ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json
 
-    shard_number=$( echo $sample_number / 3 | bc )  ### calculate number of shards needed based on total # of input genomes
+    shard_number=$( echo $sample_number / 2.5 | bc )  ### calculate number of shards needed based on total # of input genomes
     cat <<EOF > ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json
 {
   "JointGenotyping.full_map": "${full_map}",

@@ -363,7 +363,7 @@ input {
 
   output {
     # genomicsDB, to allow for addition of new samples later on
-    File genomics_database = ImportGVCFs.output_genomicsdb
+    Array[File] genomics_database = ImportGVCFs.output_genomicsdb
 
     # Metrics from either the small or large callset
     File detail_metrics_file = CollectMetricsOnFullVcf.detail_metrics_file
