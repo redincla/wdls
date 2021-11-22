@@ -137,13 +137,8 @@ echo "#!/bin/bash
 #SBATCH -t 5-00:00
 #SBATCH --mem-per-cpu=14G
 #SBATCH --output=slurm.${sample_ID}.%N.%j.log
-#module load Utility/cromwell/47
 
 module add Development/java/1.8.0_232
-module add R/3.6.1
-module add UHTS/Analysis/samtools/1.10
-module add UHTS/Analysis/GenomeAnalysisTK/4.1.3.0
-module add UHTS/Analysis/picard-tools/2.21.8
 
 java -Dconfig.file=/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/WholeGenomeGermlineSingleSample.wdl -i ${WRKDIR}/json/${sample_ID}.WGS.input.json -o ${WRKDIR}/json/${sample_ID}.WGS.options.json" > ${WRKDIR}/json/${sample_ID}.WGS.script-submit
 
