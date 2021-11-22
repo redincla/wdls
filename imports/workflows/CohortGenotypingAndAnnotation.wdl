@@ -5,9 +5,9 @@ version 1.0
 ## Each workflow could be launched and tuned independently, if needed
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping.wdl" as JointGenotyping
-import "/home/credin/scratch/WGS/wdls/imports/workflows/annotateVCF.wdl" as Annotation
-import "/home/credin/scratch/WGS/wdls/imports/workflows/FilterVCF.wdl" as FilterAndSplit
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/workflows/JointGenotyping.wdl" as JointGenotyping
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/workflows/annotateVCF.wdl" as Annotation
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/workflows/FilterVCF.wdl" as FilterAndSplit
 
 #################################################################
 # WORKFLOW DEFINITION - JointCalling to annotated gVCFs

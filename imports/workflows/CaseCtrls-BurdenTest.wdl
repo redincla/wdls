@@ -11,7 +11,7 @@ version 1.0
 ## Local import
 import "./imports/workflows/BurdenTests.wdl" as CasesPrep
 import "./imports/workflows/burdenTest-gnomAD.wdl" as CtrlsPrep
-import "/home/credin/scratch/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
 
 
 #################################################################

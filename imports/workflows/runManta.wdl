@@ -127,7 +127,7 @@ task RunManta {
 
 
     # prepare the analysis job
-    /home/credin/refs/tools/manta-1.6.0.centos6_x86_64/bin/configManta.py \
+    /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/manta-1.6.0.centos6_x86_64/bin/configManta.py \
       --bam sample~{bam_ext} \
       --referenceFasta ~{reference_fasta} \
       --runDir . \
@@ -142,7 +142,7 @@ task RunManta {
       --memGb $((~{num_jobs} * 2))
 
     # inversion conversion, then compression and index
-    python2 /home/credin/refs/tools/manta-1.6.0.centos6_x86_64/libexec/convertInversion.py \
+    python2 /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/manta-1.6.0.centos6_x86_64/libexec/convertInversion.py \
       ~{samtools} \
       ~{reference_fasta} \
       results/variants/diploidSV.vcf.gz \

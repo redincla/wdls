@@ -18,7 +18,7 @@
 
 version 1.0
 
-import "/home/credin/scratch/WGS/wdls/imports/tasks/delly-tasksv2.wdl" as Tasks
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/delly-tasksv2.wdl" as Tasks
 
 workflow Delly-sample {
   # Run Delly SV detection algorithm on whole genomes in array of bam or cram files.

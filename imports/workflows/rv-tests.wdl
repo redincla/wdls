@@ -298,7 +298,7 @@ task single_test {
   }
 
 command <<<
-    /users/credin/refs/tools/rvtests/executable/rvtest --inVcf ~{input_vcf} \
+    /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/rvtests/executable/rvtest --inVcf ~{input_vcf} \
     --pheno ~{ped_file} --out ~{base_output_name}_~{test_name} --single ~{test_name}
 >>>
 
@@ -329,7 +329,7 @@ task burden_test {
   }
 
 command <<<
-    /users/credin/refs/tools/rvtests/executable/rvtest --inVcf ~{input_vcf} \
+    /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/rvtests/executable/rvtest --inVcf ~{input_vcf} \
     --pheno ~{ped_file} --out ~{base_output_name}_~{test_name} --geneFile ~{gene_file} \
     --burden ~{test_name} --vt price --freqUpper 0.05
 

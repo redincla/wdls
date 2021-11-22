@@ -9,7 +9,7 @@ version 1.0
 #################################################################
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
 
 workflow Phasing {
 
