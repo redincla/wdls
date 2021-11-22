@@ -13,7 +13,7 @@ if [ $# -eq 2 ]; then
 else
  echo -e "\n\nSubmit split and filter VCF workflow (FilterVCF.wdl) \n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
  echo "Usage:"
- echo "submit_split.vcf.sh [input_file] [option_file] "
+ echo "sbatch submit_split.vcf.sh [input_file] [option_file] "
  echo "input_file: full path to input json file"
  echo "option_file: full path to options json file"
  exit 1
