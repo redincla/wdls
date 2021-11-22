@@ -46,7 +46,7 @@ fi
 # Write input json
     touch ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json
 
-    shard_number=$( echo $sample_number / 2.5 | bc )  ### calculate number of shards needed based on total # of input genomes
+    shard_number=$( echo $sample_number / 2 | bc )  ### calculate number of shards needed based on total # of input genomes
     cat <<EOF > ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json
 {
   "JointGenotyping.full_map": "${full_map}",
@@ -57,43 +57,43 @@ fi
   "JointGenotyping.PICARD": "/software/UHTS/Analysis/picard-tools/2.21.8/bin/picard.jar",
   "JointGenotyping.tabix": "/software/UHTS/Analysis/EPACTS/3.2.6/bin/tabix",
 
-  "JointGenotyping.unpadded_intervals_file": "/home/credin/refs/references/hg38/hg38.even.handcurated.20k.intervals",
-  "JointGenotyping.ref_fasta": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta",
-  "JointGenotyping.ref_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.fasta.fai",
-  "JointGenotyping.ref_dict": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dict",
+  "JointGenotyping.unpadded_intervals_file": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/hg38.even.handcurated.20k.intervals",
+  "JointGenotyping.ref_fasta": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta",
+  "JointGenotyping.ref_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.fasta.fai",
+  "JointGenotyping.ref_dict": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.dict",
 
   "JointGenotyping.workspace_dir_name": "genomicsdb",
   "JointGenotyping.callset_name": "${cohort_name}",
 
   "JointGenotyping.top_level_scatter_count": "${shard_number}",
 
-  "JointGenotyping.dbsnp_vcf": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
-  "JointGenotyping.dbsnp_vcf_index": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx",
+  "JointGenotyping.dbsnp_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf",
+  "JointGenotyping.dbsnp_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.dbsnp138.vcf.idx",
 
   "JointGenotyping.indel_recalibration_tranche_values": ["100.0", "99.95", "99.9", "99.5", "99.0", "97.0", "96.0", "95.0", "94.0", "93.5", "93.0", "92.0", "91.0", "90.0"],
   "JointGenotyping.indel_recalibration_annotation_values": ["FS", "ReadPosRankSum", "MQRankSum", "QD", "SOR", "DP"],
   "JointGenotyping.snp_recalibration_tranche_values": ["100.0", "99.95", "99.9", "99.8", "99.6", "99.5", "99.4", "99.3", "99.0", "98.0", "97.0", "90.0" ],
   "JointGenotyping.snp_recalibration_annotation_values": ["QD", "MQRankSum", "ReadPosRankSum", "FS", "MQ", "SOR", "DP"],
 
-  "JointGenotyping.mills_resource_vcf": "/home/credin/refs/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
-  "JointGenotyping.mills_resource_vcf_index": "/home/credin/refs/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
-  "JointGenotyping.axiomPoly_resource_vcf": "/home/credin/refs/references/hg38/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz",
-  "JointGenotyping.axiomPoly_resource_vcf_index": "/home/credin/refs/references/hg38/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz.tbi",
-  "JointGenotyping.hapmap_resource_vcf": "/home/credin/refs/references/hg38/hapmap_3.3.hg38.vcf.gz",
-  "JointGenotyping.hapmap_resource_vcf_index": "/home/credin/refs/references/hg38/hapmap_3.3.hg38.vcf.gz.tbi",
-  "JointGenotyping.omni_resource_vcf": "/home/credin/refs/references/hg38/1000G_omni2.5.hg38.vcf.gz",
-  "JointGenotyping.omni_resource_vcf_index": "/home/credin/refs/references/hg38/1000G_omni2.5.hg38.vcf.gz.tbi",
-  "JointGenotyping.one_thousand_genomes_resource_vcf": "/home/credin/refs/references/hg38/1000G_phase1.snps.high_confidence.hg38.vcf.gz",
-  "JointGenotyping.one_thousand_genomes_resource_vcf_index": "/home/credin/refs/references/hg38/1000G_phase1.snps.high_confidence.hg38.vcf.gz.tbi",
-  "JointGenotyping.one_thousand_genomes_resource_NO_MULTIALLELIC_vcf": "/home/credin/refs/references/hg38/1000G_phase1.snps.high_confidence.NO_MULTIALLELIC.hg38.vcf.gz",
-  "JointGenotyping.one_thousand_genomes_resource_NO_MULTIALLELIC_vcf_index": "/home/credin/refs/references/hg38/1000G_phase1.snps.high_confidence.NO_MULTIALLELIC.hg38.vcf.gz.tbi",
+  "JointGenotyping.mills_resource_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",
+  "JointGenotyping.mills_resource_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
+  "JointGenotyping.axiomPoly_resource_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz",
+  "JointGenotyping.axiomPoly_resource_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz.tbi",
+  "JointGenotyping.hapmap_resource_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/hapmap_3.3.hg38.vcf.gz",
+  "JointGenotyping.hapmap_resource_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/hapmap_3.3.hg38.vcf.gz.tbi",
+  "JointGenotyping.omni_resource_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000G_omni2.5.hg38.vcf.gz",
+  "JointGenotyping.omni_resource_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000G_omni2.5.hg38.vcf.gz.tbi",
+  "JointGenotyping.one_thousand_genomes_resource_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000G_phase1.snps.high_confidence.hg38.vcf.gz",
+  "JointGenotyping.one_thousand_genomes_resource_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000G_phase1.snps.high_confidence.hg38.vcf.gz.tbi",
+  "JointGenotyping.one_thousand_genomes_resource_NO_MULTIALLELIC_vcf": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000G_phase1.snps.high_confidence.NO_MULTIALLELIC.hg38.vcf.gz",
+  "JointGenotyping.one_thousand_genomes_resource_NO_MULTIALLELIC_vcf_index": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/1000G_phase1.snps.high_confidence.NO_MULTIALLELIC.hg38.vcf.gz.tbi",
 
   "JointGenotyping.snp_filter_level": "99.7",
   "JointGenotyping.indel_filter_level": "99.0",
 
-  "JointGenotyping.eval_interval_list": "/home/credin/refs/references/hg38/wgs_evaluation_regions.hg38.interval_list",
+  "JointGenotyping.eval_interval_list": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/wgs_evaluation_regions.hg38.interval_list",
 
-  "JointGenotyping.haplotype_database": "/home/credin/refs/references/hg38/Homo_sapiens_assembly38.haplotype_database.txt",
+  "JointGenotyping.haplotype_database": "/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/hg38/Homo_sapiens_assembly38.haplotype_database.txt",
 
   "JointGenotyping.use_allele_specific_annotations": "false",
   "JointGenotyping.cross_check_fingerprints": "true",
@@ -121,11 +121,7 @@ echo "#!/bin/bash
 #SBATCH --output=${WRKDIR}/json/slurm.${cohort_name}.%N.%j.log
 
 module add Development/java/1.8.0_232
-module add R/3.6.1
-module add UHTS/Analysis/samtools/1.10
-module add UHTS/Analysis/GenomeAnalysisTK/4.1.3.0
-module add UHTS/Analysis/picard-tools/2.21.8
 
-java -Dconfig.file=/home/credin/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/imports/workflows/JointGenotyping.wdl -i ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json -o ${WRKDIR}/json/${cohort_name}.JointGenotyping.options.json" > ${WRKDIR}/json/${cohort_name}.JointGenotyping.script-submit
+java -Dconfig.file=/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/workflows/JointGenotyping.wdl -i ${WRKDIR}/json/${cohort_name}.JointGenotyping.input.json -o ${WRKDIR}/json/${cohort_name}.JointGenotyping.options.json" > ${WRKDIR}/json/${cohort_name}.JointGenotyping.script-submit
 
 sbatch ${WRKDIR}/json/${cohort_name}.JointGenotyping.script-submit
