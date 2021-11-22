@@ -1,41 +1,41 @@
 [[annotation]]
-file="/home/credin/refs/references/gene_lists/cardioGenes_txn_canonical_annotated.bed.gz"
+file="/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/cardioGenes_txn_canonical_annotated.bed.gz"
 columns = [5,6,7,8,9,10,11]
 names=["MEDP_MOI","n.PLP.ClinVar","n.PLP.LoF.ClinVar","n.PLP.mis.ClinVar","pLI","oe.LoF.upper","MEDP_Confidence"]
 ops=["first","first","first","first","first","first","first"]
 
 [[annotation]]
-file="/home/credin/refs/references/gene_lists/201003_clinvar.vcf.gz"
+file="/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/211113_clinvar.vcf.gz"
 fields = ["AF_EXAC", "AF_TGP", "CLNDN", "CLNREVSTAT", "CLNSIG", "CLNSIGCONF"]
 names=["ClinVar_AF_EXAC","ClinVar_AF_TGP","ClinVar_Disease_name","ClinVar_RevStatus","ClinVar_Sign","ClinVar_Sign_Conflict"]
 ops=["self","self","self","self","self","self"]
 
 [[annotation]]
-file="/home/credin/refs/references/gene_lists/ClinGen_FULL_sorted_200901.bed.gz"
+file="/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/ClinGen_FULL_sorted_200901.bed.gz"
 columns = [6,8,9]
 names=["ClinGen_Disease_name","ClinGen_MOI","ClinGen_Classification"]
 ops=["concat","uniq","concat"]
 
 [[annotation]]
-file="/home/credin/refs/references/gene_lists/DDG2P_FULL_sorted_200901.bed.gz"
+file="/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/DDG2P_FULL_sorted_200901.bed.gz"
 columns = [5,6,7,8,9,10]
 names=["MIM_gene","MIM_Disease_name","MIM_Disease","DDD_Classification","DDD_MOI","DDD_mutation_consequence"]
 ops=["concat","concat","concat","concat","concat","concat"]
 
 [[annotation]]
-file="/home/credin/refs/references/gene_lists/IFNpathway.stringdb+custom.genes.bed.gz"
-columns = [4,5]
-names=["IFNpathway_gene_name","IFNpathway_gene_id"]
-ops=["concat","concat"]
+file="/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/PID_hg38.knownCanonical_faisorted.bed.gz"
+columns = [5,6,7,8,9]
+names=["PID_Category","PID_Phenotype","PID_MOI","PID_TotMut","PID_Confidence_level"]
+ops=["concat","concat","concat","concat","concat"]
 
 [[annotation]]
-file="/home/credin/refs/references/gene_lists/20181211_ACMG_RefSeq_hg38_full_sorted.bed.gz"
+file="/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/20181211_ACMG_RefSeq_hg38_full_sorted.bed.gz"
 columns = [5]
 names=["ACMG"]
 ops=["first"]
 
 [[annotation]]
-file="/home/credin/refs/references/gene_lists/20201106_gnomAD.LOEUF.pLI.RefSeq_hg38_sorted.bed.gz"
+file="/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/references/gene_lists/20201106_gnomAD.LOEUF.pLI.RefSeq_hg38_sorted.bed.gz"
 columns = [5,6,7]
 names=["LOEUF_bin","GnomAD_pLI","ExAC_pLI"]
 ops=["first","first","first"]
