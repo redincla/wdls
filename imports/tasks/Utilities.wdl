@@ -27,6 +27,10 @@ task CreateSequenceGroupingTSV {
   # e.g. [["1"], ["2"], ["3", "4"], ["5"], ["6", "7", "8"]]
 
   command <<<
+    source /dcsrsoft/spack/bin/setup_dcsrsoft
+    module load gcc/9.3.0
+    module load python/3.8.8  
+    
     python <<CODE
     with open("~{ref_dict}", "r") as ref_dict_file:
         sequence_tuple_list = []
