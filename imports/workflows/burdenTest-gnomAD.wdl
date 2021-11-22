@@ -9,7 +9,7 @@ version 1.0
 #################################################################
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
 
 workflow BurdenTestgnomAD {
 
@@ -500,7 +500,7 @@ command <<<
   module load gcc
   module load python/2.7.16
 
-  python /users/credin/refs/tools/TRAPD/code/make_snp_file.py --vcffile ~{input_vcf} --vep --genecolname SYMBOL --outfile ~{base_output_name}
+  python /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/TRAPD/code/make_snp_file.py --vcffile ~{input_vcf} --vep --genecolname SYMBOL --outfile ~{base_output_name}
 
 >>>
 
@@ -532,7 +532,7 @@ command <<<
   module load gcc
   module load python/2.7.16
 
-  python /users/credin/refs/tools/TRAPD/code/count_controls.py --vcffile ~{input_vcf} --snpfile ~{variant_list} --outfile ~{base_output_name} --pass --database gnomad --bedfile ~{regions_list}
+  python /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/TRAPD/code/count_controls.py --vcffile ~{input_vcf} --snpfile ~{variant_list} --outfile ~{base_output_name} --pass --database gnomad --bedfile ~{regions_list}
 >>>
 
   runtime {
