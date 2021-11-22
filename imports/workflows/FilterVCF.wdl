@@ -154,7 +154,7 @@ task subcohortgVCF {
 
 command <<<
     echo "~{sep='\n' sample_list}" >> sample.list.args
-    java -Xmx8g -jar ~{GATK} \
+    java -Xmx16g -jar ~{GATK} \
     SelectVariants \
     -R ~{ref_fasta} \
     -V ~{input_vcf} \
@@ -167,7 +167,8 @@ command <<<
 
   runtime {
   cpus: "1"
-	requested_memory_mb_per_core: "10000" 
+	requested_memory_mb_per_core: "20000" 
+  runtime_minutes: "1500"
   }
 
   output {
@@ -247,6 +248,7 @@ command <<<
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "9000" 
+  runtime_minutes: "1500"
   }
 
   output {
@@ -284,6 +286,7 @@ command <<<
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "10000" 
+  runtime_minutes: "1500"
   }
 
   output {
@@ -324,6 +327,7 @@ command <<<
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "9000" 
+  runtime_minutes: "1500"
   }
 
   output {
@@ -368,6 +372,7 @@ command <<<
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "9000" 
+  runtime_minutes: "1500"
   }
 
   output {
