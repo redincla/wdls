@@ -124,7 +124,7 @@ task ImportGVCFs {
   runtime {
     cpus: "4"
 	  requested_memory_mb_per_core: "40000"
-    runtime_minutes: "3000"
+    runtime_minutes: "4500"
   }
 
   output {
@@ -159,7 +159,7 @@ task GenotypeGVCFs {
     tar -xf ~{workspace_tar}
     WORKSPACE=$(basename ~{workspace_tar} .tar)
     export TILEDB_DISABLE_FILE_LOCKING=1
-    java -Xms8g \
+    java -Xms16g \
       -jar ~{GATK} \
       GenotypeGVCFs \
       -R ~{ref_fasta} \
@@ -176,8 +176,8 @@ task GenotypeGVCFs {
 
   runtime {
     cpus: "2"
-	  requested_memory_mb_per_core: "30000"  
-    runtime_minutes: "4700"  
+	  requested_memory_mb_per_core: "40000"  
+    runtime_minutes: "5700"  
   }
 
   output {
@@ -822,7 +822,7 @@ task CalculatGenotypePosteriors {
   runtime {
 	cpus: "1"
 	requested_memory_mb_per_core: "6000"
-  runtime_minutes: "800"
+  runtime_minutes: "1000"
 	queue: "normal"
   }
   output {
@@ -860,7 +860,7 @@ task VariantFilterLowQ {
   runtime {
 	cpus: "1"
 	requested_memory_mb_per_core: "4000"
-  runtime_minutes: "400"
+  runtime_minutes: "1000"
 	queue: "normal"
   }
   output {
@@ -907,7 +907,7 @@ task AnnovarScatteredVCF {
 
   command <<<
   module add UHTS/Analysis/EPACTS/3.2.6
-  export PATH="$PATH:/home/credin/refs/tools/annovar"
+  export PATH="$PATH:/data/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/annovar"
   table_annovar.pl ~{input_vcf} \
   "~{AnnovarDB}" -buildver ~{genome_build} \
   -out ~{base_vcf_name} -remove \
@@ -920,7 +920,7 @@ task AnnovarScatteredVCF {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "14000"
-    runtime_minutes: "1000"
+    runtime_minutes: "1500"
   }
 
   output {
@@ -965,10 +965,10 @@ task vcfannoScatteredVCF {
 task VEPannoScatteredVCF {
   input {
     File input_vcf
-    File input_vcf_index
     String base_vcf_name  
   }
 
+ #pick option: to select annotations from canonical transcripts
   command <<<
   source /dcsrsoft/spack/bin/setup_dcsrsoft
   module load gcc
@@ -980,15 +980,13 @@ task VEPannoScatteredVCF {
 
   singularity run /dcsrsoft/singularity/containers/ensembl-vep_104.sif vep \
   -i ~{input_vcf} \
-  --plugin dbNSFP,/db/local/vep/plugins_data/dbNSFP4.1a_grch38.gz,ALL \
+  --plugin dbNSFP,/db/local/vep/plugins_data/dbNSFP4.1a_grch38.gz,VEP_canonical,LRT_pred,SIFT_pred,MutationTaster_pred,Polyphen2_HDIV_pred,Polyphen2_HVAR_pred \
   --plugin SpliceAI,snv=/db/local/vep/plugins_data/spliceai_scores.raw.snv.hg38.vcf.gz,indel=/db/local/vep/plugins_data/spliceai_scores.raw.indel.hg38.vcf.gz \
   --buffer_size 100000 \
   --offline --fork 10 \
   --dir_cache=/db/local \
   --vcf --force_overwrite \
-  --pick  \  #to select annotations from canonical transcripts...
-  --domains --regulatory \
-  --cache -o "~{base_vcf_name}.hg38.VEP.vcf"
+  --pick --cache -o "~{base_vcf_name}.hg38.VEP.vcf"
 
   bgzip "~{base_vcf_name}.hg38.VEP.vcf"
   tabix "~{base_vcf_name}.hg38.VEP.vcf.gz"
@@ -996,8 +994,8 @@ task VEPannoScatteredVCF {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "14000"
-    runtime_minutes: "1000"
+	  requested_memory_mb_per_core: "20000"
+    runtime_minutes: "2000"
   }
 
   output {
