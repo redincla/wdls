@@ -51,7 +51,7 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
 
 #################################################################
 # WORKFLOW DEFINITION - Joint Genotyping for hg38 Whole Genomes and Exomes

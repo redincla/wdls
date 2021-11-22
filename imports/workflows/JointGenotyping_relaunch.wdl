@@ -51,7 +51,7 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "/home/credin/scratch/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
+import "/scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/WGS/wdls/imports/tasks/JointCalling-tasks-test.wdl" as Tasks
 
 #################################################################
 # WORKFLOW DEFINITION - Joint Genotyping for hg38 Whole Genomes and Exomes
@@ -122,7 +122,6 @@ input {
     Array[File] sites_only_vcfs
     Array[File] genotyped_vcf
     Array[File] genotyped_vcf_index
-    Array[File] unpadded_intervals
   }
 
   Boolean allele_specific_annotations = !use_gnarly_genotyper && use_allele_specific_annotations
@@ -190,7 +189,7 @@ input {
         use_allele_specific_annotations = allele_specific_annotations
     }
 
-  scatter (idx in range(length(unpadded_intervals))) {
+  scatter (idx in range(length(genotyped_vcf))) {
     #for really large callsets we give to friends, just apply filters to the sites-only
     call Tasks.ApplyRecalibration {
       input:
