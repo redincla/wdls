@@ -1,7 +1,7 @@
 version 1.0
 
 ## Copyright CHUV, 2020
-## Script to annotate vcf files with annovar 
+## Script to annotate vcf files with VEP
 ## per scattered contigs after jointgenotyping
 
 ## Local import
