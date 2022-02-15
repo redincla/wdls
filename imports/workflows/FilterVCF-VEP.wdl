@@ -361,10 +361,10 @@ command <<<
   singularity run /dcsrsoft/singularity/containers/ensembl-vep_104.sif filter_vep \
       -i ~{input_vcf} \
       -o tmp1.vcf \
-      -filter "(CANONICAL is YES) AND (IMPACT is HIGH or IMPACT is MODERATE or SpliceAI_pred_DS_DL > 0.8 or SpliceAI_pred_DS_AL > 0.8 or SpliceAI_pred_DS_AG > 0.8 or SpliceAI_pred_DS_DG > 0.8)" --force_overwrite --only_matched
+      -filter "IMPACT is HIGH or IMPACT is MODERATE or SpliceAI_pred_DS_DL > 0.8 or SpliceAI_pred_DS_AL > 0.8 or SpliceAI_pred_DS_AG > 0.8 or SpliceAI_pred_DS_DG > 0.8" --force_overwrite --only_matched
 
-  bzgip tmp1.vcf
-  tabix tmp1.vcf
+  bgzip tmp1.vcf
+  tabix tmp1.vcf.gz
 
   java -Xmx8g -jar ~{GATK} \
      SelectVariants \
