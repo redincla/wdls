@@ -79,7 +79,9 @@ workflow DellyCohort {
       }
 
   output {
-    File bcf = FilterGenotypedBCF.final_vcf
-    File index = FilterGenotypedBCF.final_vcf_index
+    File bcf_filtered = FilterGenotypedBCF.final_vcf
+    File bcf_filtered_index = FilterGenotypedBCF.final_vcf_index
+    File bcf_ALL = MergeGenotypedBCF.final_vcf
+    File bcf_ALL_index = MergeGenotypedBCF.final_vcf_index
   }
 }
