@@ -3,7 +3,7 @@
 #SBATCH --job-name=JointAnnotation
 #SBATCH -t 3-00:00
 #SBATCH --mem-per-cpu=16G
-#SBATCH --output=/users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/logs/slurm.JointAnnotation.%N.%j.log
+#SBATCH --output=/users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/logs/slurm.JointAnnotation-VEP.%N.%j.log
 
 module add Development/java/1.8.0_232
 
