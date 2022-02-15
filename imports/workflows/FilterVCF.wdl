@@ -159,10 +159,10 @@ command <<<
     -R ~{ref_fasta} \
     -V ~{input_vcf} \
     -O ~{base_output_name}.~{cohort_name}.vcf.gz \
-    --restrict-alleles-to BIALLELIC \
+    --restrict-alleles-to BIALLELIC \ switch back after HEV
     -sn sample.list.args \
     --exclude-non-variants \
-    --keep-original-ac \
+     --keep-original-ac \ switch back after HEV
 >>>
 
   runtime {
@@ -360,7 +360,8 @@ command <<<
         -F HET -F HOM-REF -F HOM-VAR -F NO-CALL -F VAR -F NSAMPLES -F NCALLED \
         -F Gene.ensGene -F Gene.refGene -F Func.ensGene -F Func.refGene -F ExonicFunc.ensGene -F ExonicFunc.refGene -F AAChange.ensGene -F AAChange.refGene \
         -F gnomadv3_AF -F gnomadv3_AF_raw -F gnomadv3_AF_male -F gnomadv3_AF_female -F gnomadv3_AF_afr -F gnomadv3_AF_ami -F gnomadv3_AF_amr -F gnomadv3_AF_asj -F gnomadv3_AF_eas -F gnomadv3_AF_fin -F gnomadv3_AF_nfe -F gnomadv3_AF_oth -F gnomadv3_AF_sas -F Kaviar_AF -F 1000g2015aug_all -F ClinVar_AF_EXAC -F ClinVar_AF_TGP -F max_aaf_all \
-        -F ClinVar_Sign -F CLINSIG -F ClinVar_Sign_Conflict -F ClinVar_RevStatus -F ClinVar_Disease_name -F ClinGen_Disease_name -F ClinGen_MOI -F ClinGen_Classification -F MIM_Disease -F MIM_Disease_name -F MIM_gene -F DDD_mutation_consequence -F DDD_MOI -F DDD_Classification -F ACMG -F MEDP_MOI -F MEDP_Confidence -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar -F IFNpathway_gene_name -F IFNpathway_gene_id \
+        -F ClinVar_Sign -F CLINSIG -F ClinVar_Sign_Conflict -F ClinVar_RevStatus -F ClinVar_Disease_name -F ClinGen_Disease_name -F ClinGen_MOI -F ClinGen_Classification -F MIM_Disease -F MIM_Disease_name -F MIM_gene -F DDD_mutation_consequence -F DDD_MOI -F DDD_Classification -F ACMG -F MEDP_MOI -F MEDP_Confidence -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar \
+        -F PID_Category -F PID_Phenotype -F PID_MOI -F PID_TotMut -F PID_Confidence_level \
         -F DamagePredCount -F SIFT_pred -F SIFT4G_pred -F Polyphen2_HDIV_pred -F Polyphen2_HVAR_pred -F LRT_pred -F MutationTaster_pred -F MutationAssessor_pred -F FATHMM_pred -F PROVEAN_pred -F VEST4_score -F MetaSVM_pred -F MetaLR_pred -F M-CAP_pred -F REVEL_score -F MutPred_score -F MVP_score -F MPC_score \
         -F DEOGEN2_pred -F BayesDel_addAF_pred -F BayesDel_noAF_pred -F ClinPred_pred -F LIST-S2_pred -F CADD_raw -F CADD_phred -F DANN_score -F fathmm-MKL_coding_pred -F fathmm-XF_coding_pred -F Eigen-raw_coding -F Eigen-phred_coding -F LOEUF_bin -F GnomAD_pLI -F ExAC_pLI \
         -F PrimateAI_pred -F Eigen-PC-raw_coding -F Eigen-PC-phred_coding -F GenoCanyon_score -F LINSIGHT -F GERP++_NR -F GERP++_RS -F phyloP100way_vertebrate -F phyloP30way_mammalian -F phyloP17way_primate -F phastCons100way_vertebrate -F phastCons30way_mammalian -F phastCons17way_primate -F oe.LoF.upper -F pLI \
