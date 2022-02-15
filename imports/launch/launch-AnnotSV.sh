@@ -9,13 +9,15 @@ export ANNOTSV=/home/credin/refs/tools/AnnotSV  #add ANNOTSV to path
 module add UHTS/Analysis/samtools/1.10  #load bcftools
 module load UHTS/Analysis/BEDTools/2.29.2 #load bedtools
 
-$ANNOTSV/bin/AnnotSV -SvinputFile /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/Delly/Full_Genome/TACG_COPRAC_HEV_VZV_0621.delly.vcf.gz \
+input_vcf=$1
+
+$ANNOTSV/bin/AnnotSV -SvinputFile ${input_vcf} \
     -genomeBuild GRCh38 \
     -minTotalNumber 100 \
-    -outputFile /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/Delly/Full_Genome/210701_AnnotSV/TACG_COPRAC_HEV_VZV_0621.delly.annotSV_full+PASS.tsv \
+    -outputFile /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/Delly/Full_Genome/211202_AnnotSV/249WGS_1221.delly.filtered.annotSV_3-4-5.tsv \
     -candidateGenesFile /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/Delly/Full_Genome/CAR_IFN.list \
     -candidateGenesFiltering no \
-#    -candidateSnvIndelFiles /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/JointCalling/210617_TACG_CoPRAC_HEV_VZVrefined_priors-filtered.vcf.gz \
-    -snvIndelFiles /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/JointCalling/210617_TACG_CoPRAC_HEV_VZVrefined_priors-filtered.vcf.gz \
+    -snvIndelFiles /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/JointCalling/211105_256WGSrefined_priors-filtered.vcf.gz \
     -snvIndelPASS 1 \
-#    -rankFiltering "3,4,5" \    
+    -rankFiltering "3,4,5"
+    #    -candidateSnvIndelFiles /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/JointCalling/210617_TACG_CoPRAC_HEV_VZVrefined_priors-filtered.vcf.gz \
