@@ -919,7 +919,7 @@ task AnnovarScatteredVCF {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "14000"
+	  requested_memory_mb_per_core: "20000"
     runtime_minutes: "1500"
   }
 
@@ -982,7 +982,7 @@ task VEPannoScatteredVCF {
   -i ~{input_vcf} \
   --plugin dbNSFP,/db/local/vep/plugins_data/dbNSFP4.1a_grch38.gz,VEP_canonical,LRT_pred,SIFT_pred,MutationTaster_pred,Polyphen2_HDIV_pred,Polyphen2_HVAR_pred \
   --plugin SpliceAI,snv=/db/local/vep/plugins_data/spliceai_scores.raw.snv.hg38.vcf.gz,indel=/db/local/vep/plugins_data/spliceai_scores.raw.indel.hg38.vcf.gz \
-  --buffer_size 100000 \
+  --buffer_size 50000 \
   --offline --fork 10 \
   --dir_cache=/db/local \
   --vcf --force_overwrite \
