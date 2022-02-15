@@ -7,5 +7,18 @@
 
 module add Development/java/1.8.0_232
 
+if [ $# -eq 2 ]; then
+ input_file=$1 #full path to json input file 
+ options_file=$2 #full path to json options
 
-java -Dconfig.file=/home/credin/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/imports/workflows/runDelly-cohort.wdl -i /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/json/runDelly.inputs.json -o /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/json/runDelly.options.json
+else
+ echo -e "\n\nSubmit Delly workflow on WGS cohort (runDelly-cohort.wdl) \n\n"
+ echo "Usage:"
+ echo "sbatch runDelly-cohort.sh [input_file] [options_file] "
+ echo "input_file: full path to inputs json file"
+ echo "options_file: full path to options json file"
+ exit 1
+fi
+
+
+java -Dconfig.file=/home/credin/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/imports/workflows/runDelly-cohort-relaunch.wdl -i ${input_file} -o ${options_file} 
