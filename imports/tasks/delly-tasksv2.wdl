@@ -1,7 +1,7 @@
 version 1.0
 
 ############
-### Launch Delly germline caller
+### Launch Delly germline SV caller
 ############
 
 task gSVCalling {
@@ -80,7 +80,8 @@ task MergeBCF {
 
   runtime {
   cpus: "1"
-	requested_memory_mb_per_core: "8000"
+	requested_memory_mb_per_core: "10000"
+  runtime_minutes: "5000"
   }
 }
 
@@ -113,7 +114,7 @@ task GenotypeBCF {
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "10000"
-  runtime_minutes: "2000"
+  runtime_minutes: "5000"
   }
 }
 
@@ -128,21 +129,29 @@ task MergeGenotypedBCF {
     String cohort_name
   }
   command <<<
+    module add UHTS/Analysis/EPACTS/3.2.6
     module add UHTS/Analysis/samtools/1.10
     BCF="~{cohort_name}.delly.geno.bcf"
     BCF_index="~{cohort_name}.delly.geno.bcf.csi"
     bcftools merge -m id -O b -o "$BCF" ~{sep=' ' input_bcfs} 
     bcftools index "$BCF" -o "$BCF_index"
+
+    VCF_OUT="~{cohort_name}.delly.ALL.vcf.gz"
+    bcftools convert -O z -o "$VCF_OUT" "$BCF" 
+    tabix "$VCF_OUT"
   >>>
 
   output {
     File merged_genotyped_bcf = "~{cohort_name}.delly.geno.bcf"
     File merged_genotyped_bcf_index = "~{cohort_name}.delly.geno.bcf.csi"
+    File final_vcf = "~{cohort_name}.delly.ALL.vcf.gz"
+    File final_vcf_index = "~{cohort_name}.delly.ALL.vcf.gz.tbi"
   }
 
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "8000"
+  runtime_minutes: "2000"
 # runtime_minutes: "580"
   }
 }
@@ -166,19 +175,20 @@ task FilterGenotypedBCF {
     BCF="~{cohort_name}.delly.filtered.geno.bcf"
     delly filter -f germline ~{input_bcf} -o "$BCF" 
 
-    VCF_OUT="~{cohort_name}.delly.vcf.gz"
+    VCF_OUT="~{cohort_name}.delly.filtered.vcf.gz"
     bcftools convert -O z -o "$VCF_OUT" "$BCF" 
     tabix "$VCF_OUT"
   >>>
 
   output {
-    File final_vcf = "~{cohort_name}.delly.vcf.gz"
-    File final_vcf_index = "~{cohort_name}.delly.vcf.gz.tbi"
+    File final_vcf = "~{cohort_name}.delly.filtered.vcf.gz"
+    File final_vcf_index = "~{cohort_name}.delly.filtered.vcf.gz.tbi"
   }
 
   runtime {
   cpus: "1"
 	requested_memory_mb_per_core: "10000"
+  runtime_minutes: "2000"
 #    runtime_minutes: "480"
   }
 }
@@ -226,7 +236,46 @@ task BCFsToVCFs {
   runtime {
     cpus: "1"
 	  requested_memory_mb_per_core: "4000"
+    runtime_minutes: "2000"
 #    runtime_minutes: "480"
   }
 
+}
+
+############
+### Launch Delly germline CNV caller
+############
+
+task gCNVCalling {
+  input {
+    File ref_fasta
+    File ref_index
+    File mappability_map
+    File input_bam
+    File input_bam_index
+    File input_bcf
+    File input_bcf_index
+    String sample_id   
+  }
+
+  command <<<
+    module add UHTS/Analysis/delly/0.7.8
+    export OMP_NUM_THREADS=2
+    BCF="~{sample_id}.delly.CNV.bcf"
+    delly cnv \
+      -g "~{ref_fasta}" \
+      -m "~{mappability_map}" \
+      -o "$BCF" \
+      -l "~{input_bcf}" "~{input_bam}" 
+  >>>
+
+  output {
+    File output_bcf = "~{sample_id}.delly.CNV.bcf"
+  }
+
+  runtime {
+  cpus: "1"
+	requested_memory_mb_per_core: "15000"  #10000 for large WGS initially ~{mem_size_Mb}, trying to increase for stuck samples
+  runtime_minutes: "10000"
+  }
 }
