@@ -74,14 +74,9 @@ task CollectUnsortedReadgroupBamQualityMetrics {
 	queue: "normal"
   }
   output {
-    File base_distribution_by_cycle_pdf = "~{output_bam_prefix}.base_distribution_by_cycle.pdf"
     File base_distribution_by_cycle_metrics = "~{output_bam_prefix}.base_distribution_by_cycle_metrics"
     File insert_size_histogram_pdf = "~{output_bam_prefix}.insert_size_histogram.pdf"
     File insert_size_metrics = "~{output_bam_prefix}.insert_size_metrics"
-    File quality_by_cycle_pdf = "~{output_bam_prefix}.quality_by_cycle.pdf"
-    File quality_by_cycle_metrics = "~{output_bam_prefix}.quality_by_cycle_metrics"
-    File quality_distribution_pdf = "~{output_bam_prefix}.quality_distribution.pdf"
-    File quality_distribution_metrics = "~{output_bam_prefix}.quality_distribution_metrics"
   }
 }
 
