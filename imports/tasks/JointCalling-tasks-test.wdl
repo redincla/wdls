@@ -919,8 +919,8 @@ task AnnovarScatteredVCF {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "20000"
-    runtime_minutes: "1500"
+	  requested_memory_mb_per_core: "35000"
+    runtime_minutes: "2500"
   }
 
   output {
@@ -982,7 +982,7 @@ task VEPannoScatteredVCF {
   -i ~{input_vcf} \
   --plugin dbNSFP,/db/local/vep/plugins_data/dbNSFP4.1a_grch38.gz,VEP_canonical,LRT_pred,SIFT_pred,MutationTaster_pred,Polyphen2_HDIV_pred,Polyphen2_HVAR_pred \
   --plugin SpliceAI,snv=/db/local/vep/plugins_data/spliceai_scores.raw.snv.hg38.vcf.gz,indel=/db/local/vep/plugins_data/spliceai_scores.raw.indel.hg38.vcf.gz \
-  --buffer_size 50000 \
+  --buffer_size 30000 \
   --offline --fork 10 \
   --dir_cache=/db/local \
   --vcf --force_overwrite \
@@ -994,8 +994,8 @@ task VEPannoScatteredVCF {
 
   runtime {
     cpus: "1"
-	  requested_memory_mb_per_core: "20000"
-    runtime_minutes: "2000"
+	  requested_memory_mb_per_core: "40000"  #20Gb too low for 1/3 of samples. reduced buffer and increased mem
+    runtime_minutes: "3000"
   }
 
   output {
