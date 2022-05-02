@@ -12,7 +12,7 @@ if [ $# -eq 2 ]; then
  options_file=$2 #full path to json options file for annotateVCF.wdl workflow
 
 else
- echo -e "\n\nSubmit annotation workflow (annotateVCF.wdl) \n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
+ echo -e "\n\nSubmit annotation workflow (annotateVCF-VEP.wdl) \n\nAuthor: Claire Redin (claire.redin@chuv.ch)\n\n"
  echo "Usage:"
  echo "sbatch submit_annovar-VEP.sh [input_file] [options_file] "
  echo "input_file: full path to inputs json file"
