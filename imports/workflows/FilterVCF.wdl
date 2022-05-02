@@ -159,10 +159,10 @@ command <<<
     -R ~{ref_fasta} \
     -V ~{input_vcf} \
     -O ~{base_output_name}.~{cohort_name}.vcf.gz \
-    --restrict-alleles-to BIALLELIC \ switch back after HEV
+    --restrict-alleles-to BIALLELIC \
     -sn sample.list.args \
     --exclude-non-variants \
-     --keep-original-ac \ switch back after HEV
+    --keep-original-ac
 >>>
 
   runtime {
@@ -358,7 +358,7 @@ command <<<
         -V ~{input_vcf} \
         -F CHROM -F POS -F ID -F REF -F ALT -F QUAL -F FILTER -GF AD -F DP -GF GQ -GF GT -F AC -F AC_full -F AN_full -F AF_full -F AC_cases -F AC_controls -F AS_FS -F AS_MQ -F AS_QD -F QD -F DP -F ExcessHet -F NEGATIVE_TRAIN_SITE -F POSITIVE_TRAIN_SITE -F SB \
         -F HET -F HOM-REF -F HOM-VAR -F NO-CALL -F VAR -F NSAMPLES -F NCALLED \
-        -F Gene.ensGene -F Gene.refGene -F Func.ensGene -F Func.refGene -F ExonicFunc.ensGene -F ExonicFunc.refGene -F AAChange.ensGene -F AAChange.refGene \
+        -F CSQ -F Gene.ensGene -F Gene.refGene -F Func.ensGene -F Func.refGene -F ExonicFunc.ensGene -F ExonicFunc.refGene -F AAChange.ensGene -F AAChange.refGene \
         -F gnomadv3_AF -F gnomadv3_AF_raw -F gnomadv3_AF_male -F gnomadv3_AF_female -F gnomadv3_AF_afr -F gnomadv3_AF_ami -F gnomadv3_AF_amr -F gnomadv3_AF_asj -F gnomadv3_AF_eas -F gnomadv3_AF_fin -F gnomadv3_AF_nfe -F gnomadv3_AF_oth -F gnomadv3_AF_sas -F Kaviar_AF -F 1000g2015aug_all -F ClinVar_AF_EXAC -F ClinVar_AF_TGP -F max_aaf_all \
         -F ClinVar_Sign -F CLINSIG -F ClinVar_Sign_Conflict -F ClinVar_RevStatus -F ClinVar_Disease_name -F ClinGen_Disease_name -F ClinGen_MOI -F ClinGen_Classification -F MIM_Disease -F MIM_Disease_name -F MIM_gene -F DDD_mutation_consequence -F DDD_MOI -F DDD_Classification -F ACMG -F MEDP_MOI -F MEDP_Confidence -F n.PLP.ClinVar -F n.PLP.LoF.ClinVar -F n.PLP.mis.ClinVar \
         -F PID_Category -F PID_Phenotype -F PID_MOI -F PID_TotMut -F PID_Confidence_level \
