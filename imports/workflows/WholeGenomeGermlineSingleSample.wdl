@@ -31,13 +31,13 @@ version 1.0
 ## licensing information pertaining to the included programs.
 
 ## Local import
-import "./imports/workflows/UnmappedBamToAlignedBam.wdl" as ToBam
-import "./imports/workflows/AggregatedBamQC.wdl" as AggregatedQC
-import "./imports/tasks/Qc.wdl" as QC
-import "./imports/workflows/BamToCram.wdl" as ToCram
-import "./imports/tasks/BamProcessing.wdl" as Processing
-import "./imports/workflows/VariantCalling.wdl" as ToGvcf
-import "./imports/workflows/pFQtoUnmappedBam.wdl" as FQTouBam
+import "./UnmappedBamToAlignedBam.wdl" as ToBam
+import "./AggregatedBamQC.wdl" as AggregatedQC
+import "../tasks/Qc.wdl" as QC
+import "./BamToCram.wdl" as ToCram
+import "../tasks/BamProcessing.wdl" as Processing
+import "./VariantCalling.wdl" as ToGvcf
+import "./pFQtoUnmappedBam.wdl" as FQTouBam
 
 
 #################################################################
