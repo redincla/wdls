@@ -21,4 +21,4 @@ else
 fi
 
 
-java -Dconfig.file=/home/credin/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/imports/workflows/runDelly-cohort-relaunch.wdl -i ${input_file} -o ${options_file} 
+java -Dconfig.file=/home/credin/.cromwell.conf_new -jar /software/Utility/cromwell/47/bin/cromwell-47.jar  run /home/credin/scratch/WGS/wdls/imports/workflows/runDelly-cohort.wdl -i ${input_file} -o ${options_file} 
