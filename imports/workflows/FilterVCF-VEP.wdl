@@ -372,9 +372,10 @@ command <<<
         -V ~{input_vcf} \
         --keep-original-ac \
         -O tmp2.vcf.gz \
-        -select "ClinVar_Sign  == 'Pathogenic/Likely_pathogenic' || ClinVar_Sign  == 'Likely_pathogenic' || ClinVar_Sign  == 'Pathogenic'"
+        -select "Func.ensGene == 'exonic' || Func.refGene == 'exonic' || ClinVar_Sign  == 'Pathogenic/Likely_pathogenic' || ClinVar_Sign  == 'Likely_pathogenic' || ClinVar_Sign  == 'Pathogenic'"
 
-  bcftools merge tmp1.vcf.gz tmp2.vcf.gz --force-samples | bcftools sort -Oz > "~{base_output_name}.~{cohort_name}.lowAC.lowAF.Himpact.AC_orig.vcf.gz"
+  bcftools concat -a -D tmp1.vcf.gz tmp2.vcf.gz | bcftools sort -Oz > "~{base_output_name}.~{cohort_name}.lowAC.lowAF.Himpact.AC_orig.vcf.gz"
+#  bcftools merge tmp1.vcf.gz tmp2.vcf.gz --force-samples | bcftools sort -Oz > "~{base_output_name}.~{cohort_name}.lowAC.lowAF.Himpact.AC_orig.vcf.gz"  COMPLETELY MESSED UP MERGED VCF!!!
   tabix "~{base_output_name}.~{cohort_name}.lowAC.lowAF.Himpact.AC_orig.vcf.gz"
 >>>
 
