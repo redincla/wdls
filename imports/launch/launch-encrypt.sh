@@ -12,13 +12,13 @@ echo "#!/bin/bash
 #SBATCH --output=/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/json/${sample_ID}.encrypt.slurm.%N.%j.log
 
 #cd /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/${sample_ID}/Raw
-cd /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs
+cd /users/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/FQs
 cat ${sample_ID}*R1_001.fastq.gz > /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R1_001.fq.gz
 cat ${sample_ID}*R2_001.fastq.gz > /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R2_001.fq.gz
-md5sum /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R1_001.fq.gz >> /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/batch7_md5sum_file
-md5sum /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R2_001.fq.gz >> /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/batch7_md5sum_file
-openssl aes-256-cbc -e -in /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R1_001.fq.gz -out /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/crypted/${sample_ID}_R1_001_crypted.fq.gz -pass file:/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/keyfile_batch_6
-openssl aes-256-cbc -e -in /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R2_001.fq.gz -out /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/crypted/${sample_ID}_R2_001_crypted.fq.gz -pass file:/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/keyfile_batch_6" > /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/json/${sample_ID}.encrypt.script-submit
+md5sum /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R1_001.fq.gz >> /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/batch8_md5sum_file
+md5sum /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R2_001.fq.gz >> /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/batch8_md5sum_file
+openssl aes-256-cbc -e -in /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R1_001.fq.gz -out /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/crypted/${sample_ID}_R1_001_crypted.fq.gz -pass file:/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/keyfile_batch_8
+openssl aes-256-cbc -e -in /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/${sample_ID}_R2_001.fq.gz -out /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/crypted/${sample_ID}_R2_001_crypted.fq.gz -pass file:/home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/RFU_FQs/keyfile_batch_8" > /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/json/${sample_ID}.encrypt.script-submit
 
 sbatch /home/credin/scratch/WGS/data_and_refs/data/Raw_FQ/TCAG/0920/json/${sample_ID}.encrypt.script-submit
 
