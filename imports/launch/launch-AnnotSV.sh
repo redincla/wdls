@@ -2,7 +2,7 @@
 #SBATCH -n 1
 #SBATCH --job-name=annotSV
 #SBATCH -t 2-00:00
-#SBATCH --mem-per-cpu=15G
+#SBATCH --mem-per-cpu=40G
 #SBATCH --output=AnnotSV.slurm.%N.%j.log
     
 export ANNOTSV=/home/credin/refs/tools/AnnotSV  #add ANNOTSV to path
