@@ -1,0 +1,128 @@
+##########################################################################################
+
+## Base script:   https://portal.firecloud.org/#methods/Talkowski-SV/Manta/1/wdl
+
+##########################################################################################
+
+## Copyright Broad Institute, 2017
+## 
+## This WDL pipeline implements SV calling with Illumina's Manta software
+##
+## Requirements/expectations :
+## - Human whole-genome pair-end sequencing data in mapped BAM format
+##
+## LICENSING : 
+## This script is released under the WDL source code license (BSD-3) (see LICENSE in 
+## https://github.com/broadinstitute/wdl). Note however that the programs it calls may 
+## be subject to different licenses. Users are responsible for checking that they are
+## authorized to run all programs before running this script. Please see the docker 
+## page at https://hub.docker.com/r/broadinstitute/genomes-in-the-cloud/ for detailed
+## licensing information pertaining to the included programs.
+
+version 1.0
+
+workflow Manta {
+  # Run Manta SV detection algorithm on whole genomes from bam or cram files.
+  input {
+    File bam_or_cram_file
+    File bam_or_cram_index
+    File sample_id
+    File region_bed
+    File region_bed_index
+    File reference_fasta #.fasta file with reference used to align bam or cram file
+    File reference_index #[optional] If omitted, the WDL will look for an index by appending .fai to the .fasta file
+  }
+
+   call RunManta {
+    input:
+      bam_or_cram_file = bam_or_cram_file,
+      bam_or_cram_index = bam_or_cram_index,
+      sample_id = sample_id,
+      reference_fasta = reference_fasta,
+      reference_index = reference_index,
+      region_bed = region_bed,
+      region_bed_index = region_bed_index
+  }
+
+  output {
+    File vcf = RunManta.vcf
+    File index = RunManta.index
+  }
+}
+
+task RunManta {
+  input {
+    File bam_or_cram_file
+    File bam_or_cram_index
+    String sample_id
+    File reference_fasta
+    File reference_index
+    File region_bed
+    File region_bed_index
+  }
+
+  Boolean is_bam = basename(bam_or_cram_file, ".bam") + ".bam" == basename(bam_or_cram_file)
+  String bam_ext = if is_bam then ".bam" else ".cram"
+  String index_ext = if is_bam then ".bai" else ".crai"
+
+  # select number of cpus and jobs
+  Int num_cpu_use = 8
+  # select number of jobs (threads) to run
+  Float jobs_per_cpu_use = 1.3
+  Int num_jobs = round(num_cpu_use * jobs_per_cpu_use)
+  String expected_index_name = basename(bam_or_cram_file) + index_ext
+
+ command <<<
+    module add UHTS/Analysis/EPACTS/3.2.6
+    module add UHTS/Analysis/samtools/1.10
+    set -Eeuo pipefail
+
+    # if a preemptible instance restarts and runWorkflow.py already
+    # exists, manta will throw an error
+    if [ -f ./runWorkflow.py ]; then
+      rm ./runWorkflow.py
+    fi
+
+    ln -s ~{bam_or_cram_file} sample~{bam_ext}
+    ln -s ~{bam_or_cram_index} sample~{bam_ext}~{index_ext}
+
+    # prepare the analysis job
+    /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/manta-1.6.0.centos6_x86_64/bin/configManta.py \
+      --bam sample~{bam_ext} \
+      --referenceFasta ~{reference_fasta} \
+      --runDir . \
+      --callRegions ~{region_bed}
+
+    # always tell manta there are 2 GiB per job, otherwise it will
+    # scale back the requested number of jobs, even if they won't
+    # need that much memory
+    ./runWorkflow.py \
+      --mode local \
+      --jobs ~{num_jobs} \
+      --memGb $((~{num_jobs} * 2))
+
+    # inversion conversion, then compression and index
+    python2 /scratch/beegfs/PRTNR/CHUV/MED/jfellay/default_sensitive/redin/tools/manta-1.6.0.centos6_x86_64/libexec/convertInversion.py \
+      samtools \
+      ~{reference_fasta} \
+      results/variants/diploidSV.vcf.gz \
+      | bcftools reheader -s <(echo "~{sample_id}") \
+      > diploidSV.vcf
+
+    bgzip -c diploidSV.vcf > ~{sample_id}.manta.vcf.gz
+    tabix -p vcf ~{sample_id}.manta.vcf.gz
+    
+  >>>
+
+  output {
+    File vcf = "${sample_id}.manta.vcf.gz"
+    File index = "${sample_id}.manta.vcf.gz.tbi"
+  }
+
+  runtime {
+  cpus: "8"
+  requested_memory_mb_per_core: "15000"
+  runtime_minutes: "1800"
+  }
+#1400 minutes not enough for some samples
+}
