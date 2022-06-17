@@ -94,7 +94,12 @@ task CollectReadgroupBamQualityMetrics {
     File ref_index
     Boolean collect_gc_bias_metrics = true
   }
-  command {
+  command <<<
+    source /dcsrsoft/spack/bin/setup_dcsrsoft
+    module load gcc
+    module load openjdk/16.0.1
+    module load r/4.0.5
+
     touch ~{output_bam_prefix}.gc_bias.detail_metrics \
       ~{output_bam_prefix}.gc_bias.pdf \
       ~{output_bam_prefix}.gc_bias.summary_metrics
@@ -110,7 +115,7 @@ task CollectReadgroupBamQualityMetrics {
       ~{true='PROGRAM="CollectGcBiasMetrics"' false="" collect_gc_bias_metrics} \
       METRIC_ACCUMULATION_LEVEL=null \
       METRIC_ACCUMULATION_LEVEL=READ_GROUP
-  }
+  >>>
   runtime {
 	cpus: "1"
 	requested_memory_mb_per_core: "7000"
@@ -138,7 +143,12 @@ task CollectAggregationMetrics {
     File ref_index
     Boolean collect_gc_bias_metrics = true
   }
-  command {
+  command <<<
+    source /dcsrsoft/spack/bin/setup_dcsrsoft
+    module load gcc
+    module load openjdk/16.0.1
+    module load r/4.0.5
+
     touch ~{output_bam_prefix}.gc_bias.detail_metrics \
       ~{output_bam_prefix}.gc_bias.pdf \
       ~{output_bam_prefix}.gc_bias.summary_metrics \
@@ -160,7 +170,7 @@ task CollectAggregationMetrics {
       METRIC_ACCUMULATION_LEVEL=null \
       METRIC_ACCUMULATION_LEVEL=SAMPLE \
       METRIC_ACCUMULATION_LEVEL=LIBRARY
-  }
+  >>>
   runtime {
 	cpus: "1"
 	requested_memory_mb_per_core: "7000"
